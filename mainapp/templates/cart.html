@@ -1,0 +1,66 @@
+{%extends 'base.html'%}
+{% load static%}
+
+{%block main%}
+<h3 class="text-center mt-5 mb-5 ">Ваша корзина {%if not cart.products.count%} пуста <div class="container"><img class="myfluid" src="{% static '/images/banner/cip.png'%}" ></div>{%endif%} </h3>
+    <main class="ps-main">
+      <div class="ps-content pt-80 pb-80">
+        <div class="ps-container">
+          <div class="ps-cart-listing">
+            <table class="table ps-cart__table">
+              <thead>
+                <tr>
+                  <th>All Products</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr> {%for item in cart.products.all%}
+                  <td><a class="ps-product__preview" href="{{item.product.get_absolute_url}}"><img class="mr-15" src="{{item.product.image1.url}}" alt="">{{item.product.title}}</a></td>
+                  <td>{{item.content_object.price}}</td>
+                  <td>
+                    <form action="{% url 'change_qty'   slug=item.product.slug %}  " method="POST">
+                      {%csrf_token%}
+                    <div class="form-group--number">
+                      {%if item.qty > 1%}
+                      <button class="minus"  name="qty" value="0"><span>-</span></button>
+                      <input  class="form-control" type="text" value="{{item.qty}}">
+                      <button class="plus"  name="qty" value="1"><span>+</span></button>
+                      {%else%}
+                      <input  class="form-control" type="text" value="{{item.qty}}">
+                      <button class="plus"  name="qty" value="1"><span>+</span></button>
+                      {%endif%}
+                    </div>
+                  </form>
+                  </td>
+                  <td>{{item.final_price}}</td>
+                  <td>
+                    <a href="{%url 'remove_from_cart' slug=item.product.slug%}"><div class="ps-remove"></div></a>
+                  </td>
+                </tr>
+                
+              </tbody>{%endfor%}
+
+            </table>
+            <div class="ps-cart__actions">
+              <div class="ps-cart__promotion">
+             
+                <div class="form-group pb-10">
+                 <a href="/"> <button class="ps-btn ps-btn--gray" >Продолжить покупки</button></a>
+                </div>
+              </div>
+              <div class="ps-cart__total">
+                <h3>Итого: <span> {{cart.final_price}} Грн</span></h3><a class="ps-btn" href="{%url 'checkout'%}">Оформить<i class="ps-icon-next"></i></a>
+              </div>
+            </div>
+          </div>
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    {%endblock main%}

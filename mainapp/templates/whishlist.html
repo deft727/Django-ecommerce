@@ -1,0 +1,148 @@
+{%extends 'base.html'%} 
+{% load static%}
+ {%block main%}
+
+<div class="container" style="margin-top: 100px ;margin-bottom: 100px;">
+    <strong> заказы пользователья {{request.user.username}}</strong>
+{% if not orders.count %}
+
+<p>заказов нет</p>
+</div>
+{%else%}
+
+
+<table class="table table-striped">
+    <thead >
+    <th scope="row">
+        номер
+    </th>
+
+    <th scope="row">
+       заказ
+    </th>
+    
+    <th scope="row">
+        сумма
+    </th> 
+    
+    <th scope="row">
+       товар
+    </th>
+    <th scope="row">
+        дополнительно
+     </th>
+    </thead>
+
+    <tbody >
+        {%for order in orders%}
+        <tr>
+            <th scope="row">
+                {{order.id}}
+            </th>
+            <td>{{order.get_status_display}}</td>
+            <td>
+                {{order.cart.final_price}}
+            </td>
+            <td>
+                <ul>
+                    {%for item in order.cart.products.all%}
+                    <li>{{item.product.title}} x {{item.qty}}</li>
+                    {%endfor%}
+                </ul>
+                
+            </td>
+            <td>
+                <button type="button"data-toggle="modal" data-target="#myModal-{{order.id}}">
+                    Дополнительно
+                </button>
+                <div class="modal fade" id="myModal-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          <h4 class="modal-title" id="myModalLabel">Детальнее</h4>
+                        </div>
+                        <div class="modal-body">
+                          <h4 class="text-center">Товар</h4>
+                          <table  class="table">
+                              <thead>
+                                  <tr>
+                                      <th scope="row">
+                                        Наименование
+                                        </th>
+                                        <th scope="row">
+                                        Изображение
+                                        </th>
+                                        <th scope="row">
+                                        Цена
+                                        </th>
+                                        <th scope="row">
+                                        Кол-во
+                                        </th>
+                                        <th scope="row">
+                                        Общая цена
+                                        </th>
+                              </thead>
+                              <tbody>
+                                  {%for item in order.cart.products.all%}
+                                  <tr>
+                                      <th scope="row">
+                                          {{item.product.title}}
+                                      </th>
+                                      <td style="max-width: 15px;" class="w-15"><img src="{{item.product.image.url}}" class="img-fluid"> 
+                                     </td>
+                                     <td>
+                                         <strong>{{item.product.price}} eu</strong>
+                                     </td>
+                                     <td>
+                                         {{item.qty}}
+                                     </td>
+                                     <td>
+                                         {{item.final_price}} eu
+                                     </td>
+                                  </tr>
+                                    {%endfor%}
+                                    <tr> 
+                                        <td colspan="2"></td>
+                                        <td>Итого:</td>
+                                        <td>{{order.cart.total_products}}</td>
+                                        <strong>{{order.cart.final_price}}</strong> 
+                                    </tr>
+                              </tbody>
+                          </table>
+                          <hr>
+                          <h4 class="text-center">Дополнительная информация</h4>
+                          <p>Имя: <strong>{{order.first_name}}</strong></p>
+                          <p>Фамилия: <strong>{{order.last_name}}</strong></p>
+                          <p>Телефон: <strong>{{order.phone}}</strong></p>
+                
+                
+                <!-- отделение -->
+                
+                
+                
+                
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                
+                        </div>
+                      </div>
+                    </div>
+                
+            </td>
+        </tr>
+     
+    </tbody>
+</table>
+
+</div>
+</div>
+
+ 
+{%endfor%}
+
+{%endif%}
+ {%endblock main%}
