@@ -1,6 +1,9 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
-from .views import (BaseView,
+# from . import views
+from .views import (
+    # HtmlView,
+                    BaseView,
                     ProductDetailView,
                     CategoryDetailView,
                     CartView,
@@ -11,11 +14,13 @@ from .views import (BaseView,
                     MakeOrderView,
                     LoginView,
                     RegistrationView,
-                    ProfileView)
+                    ProfileView,
+                    ProductRewiew)
 
 
 
 urlpatterns = [
+    # path('',HtmlView().as_view(),name='HtmlView'),
     path('',BaseView.as_view(),name='base'),
     path('products/<str:slug>/',ProductDetailView.as_view(),name='product_detail'),
     path('category/<str:slug>/',CategoryDetailView.as_view(),name='category_detail'),
@@ -28,7 +33,7 @@ urlpatterns = [
     path('login/',LoginView.as_view(), name='login'),
     path('logout/',LogoutView.as_view(next_page="/"), name='logout'),
     path('registration/',RegistrationView.as_view(), name='registration'),
-    path('profile/', ProfileView.as_view(), name='profile')
+    path('profile/', ProfileView.as_view(), name='profile'),
+    path('review/<int:pk>/', ProductRewiew.as_view(),name="add_review"),
 ]
-
 

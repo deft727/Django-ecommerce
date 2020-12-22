@@ -2,7 +2,9 @@
 {% load static%}
 
 {%block main%}
-<h3 class="text-center mt-5 mb-5 ">Ваша корзина {%if not cart.products.count%} пуста <div class="container"><img class="myfluid" src="{% static '/images/banner/cip.png'%}" ></div>{%endif%} </h3>
+<h3 class="text-center" style="margin: 25px;">Ваша корзина {%if not cart.products.count%} пуста <div class="container"><img class="myfluid" src="{% static '/images/banner/cip.png'%}" ></div>{%endif%} </h3>
+
+{%if cart.products.count%}
     <main class="ps-main">
       <div class="ps-content pt-80 pb-80">
         <div class="ps-container">
@@ -63,4 +65,6 @@
         </div>
       </div>
     </main>
+    {%endif%} 
+
     {%endblock main%}

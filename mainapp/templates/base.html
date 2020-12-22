@@ -1,4 +1,7 @@
 {% load static%}
+{% load mptt_tags %}
+
+
 <!DOCTYPE html>
 <!-- [if IE 7]><html class="ie ie7"><![endif]-->
 <!--[if IE 8]><html class="ie ie8"><![endif]-->
@@ -48,7 +51,15 @@
         <div class="container-fluid">
           <div class="row">
                 <div class="col-lg-6 col-md-8 col-sm-6 col-xs-12 ">
-                  <p>460 West 34th Street, 15th floor, New York  -  Hotline: 804-377-3580 - 804-399-3580</p>
+                  <p>
+
+               --> 
+
+
+
+
+
+                  </p>
                 </div>
 
                 {%if not request.user.is_authenticated%}
@@ -105,91 +116,55 @@
             <li class="menu-item"><a href="#">Homepage #3</a></li>
           </ul>
     </li>
-    <li class="menu-item menu-item-has-children has-mega-menu"><a href="#">Men</a>
-      <div class="mega-menu">
-        <div class="mega-wrap">
-          <div class="mega-column">
-            <ul class="mega-item mega-features">
-              <li><a href="product-listing.html">NEW RELEASES</a></li>
-              <li><a href="product-listing.html">FEATURES SHOES</a></li>
-              <li><a href="product-listing.html">BEST SELLERS</a></li>
-              <li><a href="product-listing.html">NOW TRENDING</a></li>
-              <li><a href="product-listing.html">SUMMER ESSENTIALS</a></li>
-              <li><a href="product-listing.html">MOTHER'S DAY COLLECTION</a></li>
-              <li><a href="product-listing.html">FAN GEAR</a></li>
-            </ul>
-          </div>
-          <div class="mega-column">
-            <h4 class="mega-heading">Shoes</h4>
-            <ul class="mega-item">
-              <li><a href="product-listing.html">All Shoes</a></li>
-              <li><a href="product-listing.html">Running</a></li>
-              <li><a href="product-listing.html">Training & Gym</a></li>
-              <li><a href="product-listing.html">Basketball</a></li>
-              <li><a href="product-listing.html">Football</a></li>
-              <li><a href="product-listing.html">Soccer</a></li>
-              <li><a href="product-listing.html">Baseball</a></li>
-            </ul>
-          </div>
-          <div class="mega-column">
-            <h4 class="mega-heading">CLOTHING</h4>
-            <ul class="mega-item">
-              <li><a href="product-listing.html">Compression & Nike Pro</a></li>
-              <li><a href="product-listing.html">Tops & T-Shirts</a></li>
-              <li><a href="product-listing.html">Polos</a></li>
-              <li><a href="product-listing.html">Hoodies & Sweatshirts</a></li>
-              <li><a href="product-listing.html">Jackets & Vests</a></li>
-              <li><a href="product-listing.html">Pants & Tights</a></li>
-              <li><a href="product-listing.html">Shorts</a></li>
-            </ul>
-          </div>
-          <div class="mega-column">
-            <h4 class="mega-heading">Accessories</h4>
-            <ul class="mega-item">
-              <li><a href="product-listing.html">Compression & Nike Pro</a></li>
-              <li><a href="product-listing.html">Tops & T-Shirts</a></li>
-              <li><a href="product-listing.html">Polos</a></li>
-              <li><a href="product-listing.html">Hoodies & Sweatshirts</a></li>
-              <li><a href="product-listing.html">Jackets & Vests</a></li>
-              <li><a href="product-listing.html">Pants & Tights</a></li>
-              <li><a href="product-listing.html">Shorts</a></li>
-            </ul>
-          </div>
-          <div class="mega-column">
-            <h4 class="mega-heading">BRAND</h4>
-            <ul class="mega-item">
-              <li><a href="product-listing.html">NIKE</a></li>
-              <li><a href="product-listing.html">Adidas</a></li>
-              <li><a href="product-listing.html">Dior</a></li>
-              <li><a href="product-listing.html">B&G</a></li>
-            </ul>
-          </div>
-        </div>
+
+
+
+
+
+
+ 
+{% for node in topcategory.all %}
+
+     {% if node.level == 0 %} 
+<li class="menu-item menu-item-has-children has-mega-menu"><a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+  {% endif %}
+
+  <div class="mega-menu">
+    <div class="mega-wrap">
+      <div class="mega-column">
+        <ul class="mega-item mega-features">
+          <li><a href="product-listing.html">NEW RELEASES</a></li>
+          <li><a href="product-listing.html">FEATURES SHOES</a></li>
+          <li><a href="product-listing.html">BEST SELLERS</a></li>
+          <li><a href="product-listing.html">NOW TRENDING</a></li>
+          <li><a href="product-listing.html">SUMMER ESSENTIALS</a></li>
+          <li><a href="product-listing.html">MOTHER'S DAY COLLECTION</a></li>
+          <li><a href="product-listing.html">FAN GEAR</a></li>
+        </ul>
       </div>
-    </li>
-    <li class="menu-item"><a href="#">Women</a></li>
-    <li class="menu-item"><a href="#">Kids</a></li>
-    <li class="menu-item menu-item-has-children dropdown"><a href="#">News</a>
-          <ul class="sub-menu">
-            <li class="menu-item menu-item-has-children dropdown"><a href="blog-grid.html">Blog-grid</a>
-                  <ul class="sub-menu">
-                    <li class="menu-item"><a href="blog-grid.html">Blog Grid 1</a></li>
-                    <li class="menu-item"><a href="blog-grid-2.html">Blog Grid 2</a></li>
-                  </ul>
-            </li>
-            <li class="menu-item"><a href="blog-list.html">Blog List</a></li>
-          </ul>
-    </li>
-    <li class="menu-item menu-item-has-children dropdown"><a href="#">Contact</a>
-          <ul class="sub-menu">
-            <li class="menu-item"><a href="contact-us.html">Contact Us #1</a></li>
-            <li class="menu-item"><a href="contact-us.html">Contact Us #2</a></li>
-          </ul>
-    </li>
-  </ul>
+      {% for item in node.children.all %}
+
+      <div class="mega-column">
+        <h4 class="mega-heading">{{item.name}} </h4>
+        {% for child in item.children.all  %}
+        <ul class="mega-item">
+          <li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>
+        </ul>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</li>
+
+
+{% endfor %}
+
+
+
 </div>
 
-
+                             
 
 
 
@@ -239,7 +214,10 @@
     <div class="alert alert-success alert-dismissible mt-5 ">
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       {% for message in messages %}
-      <strong>-----------------------{{ message }}-----------------------</strong>
+      <div class="row">
+        <h3 class="text-center">  {{ message }}  </h3>
+      </div>
+
       {% endfor %}
     </div>
     </div>
@@ -393,6 +371,9 @@
     <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.actions.min.js'%}"></script>
     <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.kenburn.min.js'%}"></script>
     <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.migration.min.js'%}"></script>
+    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.kenburn.min.js'%}"></script>
+    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.migration.min.js'%}"></script>
+
     <!-- Custom scripts-->
     <script type="text/javascript" src="{% static 'js/main.js'%}"></script>
   </body>

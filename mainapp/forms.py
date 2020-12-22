@@ -1,20 +1,19 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Order
+from .models import Order,Rewiews
+
 
 
 class OrderForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['order_date'].label = 'Дата получения заказа'
 
-    order_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
 
     class Meta:
         model = Order
         fields = (
-            'first_name', 'last_name', 'phone', 'adress','otdel', 'buying_type', 'order_date', 'comment'
+            'first_name', 'last_name', 'phone', 'adress','otdel', 'buying_type', 'comment'
         )
 
 
@@ -47,7 +46,7 @@ class LoginForm(forms.ModelForm):
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=40)
     email = forms.EmailField(required=True,max_length=30)
-    text = forms.CharField(widget=forms.Textarea,max_length=250,)
+    text = forms.CharField(widget=forms.Textarea,max_length=500,help_text='Максимальное кол-во символов 500')
 
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -97,3 +96,13 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model=User
         fields=['username','email','password','confirm_password','first_name','last_name','adress','phone']
+
+
+
+
+class RewiewsForm(forms.ModelForm):
+    # if not User.objects.get(user=request.user).exists():
+    #         raise forms.ValidationError('Пользователь не залогинен')
+    class Meta:
+        model = Rewiews
+        fields=('text',)

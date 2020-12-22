@@ -28,14 +28,20 @@
       </div>
       <div class="ps-product__columns">
 
-{%for product in category_products%}
+{%for product in category.get_products%}
         <div class="ps-product__column">
           <div class="ps-shoe mb-30">
-            <div class="ps-shoe__thumbnail"><a class="ps-shoe__favorite" href="{{product.get_absolute_url}}"><i class="ps-icon-heart"></i></a><img src="{{product.image.url}}" alt=""><a class="ps-shoe__overlay" href="{{product.get_absolute_url}}"></a>
+            <div class="ps-shoe__thumbnail"><a class="ps-shoe__favorite" href="{{product.get_absolute_url}}"><i class="ps-icon-heart"></i></a><img src="{{product.image1.url}}" alt="{{product.title}}"><a class="ps-shoe__overlay" href="{{product.get_absolute_url}}"></a>
             </div>
             <div class="ps-shoe__content">
               <div class="ps-shoe__variants">
-                <div class="ps-shoe__variant normal"><img src="{{product.image.url}}" alt=""><img src="{{product.image.url}}" alt=""><img src="{{product.image.url}}" alt=""><img src="{{product.image.url}}" alt=""></div>
+
+
+
+                <div class="ps-shoe__variant normal"><img src="{%if product.image2%} {{product.image2.url}} {%endif%}" alt=""><img src="{%if product.image3%} {{product.image3.url}} {%endif%}" alt=""><img src="{%if product.image4%} {{product.image4.url}} {%endif%}" alt=""><img src="{%if product.image5%} {{product.image5.url}} {%endif%}" alt=""></div>
+
+
+
                 <!-- <select class="ps-rating ps-shoe__rating">
                   <option value="1">1</option>
                   <option value="1">2</option>

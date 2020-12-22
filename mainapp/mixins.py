@@ -1,23 +1,8 @@
 from django.views.generic import View
-
-from .models import Cart,Customer,Product
-
+from .models import Cart,Customer,Product,User
 
 
 
-# class CategoryDeatailMixin(SingleObjectMixin):
-
-#     def get_context_data(self,**kwargs):
-#         if isinstance(self.get_object(),Category):
-#             model= self.CATEGOTY_SLUG2PRODUCT_MODEL[self.get_object().slug]
-#             context= super().get_context_data(**kwargs)
-#             context['categories'] = Category.objects.get_categories_for_top()
-#             context['category_products'] = model.objects.all()
-#             return context
-
-#         context= super().get_context_data(**kwargs)
-#         context['categories'] = Category.objects.get_categories_for_top()
-#         return context
     
 class CartMixin(View):
     def dispatch(self,request,*args,**kwargs):
@@ -31,9 +16,22 @@ class CartMixin(View):
             if not cart:
                 cart= Cart.objects.create(owner=customer)
         else:
-            cart= Cart.objects.filter(for_anonymoys_user=True).first()
+            session_key=request.session.session_key
+            name=str(session_key)
+            user= User.objects.filter(username=name).first()
+            # print(user)
+            if not user:
+                user = User.objects.create_user(name, 'randomemail', 'randomemail')
+            customer = Customer.objects.filter(user=user).first()
+            if not customer:
+
+                customer= Customer.objects.create(
+                    user=user 
+                )
+          
+            cart= Cart.objects.filter(for_anonymoys_user=True,owner=customer,in_order=False).first()
             if not cart:
-                cart= Cart.objects.create(for_anonymoys_user=True)
+                cart= Cart.objects.create(for_anonymoys_user=True,owner=customer)
         self.cart=cart
         self.cart.save()
         return super().dispatch(request,*args,**kwargs)

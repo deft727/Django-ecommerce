@@ -28,13 +28,16 @@
                             <tr>
                               <th class="text-uppercase">Продукт</th>
                               <th class="text-uppercase">Цена</th>
+                              <th class="text-uppercase">Кол-во</th>
+
                             </tr>
                           </thead>
                           <tbody>
                             {%for item in cart.products.all%}
                             <tr>
-                              <td>{{item.content_object.title}}</td>
-                              <td>{{item.content_object.price}} Грн</td>
+                              <td>{{item.product.title}}</td>
+                              <td>{{item.product.price}} Грн</td>
+                              <td> x {{item.qty}}</td>
                             </tr>
                             <tr>                            {%endfor%}
 

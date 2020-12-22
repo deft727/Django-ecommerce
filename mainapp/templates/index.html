@@ -44,11 +44,13 @@
       <div class="ps-section__header mb-50">
         <h3 class="ps-section__title" data-mask="features">- Последние добавления</h3>
         <ul class="ps-masonry__filter">
-          <!-- <li class="current"><a href="#" data-filter="*"> Все <sup>8</sup></a></li> -->
-          <!-- {%for category in categories%} -->
+           <li class="current" style="margin-right: auto; font-style: italic;"><a href="" data-filter="*"> Все </a></li>
+           {% for node in topcategory.all %}
+           {% if node.level == 2 %} 
+           <li style="margin-right: auto; font-style: italic;"><a href="{{ node.get_absolute_url}}" data-filter=".{{ node.name }}">{{ node.name }}</a></li> 
+           {%endif%}
+          {%endfor%} 
 
-          <!-- <li><a href="#" data-filter=".{{category.name}}"> {{category.name}} </a></li> -->
-          <!-- {%endfor%} -->
         </ul>
       </div>
       <div class="ps-section__content pb-50">
@@ -56,8 +58,9 @@
           <div class="ps-masonry">
             <div class="grid-sizer"></div>
             {%for product in products%}
-
-            <div class="grid-item men">
+            <div class="grid-item {{ product.name}} "></div>
+ 
+            <div class="grid-item {{product.category.name}}">
               <div class="grid-item__content-wrapper">
                 <div class="ps-shoe mb-30">
                   <div class="ps-shoe__thumbnail">
@@ -66,7 +69,7 @@
                   </div>
                   <div class="ps-shoe__content">
                     <div class="ps-shoe__variants">
-                      <div class="ps-shoe__variant normal"><img src="{{product.image2.url}}" alt=""><img src="{{product.image3.url}}" alt=""><img src="{{product.image4.url}}" alt=""><img src="{{product.image5.url}}" alt=""></div>
+                      <div class="ps-shoe__variant normal"><img src="{%if product.image2%} {{product.image2.url}} {%endif%}" alt=""><img src="{%if product.image3%} {{product.image3.url}} {%endif%}" alt=""><img src="{%if product.image4%} {{product.image4.url}} {%endif%}" alt=""><img src="{%if product.image5%} {{product.image5.url}} {%endif%}" alt=""></div>
                       <!-- <select class="ps-rating ps-shoe__rating">
                         <option value="1">1</option>
                         <option value="1">2</option>
@@ -76,7 +79,12 @@
                       </select> -->
                     </div>
                     <div class="ps-shoe__detail"><a class="ps-shoe__name" href="{{product.get_absolute_url}}">{{product.title}}</a>
-                      <p class="ps-shoe__categories"><a href="{{product.category.get_absolute_url}}">{{product.category}}</a> <span class="ps-shoe__price"> {{product.price}} Грн</span>
+
+                      <p class="ps-shoe__categories"><a href=" {{product.category.get_absolute_url}}  ">
+                        
+                          {{product.category.name}}
+
+                      </a> <span class="ps-shoe__price"> {{product.price}} Грн</span>
                     </div>
                   </div>
                 </div>
@@ -168,7 +176,7 @@
               </div>
               <div class="ps-shoe__content">
                 <div class="ps-shoe__variants">
-                  <div class="ps-shoe__variant normal"><img src="{{ i.image2.url }}" alt=""><img src="{{ i.image3.url }}" alt=""><img src="{{ i.image4.url }}" alt=""><img src="{{ i.image5.url }}" alt=""></div>
+                  <div class="ps-shoe__variant normal"><img src="{%if i.image2%} {{i.image2.url}} {%endif%}" alt=""><img src="{%if i.image3%} {{i.image3.url}} {%endif%}" alt=""><img src="{%if i.image4%} {{i.image4.url}} {%endif%}" alt=""><img src="{%if i.image5%} {{i.image5.url}} {%endif%}" alt=""></div>
                   <!-- <select class="ps-rating ps-shoe__rating">
                     <option value="1">1</option>
                     <option value="1">2</option>
@@ -178,7 +186,7 @@
                   </select> -->
                 </div>
                 <div class="ps-shoe__detail"><a class="ps-shoe__name" href="{{i.get_absolute_url}}">{{ i.title }}</a>
-                  <p class="ps-shoe__categories"><a href="#">Men shoes</a></p><span class="ps-shoe__price"> {{i.price}}</span>
+                  <p class="ps-shoe__categories"><a href="#">{{i.category}}</a></p><span class="ps-shoe__price"> {{i.price}}</span>
                 </div>
               </div>
             </div>
@@ -189,7 +197,9 @@
       </div>
     </div>
   </div>
-  <div class="ps-home-testimonial bg--parallax pb-80" data-background="{% static 'images/background/parallax.jpg'%}">
+
+  
+  <!-- <div class="ps-home-testimonial bg--parallax pb-80" data-background="{% static 'images/background/parallax.jpg'%}">
     <div class="container">
       <div class="owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="false" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on" data-owl-animate-in="fadeIn" data-owl-animate-out="fadeOut">
         <div class="ps-testimonial">
@@ -242,8 +252,8 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="ps-section ps-home-blog pt-80 pb-80">
+  </div> -->
+  <!-- <div class="ps-section ps-home-blog pt-80 pb-80">
     <div class="ps-container">
       <div class="ps-section__header mb-50">
         <h2 class="ps-section__title" data-mask="News">- Our Story</h2>
@@ -281,7 +291,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <div class="ps-home-contact">
     <div id="contact-map" data-address="New York, NY" data-title="BAKERY " data-zoom="17"></div>
     <div class="ps-home-contact__form">
@@ -310,7 +320,3 @@
 </main>
 {%endblock main%}
 
-{%block script%}
-<script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.kenburn.min.js'%}"></script>
-<script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.migration.min.js'%}"></script>
-{%endblock script%}

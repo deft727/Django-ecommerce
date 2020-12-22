@@ -1,29 +1,53 @@
-from django.shortcuts import render
+
+from django.shortcuts import render,redirect
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.contrib.auth import authenticate,login
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView,View
-from .models import Category,Customer,Cart,CartProduct,Product,Order,MyImage
+from .models import Category,Customer,Cart,CartProduct,Product,Order,MyImage,User
 from .mixins import CartMixin
-from .forms import OrderForm,LoginForm,RegistrationForm,ContactForm
+from .forms import OrderForm,LoginForm,RegistrationForm,ContactForm,RewiewsForm
 from .utils import recalc_cart
 from django.core.mail import EmailMessage
+
+
+from django.conf import settings
+
+from django.contrib.sessions.models import Session
+
+
+# def user_logged_in_handler(sender, request, user, **kwargs)
+# UserSession.objects.get_or_create(user = user, session_id = request.session.session_key)
+# user_logged_in.connect(user_logged_in_handler)
+
 
 def send_email(email,name,phone,comment):
     email = EmailMessage('Интернет магазин', name+ 'вы сделали заказ '+comment+'ваш телдля связи'+phone, to=[email])
     email.send()
 
+
 class BaseView(CartMixin, View):
     def get(self,request,*args,**kwargs):
-        categories=Category.objects.all()
+
+        # if not request.session.session_key:
+        #     request.session.create()
+        
+        # session_id = request.session.session_key
+
+        # print(User.objects.filter(username='session_key').first())
+
+
+
+
+        category = Category.objects.all()
         products = Product.objects.all().order_by('-id')[:8]
         myimage= MyImage.objects.all()
         randomProducts= Product.objects.all().order_by('?')[:10]
         form= ContactForm(request.POST or None)
 
         context= {
-            'categories':categories,
+            'category': category,
             'products' : products,
             'cart':self.cart,
             'myimage':myimage,
@@ -31,6 +55,7 @@ class BaseView(CartMixin, View):
             'form':form
         }
         return render(request,'index.html',context)
+
 
     def post(self,request,*args,**kwargs):
 
@@ -51,15 +76,18 @@ class ProductDetailView(CartMixin,DetailView):
 
     context_object_name='product'
     model= Product
-    queryset = Product.objects.all()
+
+
     template_name='product_detail.html'
     slug_url_kwarg='slug'
-    randomProducts= Product.objects.all().order_by('?')[:10]
-
+    # cart_product_form=CartAddProductForm()
+   
     def get_context_data(self,**kwargs):
+        slug= kwargs.get('slug')
         context= super().get_context_data(**kwargs)
         context['cart']= self.cart
-        context['randomProducts']=self.randomProducts
+        context['randomProducts']= Product.objects.all().order_by('?')[:10]
+
         return context
 
 class CategoryDetailView(CartMixin,DetailView):
@@ -79,31 +107,35 @@ class CategoryDetailView(CartMixin,DetailView):
 
 class AddToCartView(CartMixin,View):
     def get(self,request,*args,**kwargs):
+
         product_slug= kwargs.get('slug')
         product= Product.objects.get(slug=product_slug)
+
+
         cart_product,created=CartProduct.objects.get_or_create(
             user=self.cart.owner,cart=self.cart,product=product
         )
-
         if created:
             self.cart.products.add(cart_product)
         recalc_cart(self.cart)
-        # messages.add_message(request,messages.INFO,'Товар добавлен в корзину')
-        return HttpResponseRedirect('/cart/')
+        messages.add_message(request,messages.INFO,'Товар добавлен в корзину')
+        return redirect(product.get_absolute_url())
+
+
 
 class DeleteFomCartView(CartMixin,View):
 
     def get(self,request,*args,**kwargs):
 
         product_slug=kwargs.get('slug')
-        product= Product.model_class().objects.get(slug=product_slug)
+        product= Product.objects.get(slug=product_slug)
         cart_product=CartProduct.objects.get(
             user=self.cart.owner,cart=self.cart,product=product
         )
         self.cart.products.remove(cart_product)
         cart_product.delete()
         recalc_cart(self.cart)
-        # messages.add_message(request,messages.INFO,'Товар Удален')
+        messages.add_message(request,messages.INFO,'Товар Удален')
         return HttpResponseRedirect('/cart/')
 
 
@@ -124,17 +156,17 @@ class ChangeQTYView(CartMixin,View):
             cart_product.save()
             recalc_cart(self.cart)
 
-        # messages.add_message(request,messages.INFO,'Кол-во изменено')
+        messages.add_message(request,messages.INFO,'Кол-во изменено')
         return HttpResponseRedirect('/cart/')
 
 
 class CartView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
-        categories = Category.objects.all()
+        category = Category.objects.all()
         context = {
             'cart': self.cart,
-            'categories': categories
+            'category': category
         }
         return render(request, 'cart.html', context)
 
@@ -142,11 +174,11 @@ class CartView(CartMixin, View):
 class CheckoutView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
-        categories = Category.objects.all()
+        category = Category.objects.all()
         form=OrderForm(request.POST or None)
         context = {
             'cart': self.cart,
-            'categories': categories,
+            'category': category,
             'form': form
         }
         return render(request, 'checkout.html', context)
@@ -155,7 +187,16 @@ class MakeOrderView(CartMixin,View):
     
     def post(self, request, *args, **kwargs):
         form = OrderForm(request.POST or None)
-        customer = Customer.objects.get(user=request.user)
+        if request.user.is_authenticated:
+            customer = Customer.objects.get(user=request.user)
+        else:
+            session_key=request.session.session_key
+            name=str(session_key)
+            user= User.objects.filter(username=name).first()
+            customer = Customer.objects.filter(user=user).first()
+
+
+
         if form.is_valid():
             new_order = form.save(commit=False)
             new_order.customer = customer
@@ -175,7 +216,6 @@ class MakeOrderView(CartMixin,View):
 
             new_order.otdel = form.cleaned_data['otdel']
             new_order.buying_type = form.cleaned_data['buying_type']
-            new_order.order_date = form.cleaned_data['order_date']
             new_order.comment = form.cleaned_data['comment']
 
             comment=form.cleaned_data['comment']
@@ -194,19 +234,31 @@ class MakeOrderView(CartMixin,View):
             # body= form.cleaned_data['phone']
             send_email(email,name,phone,comment)
 
-            # messages.add_message(request, messages.INFO, 'Спасибо за заказ! Менеджер с Вами свяжется')
+            messages.add_message(request, messages.INFO, 'Спасибо за заказ! Менеджер с Вами свяжется')
             return HttpResponseRedirect('/')
         return HttpResponseRedirect('/checkout/')
 
 
-
+# otzivy
+class ProductRewiew(View):
+    def post(self,request,pk):
+        form = RewiewsForm(request.POST or None)
+        product=Product.objects.get(id=pk)
+        # print(product)
+        if form.is_valid():
+            form=form.save(commit=False)
+            form.name= request.user
+            form.product= product
+            form.save()
+            messages.add_message(request,messages.INFO,'Ваш отзвы добавлен!')
+        return redirect(product.get_absolute_url())
 
 
 class LoginView(CartMixin,View):
     def get(self,request,*args,**kwargs):
         form = LoginForm(request.POST or None)
-        categories = Category.objects.all()
-        context= {'form':form, 'categories':categories,'cart':self.cart}
+        category = Category.objects.all()
+        context= {'form':form, 'category':category,'cart':self.cart}
         return render(request,'login.html',context)
 
     def post(self,request,*args,**kwargs):

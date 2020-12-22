@@ -1,11 +1,13 @@
 {%extends 'base.html'%}
 {% load static%}
+{% load mptt_tags %}
 
 
 {%block main%}
     <main class="ps-main">
       <div class="test">
         <div class="container">
+          vcsjkl nxcl    {{product.characteristics.get_characteristics}}
           <div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 ">
                 </div>
@@ -19,25 +21,25 @@
               <div class="ps-product__thumbnail">
                 <div class="ps-product__preview">
                   <div class="ps-product__variants">
-                    <div class="item"><img src="{{product.image1.url}}" alt="{{product.title}}"></div>
-                    <div class="item"><img src="{{product.image2.url}}" alt="{{product.title}}"></div>
-                    <div class="item"><img src="{{product.image3.url}}" alt="{{product.title}}"></div>
-                    <div class="item"><img src="{{product.image4.url}}" alt="{{product.title}}"></div>
-                    <div class="item"><img src="{{product.image5.url}}" alt="{{product.title}}"></div>
+                    <div class="item"><img src="{%if product.image1%} {{product.image1.url}} {%endif%}" alt="{{product.title}}"></div>
+                    <div class="item"><img src="{%if product.image2%} {{product.image2.url}} {%endif%}" alt="{{product.title}}"></div>
+                    {%if product.image3%} <div class="item"><img src=" {{product.image3.url}} " ></div>{%endif%}
+                    {%if product.image4%}<div class="item"><img src=" {{product.image4.url}} " ></div>{%endif%}
+                    {%if product.image5%}  <div class="item"><img src="{{product.image5.url}} " ></div>{%endif%}
                   </div><a class="popup-youtube ps-product__video" href="http://www.youtube.com/watch?v=0O2aH4XLbto"><img src="{{product.image1.url}}" alt="{{product.title}}"><i class="fa fa-play"></i></a>
                 </div>
                 <div class="ps-product__image">
-                  <div class="item"><img class="zoom" src="{{product.image1.url}}" alt="{{product.title}}" data-zoom-image="{{product.image1.url}}"></div>
-                  <div class="item"><img class="zoom" src="{{product.image2.url}}" alt="{{product.title}}" data-zoom-image="{{product.image2.url}}"></div>
-                  <div class="item"><img class="zoom" src="{{product.image3.url}}" alt="{{product.title}}" data-zoom-image="{{product.image3.url}}"></div>
-                  <div class="item"><img class="zoom" src="{{product.image4.url}}" alt="{{product.title}}" data-zoom-image="{{product.image4.url}}"></div>
-                  <div class="item"><img class="zoom" src="{{product.image5.url}}" alt="{{product.title}}" data-zoom-image="{{product.image5.url}}"></div>
+                  <div class="item"><img class="zoom" src="{%if product.image1%} {{product.image1.url}} {%endif%}" alt="{{product.title}}" data-zoom-image="{%if product.image1%} {{product.image1.url}} {%endif%}"></div>
+                  <div class="item"><img class="zoom" src="{%if product.image2%} {{product.image2.url}} {%endif%}" alt="{{product.title}}" data-zoom-image="{%if product.image2%} {{product.image2.url}} {%endif%}"></div>
+                  {%if product.image3%} <div class="item"><img class="zoom" src=" {{product.image3.url}} "  data-zoom-image="{%if product.image3%} {{product.image3.url}} {%endif%}"></div>{%endif%}
+                  {%if product.image4%}  <div class="item"><img class="zoom" src="{{product.image4.url}} "  data-zoom-image="{%if product.image4%} {{product.image4.url}} {%endif%}"></div>{%endif%}
+                  {%if product.image5%} <div class="item"><img class="zoom" src="{{product.image5.url}} "  data-zoom-image="{%if product.image5%} {{product.image5.url}} {%endif%}"></div>{%endif%}
 
                 </div>
               </div>
               <div class="ps-product__thumbnail--mobile">
                 <div class="ps-product__main-img"><img src="{{product.image1.url}}" alt="{{product.title}}"></div>
-                <div class="ps-product__preview owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="20" data-owl-nav="true" data-owl-dots="false" data-owl-item="3" data-owl-item-xs="3" data-owl-item-sm="3" data-owl-item-md="3" data-owl-item-lg="3" data-owl-duration="1000" data-owl-mousedrag="on"><img src="{{product.image2.url}}" alt="{{product.title}}"><img src="{{product.image3.url}}" alt="{{product.title}}"><img src="{{product.image4.url}}" alt="{{product.title}}"></div>
+                <div class="ps-product__preview owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="20" data-owl-nav="true" data-owl-dots="false" data-owl-item="3" data-owl-item-xs="3" data-owl-item-sm="3" data-owl-item-md="3" data-owl-item-lg="3" data-owl-duration="1000" data-owl-mousedrag="on"><img src="{%if product.image2%} {{product.image2.url}} {%endif%}" alt="{{product.title}}"><img src="{%if product.image3%} {{product.image3.url}} {%endif%}" alt="{{product.title}}"><img src="{%if product.image4%} {{product.image4.url}} {%endif%}" alt="{{product.title}}"></div>
               </div>
               <div class="ps-product__info">
                 <div class="ps-product__rating">
@@ -50,11 +52,11 @@
                   </select><a href="#">(Read all 8 reviews)</a> -->
                 </div>
                 <h1>{{product.title}}</h1>
-                <p class="ps-product__category"><a href="#">{{product.category}}</a>,<a href="#">{{product.category.name}}</a></p>
+                <p class="ps-product__category"><a href="#">{{product.category}}</a>,<a href="{{product.category.get_absolute_url}}">{{product.category.name}}</a></p>
                 <h3 class="ps-product__price">{{product.price}} Грн<del>£ 330</del></h3>
                 <div class="ps-product__block ps-product__quickview">
                   <h4>Характеристики</h4>
-                  <p>{{product.description}}</p>
+                  <p>{{product.characteristics}} </p>
                 </div>
                 <!-- <div class="ps-product__block ps-product__style">
                   <h4>CHOOSE YOUR STYLE</h4>
@@ -79,9 +81,17 @@
                       {%endif%} -->
 
 
+
+                          {% if product.available%}
                 <div class="ps-product__shopping"><a class="ps-btn mb-10" href="{%url 'add_to_cart' slug=product.slug%}">Добавить в корзину<i class="ps-icon-next"></i></a>
                   <!-- <div class="ps-product__actions"><a class="mr-10" href="whishlist.html"><i class="ps-icon-heart"></i></a><a href="compare.html"><i class="ps-icon-share"></i></a></div> -->
                 </div>
+                {%else%}
+                <h3>Товар не доступен</h3>
+                {%endif%}
+
+
+
               </div>
               <div class="clearfix"></div>
               <div class="ps-product__content mt-50">
@@ -96,57 +106,102 @@
                   <p> {{product.description}} </p>
                 </div>
                 <div class="tab-pane" role="tabpanel" id="tab_02">
-                  <p class="mb-20">1 review for <strong>Shoes Air Jordan</strong></p>
                   <div class="ps-review">
-                    <div class="ps-review__thumbnail"><img src="images/user/1.jpg" alt=""></div>
+                    <!-- <div class="ps-review__thumbnail"><img src="images/user/1.jpg" alt=""></div> -->
                     <div class="ps-review__content">
-                      <header>
+                      <!-- <header>
                         <select class="ps-rating">
                           <option value="1">1</option>
                           <option value="1">2</option>
                           <option value="1">3</option>
                           <option value="1">4</option>
                           <option value="5">5</option>
-                        </select>
-                        <p>By<a href=""> Alena Studio</a> - November 25, 2017</p>
-                      </header>
-                      <p>Soufflé danish gummi bears tart. Pie wafer icing. Gummies jelly beans powder. Chocolate bar pudding macaroon candy canes chocolate apple pie chocolate cake. Sweet caramels sesame snaps halvah bear claw wafer. Sweet roll soufflé muffin topping muffin brownie. Tart bear claw cake tiramisu chocolate bar gummies dragée lemon drops brownie.</p>
+                        </select> 
+                                         </header> -->
+
+                                         {%if not product.rewiews_set.all.count%}
+                                          <p>Отзывов нет</p>
+                                         {%endif%}
+
+                      {%for review in product.rewiews_set.all%}
+                        <p>От <b> {{review.name}} </b> - {{review.data|date:"d.m.Y H:i"}}</p> 
+                        <p>{{review.text}}</p>
+  
+                      {%endfor%}
+
                     </div>
                   </div>
-                  <form class="ps-product__review" action="_action" method="post">
-                    <h4>ADD YOUR REVIEW</h4>
+
+                  {% if user.is_authenticated %}
+                  <form class="ps-product__review" action="{% url 'add_review' product.id %}" method="POST">
+                    {%csrf_token%}
+                    <!-- <h4>Добавить отзыв</h4> -->
                     <div class="row">
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                               <label>Name:<span>*</span></label>
                               <input class="form-control" type="text" placeholder="">
                             </div>
                             <div class="form-group">
                               <label>Email:<span>*</span></label>
                               <input class="form-control" type="email" placeholder="">
-                            </div>
+                            </div> -->
                             <div class="form-group">
-                              <label>Your rating<span></span></label>
+                              <!-- <label>Your rating<span></span></label>
                               <select class="ps-rating">
                                 <option value="1">1</option>
                                 <option value="1">2</option>
                                 <option value="1">3</option>
                                 <option value="1">4</option>
                                 <option value="5">5</option>
-                              </select>
+                              </select> -->
                             </div>
                           </div>
                           <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 ">
                             <div class="form-group">
-                              <label>Your Review:</label>
-                              <textarea class="form-control" rows="6"></textarea>
+                              <label>Ваш отзыв:</label>
+                              <textarea class="form-control" rows="6" name="text"></textarea>
                             </div>
                             <div class="form-group">
-                              <button class="ps-btn ps-btn--sm">Submit<i class="ps-icon-next"></i></button>
+                              <button class="ps-btn ps-btn--sm">Отправить<i class="ps-icon-next"></i></button>
                             </div>
                           </div>
                     </div>
                   </form>
+                  {%else%}
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
+                      <div class="form-group">
+                      </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 ">
+                      <div class="form-group">
+                        <label>Ваш отзыв:</label>
+                        <textarea class="form-control" rows="6" name="text"> Только зарегистрированные пользователи могут оставлять комментарии </textarea>
+                      </div>
+                      <div class="form-group">
+                        <!-- <button class="ps-btn ps-btn--sm">Отправить<i class="ps-icon-next"></i></button> -->
+                      </div>
+                    </div>
+              </div>
+            </form>
+{%endif%}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 </div>
                 <div class="tab-pane" role="tabpanel" id="tab_03">
                   <p>Add your tag <span> *</span></p>
@@ -194,7 +249,7 @@
                   </div>
                   <div class="ps-shoe__content">
                     <div class="ps-shoe__variants">
-                      <div class="ps-shoe__variant normal"><img src="{{ i.image2.url }}" alt=""><img src="{{ i.image3.url }}" alt=""><img src="{{ i.image4.url }}" alt=""><img src="{{ i.image5.url }}" alt=""></div>
+                      <div class="ps-shoe__variant normal"><img src="{%if i.image2%} {{i.image2.url}} {%endif%}" alt=""><img src="{%if i.image3%} {{i.image3.url}} {%endif%}" alt=""><img src="{%if i.image4%} {{i.image4.url}} {%endif%}" alt=""><img src="{%if i.image5%} {{i.image5.url}} {%endif%}" alt=""></div>
                       <!-- <select class="ps-rating ps-shoe__rating">
                         <option value="1">1</option>
                         <option value="1">2</option>

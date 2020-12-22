@@ -11,10 +11,15 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+import django_heroku
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'   # Persist sessions to DB
+SESSION_COOKIE_AGE = 1209600    
+# SESSION_ENGINE = 'postgre.django.sessions'
+# SESSION_SERIALIZER = 'postgre.django.sessions.BSONSerializer'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -23,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'rm^8ds7_w+kh2m%2_my$rb!s9-dg)cnqk+95yzfw(asx=-b&gb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -33,6 +38,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.postgres',
+    'mptt',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -65,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'mainapp.context_processors.single_well_info',
             ],
         },
     },
@@ -78,8 +86,12 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ecom_db',
+        'USER': 'kirill',
+        'PASSWORD' : 'devpass1',
+        'HOST' : '127.0.0.1',
+        'PORT': 5432
     }
 }
 
@@ -138,3 +150,5 @@ EMAIL_HOST_USER = 'magikmagazin123@gmail.com'
 EMAIL_HOST_PASSWORD = 'kirill99121'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD ='tiaxxhsvgnvmjyne'
+
+django_heroku.settings(locals())
