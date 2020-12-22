@@ -37,9 +37,11 @@ class ProductAdmin(admin.ModelAdmin):
     form = filterCategory
     formfield_overrides = { TreeManyToManyField:{'widget':CheckboxSelectMultiple},}
 
+class Qwerty(admin.ModelAdmin):
+    model=ProductFeatures
 
 
-admin.site.register(Category,MPTTModelAdmin)
+admin.site.register(Category,Qwerty)
 admin.site.register(ProductFeatures)
 
 admin.site.register(CartProduct)
