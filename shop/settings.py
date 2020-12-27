@@ -15,8 +15,6 @@ import django_heroku
 import dj_database_url
 
 
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -161,4 +159,8 @@ EMAIL_HOST_PASSWORD = 'kirill99121'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD ='tiaxxhsvgnvmjyne'
 
+
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 django_heroku.settings(locals())
