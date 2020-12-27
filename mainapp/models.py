@@ -11,6 +11,8 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from mptt.models import MPTTModel, TreeForeignKey,TreeManyToManyField
 from django.contrib.sessions.models import Session
 
+from eav.decorators import register_eav
+
 
 User=get_user_model()
 
@@ -107,7 +109,7 @@ class Product(models.Model):
     image3 = models.ImageField(null=True,blank=True, verbose_name='Изображение 3')
     image4 = models.ImageField(null=True,blank=True, verbose_name='Изображение 4')
     image5 = models.ImageField(null=True,blank=True, verbose_name='Изображение 5')
-    characteristics = JSONField()
+    characteristics = JSONField(blank=True,null=True)
     available = models.BooleanField(default=True)
     description = models.TextField(verbose_name='Описание товара',null=True)
     price = models.DecimalField(max_digits=10,decimal_places=2,verbose_name='Цена')
@@ -129,12 +131,14 @@ class Product(models.Model):
                 feature_key__in=self.characteristics.keys()
             ).prefetch_related('category')
         }
+        prnt(self.characteristics.items())
         for feature_key,feature_value in self.characteristics.items():
             postfix = characteristics[feature_key].get('postfix')
             if postfix:
                 res[characteristics[feature_key]['feature_name']] = feature_value + ' ' + postfix
             else:
                 res[characteristics[feature_key]['feature_name']] = feature_value
+        print(characteristics)
         return res
 
     def get_absolute_url(self):
@@ -229,13 +233,26 @@ class Product(models.Model):
             [p.characteristics.get('brand') for p in cls.objects.filter(category=category)]
         ))
 
+class TopText(models.Model):
+    class Meta:
+        verbose_name='текст в бегущей строке'
+    title=models.CharField(max_length=50,verbose_name='Заголовок',null=True,blank=True)
+    text= models.CharField(max_length=250,verbose_name='текст в бегущей строке',null=True,blank=True)
+    
+    def __str__(self):
+            return self.text
 
+
+class MyTopImage(models.Model):
+    class Meta:
+        verbose_name='Изображение сверху'
+        verbose_name_plural = 'Изображения сверху'
+    image=models.ImageField()
 
 class MyImage(models.Model):
-    title=models.CharField(max_length=50,verbose_name='Описание',null=True,blank=True)
-    imagetop1=models.ImageField()
-    imagetop2=models.ImageField()
-
+    class Meta:
+        verbose_name='Изображение снизу'
+        verbose_name_plural = 'Изображения снизу'
     imagedown1=models.ImageField()
     imagedown2= models.ImageField()
 

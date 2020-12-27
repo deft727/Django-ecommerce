@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView,View
-from .models import Category,Customer,Cart,CartProduct,Product,Order,MyImage,User
+from .models import Category,Customer,Cart,CartProduct,Product,Order,MyImage,User,MyTopImage
 from .mixins import CartMixin
 from .forms import OrderForm,LoginForm,RegistrationForm,ContactForm,RewiewsForm
 from .utils import recalc_cart
@@ -39,7 +39,7 @@ class BaseView(CartMixin, View):
 
 
 
-
+        Topimage=MyTopImage.objects.all()
         category = Category.objects.all()
         products = Product.objects.all().order_by('-id')[:8]
         myimage= MyImage.objects.all()
@@ -47,9 +47,11 @@ class BaseView(CartMixin, View):
         form= ContactForm(request.POST or None)
 
         context= {
+            
             'category': category,
             'products' : products,
             'cart':self.cart,
+            'Topimage':Topimage,
             'myimage':myimage,
             'randomProducts':randomProducts,
             'form':form
