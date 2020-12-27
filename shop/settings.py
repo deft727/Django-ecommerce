@@ -95,10 +95,11 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ecom_db',
         'USER': 'kirill',
         'PASSWORD' : 'devpass1',
-        'HOST' : '127.0.0.1',
+        'HOST' : 'localhost',
         'PORT': 5432
     }
 }
