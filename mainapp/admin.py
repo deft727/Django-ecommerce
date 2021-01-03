@@ -34,6 +34,10 @@ class filterCategory(forms.ModelForm):
 
 
 class ProductAdmin(admin.ModelAdmin):
+    list_display= ( 'id','title', 'category', 'price', 'available')
+    list_display_links=('id','title')
+    list_editable=('available',)
+    search_fields= ('title','descripton','price')
     form = filterCategory
     formfield_overrides = { TreeManyToManyField:{'widget':CheckboxSelectMultiple},}
 

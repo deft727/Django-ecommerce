@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mainapp',
+    'mainapp.apps.MainappConfig',
     'crispy_forms',
     
 ]
@@ -164,4 +164,8 @@ EMAIL_HOST_PASSWORD ='tiaxxhsvgnvmjyne'
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+
 django_heroku.settings(locals())
+
+# DATABASES = {'default': dj_database_url.parse('postgres://the-just-copied-link-comes-here
+# postgres://llhqpawwpotqxl:3e0d05c5087d080f1a402295b9e60243b1e135d6e584594eefff73686dcb44c0@ec2-54-247-118-139.eu-west-1.compute.amazonaws.com:5432/dfs02v38447867
