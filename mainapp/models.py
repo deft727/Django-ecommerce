@@ -324,7 +324,6 @@ class MyImage(models.Model):
         super().save(*args,**kwargs)
 
 class ChangeMyInfo(models.Model):
-    # logo = models.ImageField(null=True,blank=True, verbose_name='Логототип',upload_to='Logo')
     toptext = models.CharField(max_length=150,verbose_name='Текст в левом углу',null=True,blank=True)
     adress1= models.CharField(max_length=150,verbose_name='Адресс 1',null=True,blank=True)
     street1= models.CharField(max_length=150,verbose_name='Улица для адресс 1',null=True,blank=True)
