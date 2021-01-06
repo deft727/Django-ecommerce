@@ -33,11 +33,14 @@ class filterCategory(forms.ModelForm):
         self.fields['category'].queryset = Category.objects.filter(children=None)
 
 
+
 class ProductAdmin(admin.ModelAdmin):
+    search_fields= ('title','descripton')
     list_display= ( 'id','title', 'category', 'price', 'available')
     list_display_links=('id','title')
     list_editable=('available',)
-    search_fields= ('title','descripton','price')
+    change_form_template = 'custom_admin/change_form.html'
+
     form = filterCategory
     formfield_overrides = { TreeManyToManyField:{'widget':CheckboxSelectMultiple},}
 
@@ -53,41 +56,43 @@ class ProductAdmin(admin.ModelAdmin):
 #         ]
 
 
-class Qwerty(admin.TabularInline):
-    model=ProductFeatures
+# class Qwerty(admin.TabularInline):
+#     model=ProductFeatures
 
 
-class ProductFeaturesInline(admin.TabularInline):
-    model = ProductFeatureValidators
+# class ProductFeaturesInline(admin.TabularInline):
+#     model = ProductFeatureValidators
 
+# class MyTopImageInline(admin.TabularInline):
+#     model=Product
 
-class CategoryAdmin(admin.ModelAdmin):
-    inlines = [ProductFeaturesInline]
+# class CategoryAdmin(admin.ModelAdmin):
+#     inlines = [MyTopImageInline]
 
 
 # class  MyTopImageInline(admin.TabularInline):
-#     model = MyTopImage
-
+#     model =Category1
 # class MyTopImageAdmin(admin.ModelAdmin):
 #     inlines = [MyTopImage]
+class MyimageAdmin(admin.ModelAdmin):
+    form = filterCategory
+    formfield_overrides = { TreeManyToManyField:{'widget':CheckboxSelectMultiple},}
 
 
-admin.site.register(Category,CategoryAdmin)
+admin.site.register(Category,MPTTModelAdmin)
 admin.site.register(TopText)
-
-
 admin.site.register(CartProduct)
 admin.site.register(Cart)
 admin.site.register(Customer)
 admin.site.register(Order)
 
 admin.site.register( MyTopImage)
-
+admin.site.register(ChangeMyInfo)
 
 admin.site.register(Product,ProductAdmin)
-admin.site.register(MyImage)
+admin.site.register(MyImage,MyimageAdmin)
 admin.site.register(Rewiews)
-admin.site.register(ProductFeatureValidators)
+# admin.site.register(ProductFeatureValidators)
 
 
 admin.site.site_title="Администрация магазина"

@@ -46,13 +46,14 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.postgres',
+    # 'django.contrib.postgres',
     'mptt',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp.apps.MainappConfig',
+    'specs',
     'crispy_forms',
     
 ]
@@ -92,15 +93,21 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'ecom_db',
+#         'USER': 'kirill',
+#         'PASSWORD' : 'devpass1',
+#         'HOST' : 'localhost',
+#         'PORT': 5432
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecom_db',
-        'USER': 'kirill',
-        'PASSWORD' : 'devpass1',
-        'HOST' : 'localhost',
-        'PORT': 5432
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -142,14 +149,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
-MEDIA_URL='/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR,'static_dev'),
-# )
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-CRISPY_TEMPLATE_PACK='bootstrap3'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static_dev'),
+)
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 
 

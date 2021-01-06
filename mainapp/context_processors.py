@@ -1,11 +1,12 @@
-from .models import Category,TopText
+from .models import Category,TopText,ChangeMyInfo
+# from .mixins import CartMixin
 from django.template import context_processors
 
 def single_well_info(request):
+    # cart=CartMixin()
     category = Category.objects.all()
     toptext=TopText.objects.all()
-    # session_id = request.session._get_or_create_session_key()
-    
+    myinfo= ChangeMyInfo.objects.all()
     if not request.session.session_key:
         request.session.create()
 
@@ -13,4 +14,7 @@ def single_well_info(request):
     return {
         'topcategory': category,
         'toptext':toptext,
+        'myinfo': myinfo,
     }
+
+

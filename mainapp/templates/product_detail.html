@@ -7,7 +7,6 @@
     <main class="ps-main">
       <div class="test">
         <div class="container">
-          vcsjkl nxcl    {{product.characteristics.get_characteristics}}
           <div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 ">
                 </div>
@@ -26,10 +25,11 @@
                     {%if product.image3%} <div class="item"><img src=" {{product.image3.url}} " ></div>{%endif%}
                     {%if product.image4%}<div class="item"><img src=" {{product.image4.url}} " ></div>{%endif%}
                     {%if product.image5%}  <div class="item"><img src="{{product.image5.url}} " ></div>{%endif%}
-                  </div><a class="popup-youtube ps-product__video" href="http://www.youtube.com/watch?v=0O2aH4XLbto"><img src="{{product.image1.url}}" alt="{{product.title}}"><i class="fa fa-play"></i></a>
+                  </div>
+                  <!-- <a class="popup-youtube ps-product__video" href="http://www.youtube.com/watch?v=0O2aH4XLbto"><img src="{{product.image1.url}}" alt="{{product.title}}"><i class="fa fa-play"></i></a> -->
                 </div>
                 <div class="ps-product__image">
-                  <div class="item"><img class="zoom" src="{%if product.image1%} {{product.image1.url}} {%endif%}" alt="{{product.title}}" data-zoom-image="{%if product.image1%} {{product.image1.url}} {%endif%}"></div>
+                  <div class="item"><img class="zoom" src="{%if product.image1%} {{product.image1.url}} {%endif%}" alt="{{product.title}}" data-zoom-image="{%if product.image1%} {{product.image1.url}} {%endif%}" ></div>
                   <div class="item"><img class="zoom" src="{%if product.image2%} {{product.image2.url}} {%endif%}" alt="{{product.title}}" data-zoom-image="{%if product.image2%} {{product.image2.url}} {%endif%}"></div>
                   {%if product.image3%} <div class="item"><img class="zoom" src=" {{product.image3.url}} "  data-zoom-image="{%if product.image3%} {{product.image3.url}} {%endif%}"></div>{%endif%}
                   {%if product.image4%}  <div class="item"><img class="zoom" src="{{product.image4.url}} "  data-zoom-image="{%if product.image4%} {{product.image4.url}} {%endif%}"></div>{%endif%}
@@ -52,11 +52,22 @@
                   </select><a href="#">(Read all 8 reviews)</a> -->
                 </div>
                 <h1>{{product.title}}</h1>
-                <p class="ps-product__category"><a href="#">{{product.category}}</a>,<a href="{{product.category.get_absolute_url}}">{{product.category.name}}</a></p>
+                <p class="ps-product__category"><a href="{{product.category.get_absolute_url}}">{{product.category}}</a></p>
                 <h3 class="ps-product__price">{{product.price}} Грн<del>£ 330</del></h3>
                 <div class="ps-product__block ps-product__quickview">
-                  <h4>Характеристики</h4>
-                  <p>{{product.category.get_characteristics}} </p>
+                  <b class="mt-4"> Характеристики:</b>
+                  <table class="table">
+                    <tbody>
+                    {% for f_name, f_value in product.get_features.items %}
+                      <tr>
+                        <th scope="row">{{ f_name }}</th>
+                        <td> {{f_value}} </td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+              
+              
                 </div>
                 <!-- <div class="ps-product__block ps-product__style">
                   <h4>CHOOSE YOUR STYLE</h4>
@@ -245,7 +256,7 @@
                 <div class="ps-shoe">
                   <div class="ps-shoe__thumbnail">
                     <!-- <a class="ps-shoe__favorite" href="#"><i class="ps-icon-heart"></i></a> -->
-                    <img src="{{ i.image1.url }}" alt=""><a class="ps-shoe__overlay" href="{{i.get_absolute_url}}"></a>
+                    <img src="{{ i.image1.url }}" alt="{{ i.title }}" height="310"><a class="ps-shoe__overlay" href="{{i.get_absolute_url}}"></a>
                   </div>
                   <div class="ps-shoe__content">
                     <div class="ps-shoe__variants">

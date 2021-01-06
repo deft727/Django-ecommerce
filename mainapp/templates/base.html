@@ -51,15 +51,9 @@
         <div class="container-fluid">
           <div class="row">
                 <div class="col-lg-6 col-md-8 col-sm-6 col-xs-12 ">
-                  <p>
-
-               --> 
-
-
-
-
-
-                  </p>
+               <p>{%for i in myinfo%}
+                 {{i.toptext}}
+                {%endfor%}</p>
                 </div>
 
                 {%if not request.user.is_authenticated%}
@@ -202,6 +196,7 @@
     <div class="header-services">
       <div class="ps-services owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="7000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="false" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
         {% for text in toptext %}
+      
         <p class="ps-service"><i class="ps-icon-delivery"></i><strong>{{text.title }} </strong> : {{ text.text}}</p>
         {%endfor%}
       </div>
@@ -254,27 +249,28 @@
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                   <aside class="ps-widget--footer ps-widget--info">
                     <header><a class="ps-logo" href="index.html"><img src="images/logo-white.png" alt=""></a>
-                      <h3 class="ps-widget__title">Address Office 1</h3>
+                      {%for i in myinfo%}
+                      <h3 class="ps-widget__title">{{i.adress1}}</h3>
                     </header>
                     <footer>
-                      <p><strong>460 West 34th Street, 15th floor, New York</strong></p>
-                      <p>Email: <a href='mailto:support@store.com'>support@store.com</a></p>
-                      <p>Phone: +323 32434 5334</p>
-                      <p>Fax: ++323 32434 5333</p>
-                    </footer>
+                      <p><strong>{{i.street1}}</strong></p>
+                      <p>Email: <a href='mailto:{{i.email1}}'>{{i.email1}}</a></p>
+                      <p>Phone: {{i.phone1}}</p>
+                      <!-- <p>Fax: ++323 32434 5333</p> -->
+                    </footer>                
+
                   </aside>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                   <aside class="ps-widget--footer ps-widget--info second">
                     <header>
-                      <h3 class="ps-widget__title">Address Office 2</h3>
+                      <h3 class="ps-widget__title">{{i.adress2}}</h3>
                     </header>
                     <footer>
-                      <p><strong>PO Box 16122 Collins  Victoria 3000 Australia</strong></p>
-                      <p>Email: <a href='mailto:support@store.com'>support@store.com</a></p>
-                      <p>Phone: +323 32434 5334</p>
-                      <p>Fax: ++323 32434 5333</p>
-                    </footer>
+                      <p><strong>{{i.street2}}</strong></p>
+                      <p>Email: <a href='mailto:{{i.email2}}'>{{i.email2}}</a></p>
+                      <p>Phone: {{i.phone2}}</p>
+                    </footer>{%endfor%}
                   </aside>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12 ">
@@ -330,7 +326,9 @@
         <div class="ps-container">
           <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
-                  <p>&copy; <a href="#">SKYTHEMES</a>, Inc. All rights Resevered. Design by <a href="#"> Alena Studio</a></p>
+                  {%for i in myinfo%}
+                  <p>&copy; {{i.about}}</p>
+                  {%endfor%}
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
                   <ul class="ps-social">

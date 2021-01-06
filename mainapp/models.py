@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
-from django.contrib.postgres.fields import JSONField
+# from django.contrib.postgres.fields import JSONField
 from django.utils import timezone
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -25,8 +25,28 @@ class Category(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True,on_delete=models.CASCADE)
     name = models.CharField(max_length=250,verbose_name='Имя категории')
     slug = models.SlugField(unique=True)
+    class MPTTMeta:
+        order_insertion_by = ['name']
 
+    # class Meta:
+        # unique_together = (('parent', 'slug',))
+        # verbose_name_plural = 'Категории'
+
+    # def get_slug_list(self):
+    #     try:
+    #         ancestors = self.get_ancestors(include_self=True)
+    #     except:
+    #         ancestors = []
+    #     else:
+    #         ancestors = [ i.slug for i in ancestors]
+    #         slugs = []
+    #     for i in range(len(ancestors)):
+    #         slugs.append('/'.join(ancestors[:i+1]))
+    #         return slugs
     def __str__(self):
+
+        # return self.name
+
 
         try:
 
@@ -40,57 +60,58 @@ class Category(MPTTModel):
     def get_absolute_url(self):
         return reverse('category_detail',kwargs={'slug': self.slug})
 
-
-
-
-    def get_fields_for_filter_in_template(self):
-        return ProductFeatures.objects.filter(
-            category=self,
-            use_in_filter=True
-        ).prefetch_related('category').value('feature_key','feature_measure','feature_name','filter_type')
-    @property
     def get_products(self):
-        return Product.objects.filter(category__name=self.name)
+           Product.objects.filter(category=self)
+
+ 
+    # def get_fields_for_filter_in_template(self):
+    #     return ProductFeatures.objects.filter(
+    #         category=self,
+    #         use_in_filter=True
+    #     ).prefetch_related('category').value('feature_key','feature_measure','feature_name','filter_type')
+    # @property
+    # def get_products(self):
+    #     return Product.objects.filter(category__name=self.name)
 
 
 
     
-class ProductFeatures(models.Model):
+# class ProductFeatures(models.Model):
      
-    RADIO='radio'
-    CHECKBOX='checkbox'
-    FILTER_TYPE_CHOICES=(
-        (RADIO,'Радиокнопка'),
-        (CHECKBOX,'Чекбокс')
-    )
-    feature_key = models.CharField(max_length=100,verbose_name='Ключ характеристики')
-    feature_name= models.CharField(max_length=255,verbose_name='Наименование характеристики')
-    category= models.ForeignKey(Category,verbose_name='Категория',on_delete=models.CASCADE)
-    postfix_for_value= models.CharField(
-        max_length=25,
-        null=True,
-        blank=True,
-        verbose_name='Постфикс для значения',
-        help_text=f'Для хар-к можно добавить постфикс'
-    )
-    use_in_filter=models.CharField(max_length=50,
-        default=False,
-        verbose_name='Использовать в фильтрации товаров на странице'
-    )
-    filter_type = models.CharField(
-        max_length=20,
-        verbose_name='Тип фильтра',
-        default=CHECKBOX,
-        choices=FILTER_TYPE_CHOICES
-    )
-    filter_measures=models.CharField(
-        max_length=50,
-        verbose_name='Единица измерения',
-        help_text='Единица измерения для фильтра'
-    )
+    # RADIO='radio'
+    # CHECKBOX='checkbox'
+    # FILTER_TYPE_CHOICES=(
+    #     (RADIO,'Радиокнопка'),
+    #     (CHECKBOX,'Чекбокс')
+    # )
+    # feature_key = models.CharField(max_length=100,verbose_name='Ключ характеристики')
+    # feature_name= models.CharField(max_length=255,verbose_name='Наименование характеристики')
+    # category= models.ForeignKey(Category,verbose_name='Категория',on_delete=models.CASCADE)
+    # postfix_for_value= models.CharField(
+    #     max_length=25,
+    #     null=True,
+    #     blank=True,
+    #     verbose_name='Постфикс для значения',
+    #     help_text=f'Для хар-к можно добавить постфикс'
+    # )
+    # use_in_filter=models.CharField(max_length=50,
+    #     default=False,
+    #     verbose_name='Использовать в фильтрации товаров на странице'
+    # )
+    # filter_type = models.CharField(
+    #     max_length=20,
+    #     verbose_name='Тип фильтра',
+    #     default=CHECKBOX,
+    #     choices=FILTER_TYPE_CHOICES
+    # )
+    # filter_measures=models.CharField(
+    #     max_length=50,
+    #     verbose_name='Единица измерения',
+    #     help_text='Единица измерения для фильтра'
+    # )
 
-    def __str__(self):
-        return f'Категория - "{self.category.name}" | Характеристика -"{self.feature_name}"'
+    # def __str__(self):
+    #     return f'Категория - "{self.category.name}" | Характеристика -"{self.feature_name}"'
 
 
 
@@ -109,7 +130,8 @@ class Product(models.Model):
     image3 = models.ImageField(null=True,blank=True, verbose_name='Изображение 3',upload_to='products/%Y/%m/%d/')
     image4 = models.ImageField(null=True,blank=True, verbose_name='Изображение 4',upload_to='products/%Y/%m/%d/')
     image5 = models.ImageField(null=True,blank=True, verbose_name='Изображение 5',upload_to='products/%Y/%m/%d/')
-    characteristics = JSONField(blank=True,null=True)
+    features = models.ManyToManyField("specs.ProductFeatures", blank=True, related_name='features_for_product')
+    # characteristics = JSONField(blank=True,null=True)
     available = models.BooleanField(default=True)
     description = models.TextField(verbose_name='Описание товара',null=True)
     price = models.DecimalField(max_digits=10,decimal_places=2,verbose_name='Цена')
@@ -123,29 +145,14 @@ class Product(models.Model):
     def get_model_name(self):
         return self.__class__.__name__.lower()
 
-    def get_characteristics(self):
-        res={}
-        characteristics={
-            f.feature_key: {'feature_name':f.feature_name,'postfix':f.postfix_for_value}
-            for f in ProductFeatures.objects.filter(
-                feature_key__in=self.characteristics.keys()
-            ).prefetch_related('category')
-        }
-        prnt(self.characteristics.items())
-        for feature_key,feature_value in self.characteristics.items():
-            postfix = characteristics[feature_key].get('postfix')
-            if postfix:
-                res[characteristics[feature_key]['feature_name']] = feature_value + ' ' + postfix
-            else:
-                res[characteristics[feature_key]['feature_name']] = feature_value
-        print(characteristics)
-        return res
-
     def get_absolute_url(self):
         return reverse('product_detail',kwargs={'slug':self.slug})
-    
-    def get_feature_value_by_key(self,key):
-        return self.characteristics.get(key)
+
+    def get_features(self):
+        return {f.feature.feature_name: ' '.join([f.value, f.feature.unit or ""]) for f in self.features.all()}
+
+    # def get_feature_value_by_key(self,key):
+        # return self.characteristics.get(key)
 
 
     def save(self,*args,**kwargs):
@@ -226,12 +233,12 @@ class Product(models.Model):
             )
             super().save(*args,**kwargs)
 
-    @classmethod
-    def get_products_brands(cls,category):
-        return list(filter(
-            lambda x: x is not None,
-            [p.characteristics.get('brand') for p in cls.objects.filter(category=category)]
-        ))
+    # @classmethod
+    # def get_products_brands(cls,category):
+    #     return list(filter(
+    #         lambda x: x is not None,
+    #         [p.characteristics.get('brand') for p in cls.objects.filter(category=category)]
+    #     ))
 
 class TopText(models.Model):
     class Meta:
@@ -247,14 +254,47 @@ class MyTopImage(models.Model):
     class Meta:
         verbose_name='Изображение сверху'
         verbose_name_plural = 'Изображения сверху'
-    image=models.ImageField()
+    image1=models.ImageField(null=True,blank=True, verbose_name='Изображение 1',upload_to='TopImage/')
+    image2=models.ImageField(null=True,blank=True, verbose_name='Изображение 2',upload_to='TopImage/')
+
+    # def save(self,*args,**kwargs):
+
+    #     image1=self.image1
+    #     if image1 :
+
+    #         img1=Image.open(image1)
+    #         new_img1=img1.convert('RGB')
+    #         res_img1=new_img1.resize((1920,650),Image.ANTIALIAS)
+    #         filestream= BytesIO()
+    #         file_=res_img1.save(filestream,'JPEG',quality=90)
+    #         filestream.seek(0)
+    #         name= '{}.{}'.format(*self.image1.name.split('.'))
+    #         self.image1 = InMemoryUploadedFile(
+    #             filestream,'ImageFiedl',name,'jpeg/image',sys.getsizeof(filestream),  None
+    #         )
+    #         super().save(*args,**kwargs)
+        
+    #     image2=self.image2
+    #     if image2 :
+
+    #         img2=Image.open(image2)
+    #         new_img2=img2.convert('RGB')
+    #         res_img2=new_img2.resize((1920,650),Image.ANTIALIAS)
+    #         filestream= BytesIO()
+    #         file_=res_img2.save(filestream,'JPEG',quality=90)
+    #         filestream.seek(0)
+    #         name= '{}.{}'.format(*self.image2.name.split('.'))
+    #         self.image2 = InMemoryUploadedFile(
+    #             filestream,'ImageFiedl',name,'jpeg/image',sys.getsizeof(filestream),  None
+    #         )
+    #         super().save(*args,**kwargs)
 
 class MyImage(models.Model):
     class Meta:
         verbose_name='Изображение снизу'
         verbose_name_plural = 'Изображения снизу'
-    imagedown1=models.ImageField()
-    imagedown2= models.ImageField()
+    imagedown1=models.ImageField(null=True,blank=True, verbose_name='Изображение 1',upload_to='DownImage')
+    imagedown2= models.ImageField(null=True,blank=True, verbose_name='Изображение 2',upload_to='DownImage')
 
     def save(self,*args,**kwargs):
         imagedown1=self.imagedown1
@@ -283,24 +323,30 @@ class MyImage(models.Model):
         )
         super().save(*args,**kwargs)
 
+class ChangeMyInfo(models.Model):
+    # logo = models.ImageField(null=True,blank=True, verbose_name='Логототип',upload_to='Logo')
+    toptext = models.CharField(max_length=150,verbose_name='Текст в левом углу',null=True,blank=True)
+    adress1= models.CharField(max_length=150,verbose_name='Адресс 1',null=True,blank=True)
+    street1= models.CharField(max_length=150,verbose_name='Улица для адресс 1',null=True,blank=True)
+    email1= models.EmailField(max_length=150,verbose_name='емайл для адрес 1',null=True,blank=True)
+    phone1= models.CharField(max_length=20, verbose_name='Номер телефона')
+    adress2 = models.CharField(max_length=150,verbose_name='Адресс 2',null=True,blank=True)
+    street2=  models.CharField(max_length=150,verbose_name='Улица для адресс 2',null=True,blank=True)
+    email2= models.EmailField(max_length=150,verbose_name='емайл для адрес 2',null=True,blank=True)
+    phone2= models.CharField(max_length=20, verbose_name='Номер телефона')
+    about=  models.CharField(max_length=150,verbose_name='Пару слов о сайте',null=True,blank=True)
 
+# class ProductFeatureValidators(models.Model):
+    # category = models.ForeignKey(Category,verbose_name='Категория',on_delete=models.CASCADE)
+    # feature= models.ForeignKey(ProductFeatures, verbose_name='Характеристика',null=True,blank=True,on_delete=models.CASCADE)
+    # feature_value= models.CharField(max_length=255,unique=True,null=True,blank=True,verbose_name='Значение хар-ки')
 
-
-
-
-
-
-class ProductFeatureValidators(models.Model):
-    category = models.ForeignKey(Category,verbose_name='Категория',on_delete=models.CASCADE)
-    feature= models.ForeignKey(ProductFeatures, verbose_name='Характеристика',null=True,blank=True,on_delete=models.CASCADE)
-    feature_value= models.CharField(max_length=255,unique=True,null=True,blank=True,verbose_name='Значение хар-ки')
-
-    def __str__(self):
-        if not self.feature:
-            return f'Валидатор категории "{self.category.name}"- Хар-ка не выбрана'
-        return f'Валидатор категории"{self.category.name} | '\
-                f'Характеристика - "{self.feature.feature_name}"|'\
-                f'Значение - "{self.feature_value}"'
+    # def __str__(self):
+    #     if not self.feature:
+    #         return f'Валидатор категории "{self.category.name}"- Хар-ка не выбрана'
+    #     return f'Валидатор категории"{self.category.name} | '\
+    #             f'Характеристика - "{self.feature.feature_name}"|'\
+    #             f'Значение - "{self.feature_value}"'
 
 
 class CartProduct(models.Model):

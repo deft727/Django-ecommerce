@@ -1,21 +1,32 @@
 {%extends 'base.html'%}
 {% load static%}
+{% load search_filter %}
+{% load mptt_tags %}
+
+
+
 
 {%block main%}
+<nav aria-label="breadcrumb" class="mt-5">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'base' %}">Главная</a></li>
+    <li class="breadcrumb-item active">{{ category.name }}</li>
+  </ol>
+</nav>
 
 <main class="ps-main">
   <div class="ps-products-wrap pt-80 pb-80">
     <div class="ps-products" data-mh="product-listing">
       <div class="ps-product-action">
-        <div class="ps-product__filter">
-          <select class="ps-select selectpicker">
+        <!-- <div class="ps-product__filter"> -->
+          <!-- <select class="ps-select selectpicker">
             <option value="1">Shortby</option>
             <option value="2">Name</option>
             <option value="3">Price (Low to High)</option>
             <option value="3">Price (High to Low)</option>
-          </select>
+          </select> -->
         </div>
-        <div class="ps-pagination">
+        <!-- <div class="ps-pagination">
           <ul class="pagination">
             <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
             <li class="active"><a href="#">1</a></li>
@@ -25,13 +36,13 @@
             <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
           </ul>
         </div>
-      </div>
+      </div> -->
       <div class="ps-product__columns">
 
-{%for product in category.get_products%}
+{%for product in category_products.object_list%}
         <div class="ps-product__column">
           <div class="ps-shoe mb-30">
-            <div class="ps-shoe__thumbnail"><a class="ps-shoe__favorite" href="{{product.get_absolute_url}}"><i class="ps-icon-heart"></i></a><img src="{{product.image1.url}}" alt="{{product.title}}"><a class="ps-shoe__overlay" href="{{product.get_absolute_url}}"></a>
+            <div class="ps-shoe__thumbnail"><a class="ps-shoe__favorite" href="{{product.get_absolute_url}}"><i class="ps-icon-heart"></i></a><img src="{{product.image1.url}}" alt="{{product.title}}" height="320"><a class="ps-shoe__overlay" href="{{product.get_absolute_url}}"></a>
             </div>
             <div class="ps-shoe__content">
               <div class="ps-shoe__variants">
@@ -69,59 +80,56 @@
             <option value="3">Price (High to Low)</option>
           </select>
         </div>
+
+ 
         <div class="ps-pagination">
           <ul class="pagination">
-            <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">...</a></li>
-            <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+            {% if page.has_other_pages %}
+            {% if page.has_previous %}
+
+            <li><a href="?page={{ page.previous_page_number }}"><i class="fa fa-angle-left"></i></a></li>
+            {%endif%}
+            {% for i in page.paginator.page_range %}
+            {% if page.number == i %}
+            <li class="active"><a href="#">{{ i }}</a></li>
+            {%else%}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+              {% endfor %}
+              {% if page.has_next %}
+
+            <li><a href="?page={{ page.next_page_number }}"><i class="fa fa-angle-right"></i></a></li>
+            {% endif %}
+            {% endif %}
+
           </ul>
         </div>
+
+
+      
       </div>
     </div>
+    
     <div class="ps-sidebar" data-mh="product-listing">
       <aside class="ps-widget--sidebar ps-widget--category">
         <div class="ps-widget__header">
-          <h3>Category</h3>
-        </div>
-        <div class="ps-widget__content">
-          <ul class="ps-list--checked">
-            <li class="current"><a href="product-listing.html">Life(521)</a></li>
-            <li><a href="product-listing.html">Running(76)</a></li>
-            <li><a href="product-listing.html">Baseball(21)</a></li>
-            <li><a href="product-listing.html">Football(105)</a></li>
-            <li><a href="product-listing.html">Soccer(108)</a></li>
-            <li><a href="product-listing.html">Trainning & game(47)</a></li>
-            <li><a href="product-listing.html">More</a></li>
-          </ul>
-        </div>
-      </aside>
-      <aside class="ps-widget--sidebar ps-widget--filter">
-        <div class="ps-widget__header">
-          <h3>Category</h3>
-        </div>
-        <div class="ps-widget__content">
-          <div class="ac-slider" data-default-min="300" data-default-max="2000" data-max="3450" data-step="50" data-unit="$"></div>
-          <p class="ac-slider__meta">Price:<span class="ac-slider__value ac-slider__min"></span>-<span class="ac-slider__value ac-slider__max"></span></p><a class="ac-slider__filter ps-btn" href="#">Filter</a>
-        </div>
-      </aside>
-      <aside class="ps-widget--sidebar ps-widget--category">
-        <div class="ps-widget__header">
-          <h3>Sky Brand</h3>
-        </div>
-        <div class="ps-widget__content">
-          <ul class="ps-list--checked">
-            <li class="current"><a href="product-listing.html">Nike(521)</a></li>
-            <li><a href="product-listing.html">Adidas(76)</a></li>
-            <li><a href="product-listing.html">Baseball(69)</a></li>
-            <li><a href="product-listing.html">Gucci(36)</a></li>
-            <li><a href="product-listing.html">Dior(108)</a></li>
-            <li><a href="product-listing.html">B&G(108)</a></li>
-            <li><a href="product-listing.html">Louis Vuiton(47)</a></li>
-          </ul>
-        </div>
+
+
+
+          {% block productfilter %}
+<hr>
+
+
+<form action="{% url 'category_detail' slug=category.slug %}" method="GET" name="filter">
+  {{ category|product_spec }}
+<p class="text-center">
+  <button class="btn btn-outline-success" type="submit">Поиск</button>
+  <button class="btn btn-outline-info" type="submit">Сбросить</button>
+</p>
+</form>
+
+{% endblock productfilter %}
+         
       </aside>
      
       <!--aside.ps-widget--sidebar-->
@@ -154,6 +162,7 @@
       </div>
     </div>
   </div>
+  
 </main>
 
 {%endblock main%}
