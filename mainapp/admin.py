@@ -74,9 +74,9 @@ class ProductAdmin(admin.ModelAdmin):
 #     model =Category1
 # class MyTopImageAdmin(admin.ModelAdmin):
 #     inlines = [MyTopImage]
-class MyimageAdmin(admin.ModelAdmin):
-    form = filterCategory
-    formfield_overrides = { TreeManyToManyField:{'widget':CheckboxSelectMultiple},}
+# class MyimageAdmin(admin.ModelAdmin):
+#     form = filterCategory
+#     formfield_overrides = { TreeManyToManyField:{'widget':CheckboxSelectMultiple},}
 
 
 admin.site.register(Category,MPTTModelAdmin)
@@ -90,7 +90,7 @@ admin.site.register( MyTopImage)
 admin.site.register(ChangeMyInfo)
 
 admin.site.register(Product,ProductAdmin)
-admin.site.register(MyImage,MyimageAdmin)
+admin.site.register(MyImage)
 admin.site.register(Rewiews)
 # admin.site.register(ProductFeatureValidators)
 
