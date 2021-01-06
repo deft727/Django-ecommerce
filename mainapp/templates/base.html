@@ -56,8 +56,9 @@
                 {%endfor%}</p>
                 </div>
 
-                {%if not request.user.is_authenticated%}
                 <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12 ">
+                  {%if not request.user.is_authenticated%}
+
                   <div class="header__actions"><a href="{%url 'login'%}">Вход</a>
                     <div class="header__actions"><a href="{%url 'registration'%}">Регистрация</a>
                  {%else%}
