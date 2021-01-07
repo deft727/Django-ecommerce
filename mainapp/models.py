@@ -373,32 +373,20 @@ class Cart(models.Model):
     class Meta:
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзина'
-        # unique_together = ('user', 'session_key',)
-        # add user
-    # user = models.OneToOneField(User, blank=True, null=True, related_name='cart',on_delete=models.CASCADE)
-
+  
     owner = models.ForeignKey('Customer',null=True, verbose_name='Владелец',on_delete=models.CASCADE)
     products = models.ManyToManyField(CartProduct,blank=True,related_name='related_cart')
     total_products = models.PositiveIntegerField(default=0)
     final_price = models.DecimalField(max_digits=10,default=0, decimal_places=2,verbose_name='Общая сумма')
     in_order= models.BooleanField(default=False)
     for_anonymoys_user= models.BooleanField(default=False)
-    # add session key
 
     
         
     def __str__(self):
         return str(self.id)
 
-    # def save(self,*args,**kwargs):
-    #     cart_data= self.products.aggregate(models.Sum('final_price'),models.Count('id'))
-    #     if cart_data.get('final_price__sum'):
-    #         self.final_price = cart_data.get('final_price__sum')
-    #     else:
-    #         self.final_price=0
-    #     self.total_products = cart_data['id__count']
-
-# cart.related_producr.all() продукты в корзине
+ 
 
 class Customer(models.Model):
 
@@ -446,8 +434,9 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, verbose_name='Покупатель', related_name='related_orders', on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255, verbose_name='Имя')
     last_name = models.CharField(max_length=255, verbose_name='Фамилия')
-    phone = models.CharField(max_length=20, verbose_name='Телефон')
+    phone = models.CharField(max_length=20, verbose_name='Телефон',help_text="+38-050-111-11-11")
     cart = models.ForeignKey(Cart, verbose_name='Корзина', on_delete=models.CASCADE, null=True, blank=True)
+    email= models.EmailField(max_length=60, verbose_name='Емайл', null=True, blank=True)
     adress = models.CharField(max_length=1024, verbose_name='Адрес', null=True, blank=True)
     otdel = models.CharField(max_length=20,verbose_name='Отделение', null=True, blank=True)
     status = models.CharField(
@@ -464,9 +453,7 @@ class Order(models.Model):
     )
     comment = models.TextField(verbose_name='Комментарий к заказу', null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True, verbose_name='Дата создания заказа')
-    # order_date = models.DateField(verbose_name='Дата получения заказа', default=timezone.now)
-    # add session
-    # session = models.ForeignKey(Session, on_delete=models.SET_NULL, blank=True, null=True)
+
     def __str__(self):
         return str(self.id)
 

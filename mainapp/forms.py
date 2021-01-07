@@ -13,7 +13,7 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = (
-            'first_name', 'last_name', 'phone', 'adress','otdel', 'buying_type', 'comment'
+            'first_name', 'last_name', 'phone', 'email','adress','otdel', 'buying_type', 'comment'
         )
 
 
@@ -59,7 +59,7 @@ class ContactForm(forms.Form):
 class RegistrationForm(forms.ModelForm):
     confirm_password = forms.CharField(widget=forms.PasswordInput)
     password=forms.CharField(widget=forms.PasswordInput)
-    phone = forms.CharField(required=True)
+    phone = forms.CharField(required=True,help_text="+38-050-111-11-11")
     adress = forms.CharField(required=False)
     email = forms.EmailField(required=True)
 

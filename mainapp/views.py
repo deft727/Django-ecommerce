@@ -28,8 +28,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # user_logged_in.connect(user_logged_in_handler)
 
 
-def send_email(email,name,phone,comment):
-    email = EmailMessage('Интернет магазин', name+ 'вы сделали заказ '+comment+'ваш телдля связи'+phone, to=[email])
+def send_email(email,name,phone,comment,prod):
+    email = EmailMessage(' Интернет магазин ', name+ ' вы сделали заказ '+comment+' ваш тел для связи '+ phone, 
+    ' заказали ' + prod , to=[email])
     email.send()
 
 
@@ -112,65 +113,49 @@ class CategoryDetailView(CartMixin, DetailView):
     template_name = 'category_detail.html'
     slug_url_kwarg = 'slug'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self,*args, **kwargs):
         context = super().get_context_data(**kwargs)
         query = self.request.GET.get('search')
         query1 = self.request.GET.get('page')
-        print(query,query1)
         category = self.get_object()
         context['cart'] = self.cart
         context['categories'] = self.model.objects.all()
-
         page_number = self.request.GET.get('page',1) 
-        # if page is None:
-        #     page=1
-        print(page_number)
+        filter_by= self.request.GET.get('sort')
 
         if   not query and  not self.request.GET :
             category_products = Product.objects.filter(category=category)
             # context['category_products'] = category_products
-            print(self.request.GET.get('page'))
             paginator = Paginator(category_products, 1)  # 3 поста на каждой странице  
             page =paginator.get_page(page_number) 
-            print(page)
-            # try:  
-            #     posts = paginator.page(page)  
-            # except PageNotAnInteger:  
-            #     # Если страница не является целым числом, поставим первую страницу  
-            #     posts = paginator.page(1)  
-            # except EmptyPage:  
-            #     # Если страница больше максимальной, доставить последнюю страницу результатов  
-            #     posts = paginator.page(paginator.num_pages)
+
             context['category_products'] = page
             context['page']= page
             return context
-
-        if query1:
+      
+        if query1 or filter_by:
             category_products = Product.objects.filter(category=category)
-            # context['category_products'] = category_products
-            print(self.request.GET.get('page'))
+            if filter_by=='priceup':
+                category_products = Product.objects.filter(category=category).order_by('price')
+            if filter_by=='pricedown':
+                category_products = Product.objects.filter(category=category).order_by('-price')
+            if filter_by=='title':
+                category_products = Product.objects.filter(category=category).order_by('title')
+            if filter_by:
+
+                addSort = '&sort=' + filter_by
             paginator = Paginator(category_products, 1)  # 3 поста на каждой странице  
             page =paginator.get_page(page_number) 
-            print(page)
-            # try:  
-            #     posts = paginator.page(page)  
-            # except PageNotAnInteger:  
-            #     # Если страница не является целым числом, поставим первую страницу  
-            #     posts = paginator.page(1)  
-            # except EmptyPage:  
-            #     # Если страница больше максимальной, доставить последнюю страницу результатов  
-            #     posts = paginator.page(paginator.num_pages)
+        
+            context['addSort']=addSort
             context['category_products'] = page
             context['page']= page
             return context
-
-
+  
         if query:
-            # products= Product.objects.filter(category=category)
             products = category.product_set.filter(Q(title__icontains=query))
             paginator = Paginator(products, 2)  # 3 поста на каждой странице  
             page =paginator.get_page(page_number) 
-            print('query',page)
             context['category_products'] =page
             context['page']= page
 
@@ -333,8 +318,10 @@ class MakeOrderView(CartMixin,View):
             new_order.last_name = form.cleaned_data['last_name']
             new_order.adress = form.cleaned_data['adress']
 
-            email=form.cleaned_data['adress']
+            adress=form.cleaned_data['adress']
 
+            new_order.email=form.cleaned_data['email']
+            email= form.cleaned_data['email']
 
             new_order.otdel = form.cleaned_data['otdel']
             new_order.buying_type = form.cleaned_data['buying_type']
@@ -343,18 +330,17 @@ class MakeOrderView(CartMixin,View):
             comment=form.cleaned_data['comment']
 
             new_order.save()
-            self.cart.in_order = True
-            self.cart.save()
-            new_order.cart = self.cart
-            new_order.save()
-            customer.orders.add(new_order)
+            a=CartProduct.objects.filter(user=customer).order_by('-id').first()
+            prod=a.product.title
+            print(prod)
+
 
 
             # email=form.cleaned_data['adress']
             # print(email)
             # name= form.cleaned_data['first_name']
             # body= form.cleaned_data['phone']
-            send_email(email,name,phone,comment)
+            send_email(email,name,phone,comment,prod)
 
             messages.add_message(request, messages.INFO, 'Спасибо за заказ! Менеджер с Вами свяжется')
             return HttpResponseRedirect('/')
