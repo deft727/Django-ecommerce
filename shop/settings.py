@@ -40,11 +40,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['*',]
 
 
-# MIDDLEWARE = [
-#     'whitenoise.middleware.WhiteNoiseMiddleware',]
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -110,7 +105,7 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 #         'PORT': 5432
 #     }
 # }
-dotenv_file = os.path.join(BASE_DIR, ".env")
+# dotenv_file = os.path.join(BASE_DIR, ".env")
 # if os.path.isfile(dotenv_file):
 #     dotenv.load_dotenv(dotenv_file)
 
@@ -159,7 +154,7 @@ USE_TZ = True
 
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
@@ -167,7 +162,7 @@ STATICFILES_DIRS = (
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, '/static/')
 MEDIA_URL = '/media/'
 
 
