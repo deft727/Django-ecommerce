@@ -35,7 +35,7 @@ class filterCategory(forms.ModelForm):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    search_fields= ('title','descripton')
+    search_fields= ('title',)
     list_display= ( 'id','title', 'category', 'price', 'available')
     list_display_links=('id','title')
     list_editable=('available',)
@@ -85,6 +85,7 @@ admin.site.register(CartProduct)
 admin.site.register(Cart)
 admin.site.register(Customer)
 admin.site.register(Order)
+admin.site.register(Logo)
 
 admin.site.register( MyTopImage)
 admin.site.register(ChangeMyInfo)

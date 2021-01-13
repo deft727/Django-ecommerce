@@ -1,17 +1,15 @@
-
 import operator
 from functools import reduce
 from itertools import chain
 from django.db import transaction
 from django.db.models import Q
-
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.contrib.auth import authenticate,login
 from django.http import HttpResponseRedirect
-from django.views.generic import DetailView,View
-from .models import Category,Customer,Cart,CartProduct,Product,Order,MyImage,User,MyTopImage
+from django.views.generic import DetailView,View,ListView
+from .models import Category,Customer,Cart,CartProduct,Product,Order,MyImage,User,MyTopImage,AboutUs,Returns,Delivery,ContactUs
 from .mixins import CartMixin
 from .forms import OrderForm,LoginForm,RegistrationForm,ContactForm,RewiewsForm
 from .utils import recalc_cart
@@ -20,18 +18,21 @@ from specs.models import ProductFeatures
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.contrib.sessions.models import Session
+from django.core.paginator import Paginator
+from django.template.loader import render_to_string
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  
-
-# def user_logged_in_handler(sender, request, user, **kwargs)
-# UserSession.objects.get_or_create(user = user, session_id = request.session.session_key)
-# user_logged_in.connect(user_logged_in_handler)
+def custom_404(request):
+    return render(request, '404.html', {}, status=404)
 
 
-def send_email(email,name,phone,comment,prod):
-    email = EmailMessage(' Интернет магазин ', name+ ' вы сделали заказ '+comment+' ваш тел для связи '+ phone, 
-    ' заказали ' + prod , to=[email])
-    email.send()
+
+class AboutUsView(View):
+    def get(self,request,*args,**kwargs):
+        about= AboutUs.objects.all()
+        context= {
+            'about': about,
+        }
+        return render(request,'contact-us.html',context)
 
 
 class MyQ(Q):
@@ -40,26 +41,13 @@ class MyQ(Q):
 
 class BaseView(CartMixin, View):
     def get(self,request,*args,**kwargs):
-
-        # if not request.session.session_key:
-        #     request.session.create()
-        
-        # session_id = request.session.session_key
-
-        # print(User.objects.filter(username='session_key').first())
-
-
-
         Topimage=MyTopImage.objects.all()
         category = Category.objects.all()
         products = Product.objects.all().order_by('-id')[:8]
         myimage= MyImage.objects.all()
         randomProducts= Product.objects.all().order_by('?')[:10]
         form= ContactForm(request.POST or None)
-
-
         context= {
-            
             'category': category,
             'products' : products,
             'cart':self.cart,
@@ -78,7 +66,7 @@ class BaseView(CartMixin, View):
             name= form.cleaned_data['name']
             email_user = form.cleaned_data['email']
             text= form.cleaned_data['text']
-            email = EmailMessage('Интернет магазин','ГОСТЬ С ИМЕНЕМ - '+ name+ ' НАПИСАЛ- '+ text + ' ЕГО ПОЧТА ДЛЯ СВЗЯИ: '+ email_user, to=['magikmagazin123@gmail.com'])
+            email = EmailMessage('Интернет магазин',' ГОСТЬ С ИМЕНЕМ - '+ name+ ' НАПИСАЛ- '+ text + ' ЕГО ПОЧТА ДЛЯ СВЗЯИ: '+ email_user, to=['magikmagazin123@gmail.com'])
             email.send()
             messages.add_message(request,messages.INFO,'Ваше сообщение отправлено')
             return HttpResponseRedirect('/')
@@ -91,16 +79,15 @@ class ProductDetailView(CartMixin,DetailView):
     model= Product
     template_name='product_detail.html'
     slug_url_kwarg='slug'
-    # cart_product_form=CartAddProductForm()
-   
-    def get_context_data(self,**kwargs):
-        # slug= kwargs.get('slug')
-        context = super().get_context_data(**kwargs)
-        context['categories'] = self.get_object().category.__class__.objects.all()
-        context['cart']= self.cart
-        context['randomProducts']= Product.objects.all().order_by('?')[:10]
-        return context
 
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('search')
+        context['categories'] =  self.get_object().category.__class__.objects.all()
+        context['cart']= self.cart
+        category=self.get_object().category
+        context['randomProducts']= Product.objects.filter(category=category)[:12]
+        return context
 
 
 
@@ -122,29 +109,41 @@ class CategoryDetailView(CartMixin, DetailView):
         context['categories'] = self.model.objects.all()
         page_number = self.request.GET.get('page',1) 
         filter_by= self.request.GET.get('sort')
-
+        addSort =''
         if   not query and  not self.request.GET :
-            category_products = Product.objects.filter(category=category)
-            # context['category_products'] = category_products
-            paginator = Paginator(category_products, 1)  # 3 поста на каждой странице  
+            category_man_id = category.id # укажи стартовую верхнюю категорию
+            sub1 = list(Category.objects.filter(parent = category_man_id))
+            sub2 = list(Category.objects.filter(parent__in = sub1))
+            if sub1 or sub2:
+                category_products= Product.objects.filter(category__in = sub1+sub2)
+            else:
+                category_products =  Category.objects.get(id=category.id).get_products()
+         
+            paginator = Paginator(category_products, 18)  # 3 поста на каждой странице  
             page =paginator.get_page(page_number) 
-
             context['category_products'] = page
             context['page']= page
             return context
       
         if query1 or filter_by:
-            category_products = Product.objects.filter(category=category)
+            category_man_id = category.id # укажи стартовую верхнюю категорию
+            sub1 = list(Category.objects.filter(parent = category_man_id))
+            sub2 = list(Category.objects.filter(parent__in = sub1))
+            if sub1 or sub2:
+                category_products= Product.objects.filter(category__in = sub1+sub2)
+            else:
+                category_products = Product.objects.filter(category=category)
+
             if filter_by=='priceup':
-                category_products = Product.objects.filter(category=category).order_by('price')
+                category_products = category_products.order_by('price')
             if filter_by=='pricedown':
-                category_products = Product.objects.filter(category=category).order_by('-price')
+                category_products = category_products.order_by('-price')
             if filter_by=='title':
-                category_products = Product.objects.filter(category=category).order_by('title')
+                category_products = category_products.order_by('title')
             if filter_by:
 
                 addSort = '&sort=' + filter_by
-            paginator = Paginator(category_products, 1)  # 3 поста на каждой странице  
+            paginator = Paginator(category_products, 18)  # 3 поста на каждой странице  
             page =paginator.get_page(page_number) 
         
             context['addSort']=addSort
@@ -153,33 +152,14 @@ class CategoryDetailView(CartMixin, DetailView):
             return context
   
         if query:
-            products = category.product_set.filter(Q(title__icontains=query))
-            paginator = Paginator(products, 2)  # 3 поста на каждой странице  
+            if query[0].lower():
+                query= query.title()
+            products =   Product.objects.filter(Q(title__icontains=query))
+            paginator = Paginator(products, 18)  # 3 поста на каждой странице  
             page =paginator.get_page(page_number) 
-            context['category_products'] =page
+            context['category_products'] = page
             context['page']= page
-
             return context
-
-
-
-
-        # if category_products:
-        #     paginator = Paginator(category_products, 3)  # 3 поста на каждой странице  
-        #     page = request.GET.get('page') 
-
-        #     try:  
-        #         posts = paginator.page(page)  
-        #     except PageNotAnInteger:  
-        #         # Если страница не является целым числом, поставим первую страницу  
-        #         posts = paginator.page(1)  
-        #     except EmptyPage:  
-        #         # Если страница больше максимальной, доставить последнюю страницу результатов  
-        #         posts = paginator.page(paginator.num_pages)
-        #     return 		  {'context':context,
-        #                     'page': page,  
-		#                    'posts': posts} 
-
 
 
         url_kwargs = {}
@@ -198,26 +178,18 @@ class CategoryDetailView(CartMixin, DetailView):
             q_condition_queries
         ).prefetch_related('product', 'feature').values('product_id')
         products = Product.objects.filter(id__in=[pf_['product_id'] for pf_ in pf])
-        # context['category_products'] = products
-
-        paginator = Paginator(products, 2)  # 3 поста на каждой странице  
+        paginator = Paginator(products, 18)  # 3 поста на каждой странице  
         page =paginator.get_page(page_number) 
-        print('filter',page)
         context['category_products'] = page
         context['page']= page
         return context
 
 
-
-
-
 class AddToCartView(CartMixin,View):
     def get(self,request,*args,**kwargs):
-
+        
         product_slug= kwargs.get('slug')
         product= Product.objects.get(slug=product_slug)
-
-
         cart_product,created=CartProduct.objects.get_or_create(
             user=self.cart.owner,cart=self.cart,product=product
         )
@@ -226,7 +198,6 @@ class AddToCartView(CartMixin,View):
         recalc_cart(self.cart)
         messages.add_message(request,messages.INFO,'Товар добавлен в корзину')
         return redirect(product.get_absolute_url())
-
 
 
 class DeleteFomCartView(CartMixin,View):
@@ -269,6 +240,7 @@ class ChangeQTYView(CartMixin,View):
 class CartView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
+
         category = Category.objects.all()
         context = {
             'cart': self.cart,
@@ -290,7 +262,6 @@ class CheckoutView(CartMixin, View):
         return render(request, 'checkout.html', context)
 
 class MakeOrderView(CartMixin,View):
-    
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         form = OrderForm(request.POST or None)
@@ -321,26 +292,37 @@ class MakeOrderView(CartMixin,View):
             adress=form.cleaned_data['adress']
 
             new_order.email=form.cleaned_data['email']
-            email= form.cleaned_data['email']
+            email = form.cleaned_data['email']
 
             new_order.otdel = form.cleaned_data['otdel']
             new_order.buying_type = form.cleaned_data['buying_type']
             new_order.comment = form.cleaned_data['comment']
-
             comment=form.cleaned_data['comment']
-
             new_order.save()
-            a=CartProduct.objects.filter(user=customer).order_by('-id').first()
-            prod=a.product.title
-            print(prod)
-
-
+            self.cart.in_order = True
+            self.cart.save()
+            new_order.cart = self.cart
+            new_order.save()
+            customer.orders.add(new_order)
+            orders = Order.objects.filter(customer=customer).order_by('-id')[:1]
+# -----------------------------------------------------------------------------------------------------------------------
+            subject = "Заказ на сайте 12312312"
+            to = [email,]
+            from_email = 'test@example.com'
+            ctx = {
+                'orders': orders,
+            }
+            message = get_template('message.html').render(ctx)
+            msg = EmailMessage(subject, message, to=to, from_email=from_email)
+            msg.content_subtype = 'html'
+            msg.send()
+# ----------------------------------------------------------------------------------------------------------------------
 
             # email=form.cleaned_data['adress']
             # print(email)
             # name= form.cleaned_data['first_name']
             # body= form.cleaned_data['phone']
-            send_email(email,name,phone,comment,prod)
+            # send_email(email,name,phone)
 
             messages.add_message(request, messages.INFO, 'Спасибо за заказ! Менеджер с Вами свяжется')
             return HttpResponseRedirect('/')
@@ -352,13 +334,12 @@ class ProductRewiew(View):
     def post(self,request,pk):
         form = RewiewsForm(request.POST or None)
         product=Product.objects.get(id=pk)
-        # print(product)
         if form.is_valid():
             form=form.save(commit=False)
             form.name= request.user
             form.product= product
             form.save()
-            messages.add_message(request,messages.INFO,'Ваш отзвы добавлен!')
+            messages.add_message(request,messages.INFO,'Ваш отзыв добавлен!')
         return redirect(product.get_absolute_url())
 
 
@@ -393,11 +374,9 @@ class RegistrationView(CartMixin,View):
     def post(self,request,*args,**kwargs):
         form= RegistrationForm(request.POST or None)
         if form.is_valid():
-            # print('Эмайл тут   ',form.cleaned_data)
             new_user=form.save(commit=False)
             new_user.username=form.cleaned_data['username']
             new_user.email=form.cleaned_data['email']
-            # print(form.cleaned_data['email'])
             new_user.first_name=form.cleaned_data['first_name']
             new_user.last_name=form.cleaned_data['last_name']
             new_user.set_password(form.cleaned_data['password'])

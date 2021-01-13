@@ -13,7 +13,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import django_heroku
 import dj_database_url
+# import dotenv
 
+# import posixpath
 
 
 
@@ -35,11 +37,15 @@ SECRET_KEY = 'rm^8ds7_w+kh2m%2_my$rb!s9-dg)cnqk+95yzfw(asx=-b&gb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://mysite123456.herokuapp.com/','http://127.0.0.1:8000/']
+ALLOWED_HOSTS = [
+    'localhost',
+    '.herokuapp.com'
+]
 
-MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# MIDDLEWARE = [
+#     'whitenoise.middleware.WhiteNoiseMiddleware',]
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Application definition
 
@@ -55,18 +61,20 @@ INSTALLED_APPS = [
     'mainapp.apps.MainappConfig',
     'specs',
     'crispy_forms',
+    # 'django_inlinecss',
     
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'shop.urls'
@@ -74,7 +82,7 @@ ROOT_URLCONF = 'shop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -105,6 +113,10 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 #         'PORT': 5432
 #     }
 # }
+dotenv_file = os.path.join(BASE_DIR, ".env")
+# if os.path.isfile(dotenv_file):
+#     dotenv.load_dotenv(dotenv_file)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -131,6 +143,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -145,20 +158,26 @@ USE_L10N = True
 
 USE_TZ = True
 
+# COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', False)
 
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static_dev'),
-# )
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+
 
 
 
@@ -178,3 +197,37 @@ django_heroku.settings(locals())
 
 # DATABASES = {'default': dj_database_url.parse('postgres://the-just-copied-link-comes-here
 # postgres://llhqpawwpotqxl:3e0d05c5087d080f1a402295b9e60243b1e135d6e584594eefff73686dcb44c0@ec2-54-247-118-139.eu-west-1.compute.amazonaws.com:5432/dfs02v38447867
+
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
+#                        'pathname=%(pathname)s lineno=%(lineno)s ' +
+#                        'funcname=%(funcName)s %(message)s'),
+#             'datefmt': '%Y-%m-%d %H:%M:%S'
+#         },
+#         'simple': {
+#             'format': '%(levelname)s %(message)s'
+#         }
+#     },
+#     'handlers': {
+#         'null': {
+#             'level': 'DEBUG',
+#             'class': 'logging.NullHandler',
+#         },
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'verbose'
+#         }
+#     },
+#     'loggers': {
+#         'testlogger': {
+#             'handlers': ['console'],
+#             'level': 'INFO',
+#         }
+#     }
+# }

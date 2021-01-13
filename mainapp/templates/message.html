@@ -1,0 +1,35 @@
+<p> Вы сделали заказ на сайте <a href="www.123123">  12341234 </a> </p>
+<table class="table">
+    <thead>
+      <tr>
+        <th>Номер Заказа </th>
+        <th> Сумма </th>
+        <th> Товар</th>
+      </tr>
+    </thead>
+    <tbody>
+        {%for order in orders%}
+      <tr>
+        <td>{{order.id}}</td>
+        <td>{{order.cart.final_price}}</td>
+        <td>
+             <ul>
+            {%for item in order.cart.products.all%}
+            <li>{{item.product.title}} x {{item.qty}} x {{item.product.price}}</li>
+            {%endfor%}
+        </ul>
+    </td>
+</tr>
+<h4 >Дополнительная информация</h4>
+<p>Имя: <strong>{{order.first_name}}</strong></p>
+<p>Фамилия: <strong>{{order.last_name}}</strong></p>
+<p>Телефон: <strong>{{order.phone}}</strong></p>
+<p>Город: <strong>{{order.adress}}</strong></p>
+<p>Отделение: <strong>{{order.otdel}}</strong></p>
+<p>Коментарий: <strong>{{order.comment}}</strong></p>
+<p>Создано  <strong>{{order.created_at}}</strong></p>
+
+{%endfor%}
+</tbody>           
+</table>
+

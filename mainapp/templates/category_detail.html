@@ -38,7 +38,10 @@
         </div>
       </div> -->
       <div class="ps-product__columns">
-
+  <!-- <form class="d-flex mt-3" action="{% url 'category_detail' slug=category.slug %}" method="GET">
+        <input class="form-control me-2" name="search" type="search" placeholder="Поиск товара" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Поиск</button>
+      </form> -->
 {%for product in category_products.object_list%}
         <div class="ps-product__column">
           <div class="ps-shoe mb-30">

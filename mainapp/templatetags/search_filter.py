@@ -4,20 +4,27 @@ from django import template
 from django.utils.safestring import mark_safe
 
 from specs.models import ProductFeatures
-
+from mainapp.models import Category
 register = template.Library()
 
 
 @register.filter
 def product_spec(category):
-    product_features = ProductFeatures.objects.filter(product__category=category)
+    category_man_id = category.id
+    sub1 = list(Category.objects.filter(parent = category_man_id))
+    sub2 = list(Category.objects.filter(parent__in = sub1))
+    if sub1 or sub2:
+        product_features = ProductFeatures.objects.filter(product__category__in = sub1 + sub2)
+    else:
+        product_features = ProductFeatures.objects.filter(product__category=category)
     feature_and_values = defaultdict(list)
     for product_feature in product_features:
         if product_feature.value not in feature_and_values[(product_feature.feature.feature_name, product_feature.feature.feature_filter_name)]:
             feature_and_values[
                 (product_feature.feature.feature_name, product_feature.feature.feature_filter_name)
             ].append(product_feature.value)
-    print(feature_and_values)
+    
+ 
     search_filter_body = """<div class="col-md-12">{}</div>"""
     mid_res = ""
     for (feature_name, feature_filter_name), feature_values in feature_and_values.items():

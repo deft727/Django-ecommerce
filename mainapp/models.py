@@ -22,7 +22,7 @@ class Category(MPTTModel):
     class Meta:
         verbose_name = 'Категории'
         verbose_name_plural = 'Категории'
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True,on_delete=models.CASCADE)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True,on_delete=models.PROTECT)
     name = models.CharField(max_length=250,verbose_name='Имя категории')
     slug = models.SlugField(unique=True)
     class MPTTMeta:
@@ -61,8 +61,11 @@ class Category(MPTTModel):
         return reverse('category_detail',kwargs={'slug': self.slug})
 
     def get_products(self):
-           Product.objects.filter(category=self)
+            return self.category.all()
 
+    # @property
+    # def get_products(self):
+    #      return Products.objects.filter(category=self.parent)
  
     # def get_fields_for_filter_in_template(self):
     #     return ProductFeatures.objects.filter(
@@ -122,7 +125,7 @@ class Product(models.Model):
         verbose_name_plural = 'Продукты'
         order_with_respect_to='slug'
 
-    category =  TreeForeignKey(Category, blank=True, null=True, related_name='category', verbose_name="Выберите категорию",on_delete=models.CASCADE)
+    category =  TreeForeignKey(Category, blank=True, null=True, related_name='category', verbose_name="Выберите категорию",on_delete=models.PROTECT)
     title = models.CharField(max_length=250,verbose_name='Наименоватние продукта')
     slug=models.SlugField(unique=True)
     image1 = models.ImageField(verbose_name='Главное изображение',upload_to='photos/%Y/%m/%d/')
@@ -132,7 +135,7 @@ class Product(models.Model):
     image5 = models.ImageField(null=True,blank=True, verbose_name='Изображение 5',upload_to='products/%Y/%m/%d/')
     features = models.ManyToManyField("specs.ProductFeatures", blank=True, related_name='features_for_product')
     # characteristics = JSONField(blank=True,null=True)
-    available = models.BooleanField(default=True)
+    available = models.BooleanField(default=True,verbose_name="Наличие")
     description = models.TextField(verbose_name='Описание товара',null=True)
     price = models.DecimalField(max_digits=10,decimal_places=2,verbose_name='Цена')
 
@@ -141,6 +144,8 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+    def get_products(self):
+        return self.children.all()
 
     def get_model_name(self):
         return self.__class__.__name__.lower()
@@ -331,9 +336,47 @@ class ChangeMyInfo(models.Model):
     phone1= models.CharField(max_length=20, verbose_name='Номер телефона')
     adress2 = models.CharField(max_length=150,verbose_name='Адресс 2',null=True,blank=True)
     street2=  models.CharField(max_length=150,verbose_name='Улица для адресс 2',null=True,blank=True)
-    email2= models.EmailField(max_length=150,verbose_name='емайл для адрес 2',null=True,blank=True)
+    email2= models.EmailField(max_length=150,verbose_name='Емайл для адрес 2',null=True,blank=True)
     phone2= models.CharField(max_length=20, verbose_name='Номер телефона')
     about=  models.CharField(max_length=150,verbose_name='Пару слов о сайте',null=True,blank=True)
+
+class Logo(models.Model):
+    logo=models.ImageField(null=True,blank=True, verbose_name='Логотип',upload_to='Logo')
+    insta = models.URLField(null=True,blank=True, verbose_name='Инстаграмм')
+    twiter = models.URLField(null=True,blank=True, verbose_name='Твитер')
+    facebook = models.URLField(null=True,blank=True, verbose_name='Фейсбук')
+    
+    def save(self,*args,**kwargs):
+        imagedown2=self.logo
+        img=Image.open(imagedown2)
+        new_img=img.convert('RGB')
+        res_img=new_img.resize((362,129),Image.ANTIALIAS)
+        filestream= BytesIO()
+        file_=res_img.save(filestream,'JPEG',quality=90)
+        filestream.seek(0)
+        name= '{}.{}'.format(*self.logo.name.split('.'))
+        self.logo = InMemoryUploadedFile(
+            filestream,'ImageFiedl',name,'jpeg/image',sys.getsizeof(filestream),  None
+        )
+        super().save(*args,**kwargs)
+
+class AboutUs(models.Model):
+    title = models.CharField(max_length=150,verbose_name='Заголовок',null=True,blank=True)
+    text = models.CharField(max_length=150,verbose_name='Текст',null=True,blank=True)
+    doptext = models.CharField(max_length=700,verbose_name='Дополнительный Текст',null=True,blank=True)
+
+class Returns(models.Model):
+    returns = models.CharField(max_length=250,verbose_name='Заголовок',null=True,blank=True)
+    returnsText = models.CharField(max_length=700,verbose_name='Дополнительный Текст',null=True,blank=True)
+
+class Delivery(models.Model):
+    title = models.CharField(max_length=150,verbose_name='Заголовок',null=True,blank=True)
+    text = models.CharField(max_length=150,verbose_name='Текст',null=True,blank=True)
+
+class ContactUs(models.Model):
+    title = models.CharField(max_length=150,verbose_name='Заголовок',null=True,blank=True)
+    text = models.CharField(max_length=150,verbose_name='Текст',null=True,blank=True)
+
 
 # class ProductFeatureValidators(models.Model):
     # category = models.ForeignKey(Category,verbose_name='Категория',on_delete=models.CASCADE)
@@ -437,7 +480,7 @@ class Order(models.Model):
     phone = models.CharField(max_length=20, verbose_name='Телефон',help_text="+38-050-111-11-11")
     cart = models.ForeignKey(Cart, verbose_name='Корзина', on_delete=models.CASCADE, null=True, blank=True)
     email= models.EmailField(max_length=60, verbose_name='Емайл', null=True, blank=True)
-    adress = models.CharField(max_length=1024, verbose_name='Адрес', null=True, blank=True)
+    adress = models.CharField(max_length=60, verbose_name='Город', null=True, blank=True)
     otdel = models.CharField(max_length=20,verbose_name='Отделение', null=True, blank=True)
     status = models.CharField(
         max_length=100,
@@ -455,7 +498,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now=True, verbose_name='Дата создания заказа')
 
     def __str__(self):
-        return str(self.id)
+        return "Заказ: {} {}".format(self.first_name, self.last_name)
 
 class Rewiews(models.Model):
 

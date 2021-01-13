@@ -214,7 +214,7 @@
 
 
                 </div>
-                <div class="tab-pane" role="tabpanel" id="tab_03">
+                <!-- <div class="tab-pane" role="tabpanel" id="tab_03">
                   <p>Add your tag <span> *</span></p>
                   <form class="ps-product__tags" action="_action" method="post">
                     <div class="form-group">
@@ -222,15 +222,15 @@
                       <button class="ps-btn ps-btn--sm">Add Tags</button>
                     </div>
                   </form>
-                </div>
-                <div class="tab-pane" role="tabpanel" id="tab_04">
+                </div> -->
+                <!-- <div class="tab-pane" role="tabpanel" id="tab_04">
                   <div class="form-group">
                     <textarea class="form-control" rows="6" placeholder="Enter your addition here..."></textarea>
                   </div>
                   <div class="form-group">
                     <button class="ps-btn" type="button">Submit</button>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -244,7 +244,7 @@
                     <h3 class="ps-section__title" data-mask="Related item">- Вам также понравится</h3>
                   </div>
                   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-                    <div class="ps-owl-actions"><a class="ps-prev" href="#"><i class="ps-icon-arrow-right"></i>Prev</a><a class="ps-next" href="#">Next<i class="ps-icon-arrow-left"></i></a></div>
+                    <div class="ps-owl-actions"><a class="ps-prev" href="/"><i class="ps-icon-arrow-right"></i>Prev</a><a class="ps-next" href="/">Next<i class="ps-icon-arrow-left"></i></a></div>
                   </div>
             </div>
           </div>
@@ -270,7 +270,7 @@
                       </select> -->
                     </div>
                     <div class="ps-shoe__detail"><a class="ps-shoe__name" href="{{i.get_absolute_url}}">{{ i.title }}</a>
-                      <p class="ps-shoe__categories"><a href="#">Men shoes</a></p><span class="ps-shoe__price"> {{i.price}}</span>
+                      <p class="ps-shoe__categories"><a href="{{ i.category.get_absolute_url }}">{{ i.category }}</a></p><span class="ps-shoe__price"> {{i.price}}</span>
                     </div>
                   </div>
                 </div>

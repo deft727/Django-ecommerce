@@ -1,8 +1,6 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
-# from . import views
 from .views import (
-    # HtmlView,
                     BaseView,
                     ProductDetailView,
                     CategoryDetailView,
@@ -15,12 +13,17 @@ from .views import (
                     LoginView,
                     RegistrationView,
                     ProfileView,
-                    ProductRewiew)
+                    ProductRewiew,
+                    AboutUsView,
+                    custom_404,
+                    )
+# from django.conf.urls import url
 
 
+
+# handler404 = 'mainapp.views.custom_page_not_found_view'
 
 urlpatterns = [
-    # path('',HtmlView().as_view(),name='HtmlView'),
     path('',BaseView.as_view(),name='base'),
     path('products/<str:slug>/',ProductDetailView.as_view(),name='product_detail'),
     path('category/<str:slug>/', CategoryDetailView.as_view(), name='category_detail'),
@@ -35,5 +38,8 @@ urlpatterns = [
     path('registration/',RegistrationView.as_view(), name='registration'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('review/<int:pk>/', ProductRewiew.as_view(),name="add_review"),
+    path('about/', AboutUsView.as_view(), name='about'),
+    # url(r'^$',BaseView.as_view(),name='base'),
 ]
 
+custom_404 = 'mainapp.views.custom_404'

@@ -83,7 +83,6 @@ class CreateFeatureView(View):
         category_id = request.GET.get('category_id')
         feature_name = request.GET.get('feature_name')
         value = request.GET.get('feature_value').strip(" ")
-        # print(feature_name)
         category = Category.objects.get(id=int(category_id))
         feature = CategoryFeature.objects.get(category=category, feature_name=feature_name)
         existed_object, created = FeatureValidator.objects.get_or_create(
@@ -130,7 +129,6 @@ class AttachNewFeatureToProduct(View):
         res_string = ""
         product = Product.objects.get(id=int(request.GET.get('product_id')))
         existing_features = list(set([item.feature.feature_name for item in product.features.all()]))
-        # print(existing_features)
         category_features = CategoryFeature.objects.filter(
             category=product.category
         ).exclude(feature_name__in=existing_features)

@@ -22,21 +22,21 @@
     <!-- Fonts-->
     
     <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:300,400,700%7CMontserrat:300,400,500,600,700,800,900" rel="stylesheet">
-    <link rel="stylesheet" href="{% static '/plugins/font-awesome/css/font-awesome.min.css'%}">
-    <link rel="stylesheet" href="{% static '/plugins/ps-icon/style.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome/css/font-awesome.min.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/ps-icon/style.css'%}">
     <!-- CSS Library-->
-    <link rel="stylesheet" href="{% static '/plugins/bootstrap/dist/css/bootstrap.min.css'%}">
-    <link rel="stylesheet" href="{% static '/plugins/owl-carousel/assets/owl.carousel.css'%}">
-    <link rel="stylesheet" href="{% static '/plugins/jquery-bar-rating/dist/themes/fontawesome-stars.css'%}">
-    <link rel="stylesheet" href="{% static '/plugins/slick/slick/slick.css'%}">
-    <link rel="stylesheet" href="{% static '/plugins/bootstrap-select/dist/css/bootstrap-select.min.css'%}">
-    <link rel="stylesheet" href="{% static '/plugins/Magnific-Popup/dist/magnific-popup.css'%}">
-    <link rel="stylesheet" href="{% static '/plugins/jquery-ui/jquery-ui.min.css'%}">
-    <link rel="stylesheet" href="{% static '/plugins/revolution/css/settings.css'%}">
-    <link rel="stylesheet" href="{% static '/plugins/revolution/css/layers.css'%}">
-    <link rel="stylesheet" href="{% static '/plugins/revolution/css/navigation.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap/dist/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/owl-carousel/assets/owl.carousel.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/jquery-bar-rating/dist/themes/fontawesome-stars.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/slick/slick/slick.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-select/dist/css/bootstrap-select.min.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/Magnific-Popup/dist/magnific-popup.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/jquery-ui/jquery-ui.min.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/revolution/css/settings.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/revolution/css/layers.css'%}">
+    <link rel="stylesheet" href="{% static 'plugins/revolution/css/navigation.css'%}">
     <!-- Custom-->
-    <link rel="stylesheet" href="{% static '/css/style.css'%}">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
     <!--HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries-->
     <!--WARNING: Respond.js doesn't work if you view the page via file://-->
     <!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]-->
@@ -80,7 +80,7 @@
       <nav class="navigation">
         <div class="container-fluid">
           <div class="navigation__column left">
-            <div class="header__logo"><a class="ps-logo" href="{%url 'base'%}"><img src="{% static '/images/logo.png'%}" alt=""></a></div>
+            <div class="header__logo"><a class="ps-logo" href="{%url 'base'%}"><img src="{%for i in logo%} {{i.logo.url}} {%endfor%}" alt=""></a></div>
           </div>
  
 
@@ -104,13 +104,7 @@
           
  <div class="navigation__column center">
   <ul class="main-menu menu">
-    <li class="menu-item menu-item-has-children dropdown"><a href="index.html">Home</a>
-          <ul class="sub-menu">
-            <li class="menu-item"><a href="index.html">Homepage #1</a></li>
-            <li class="menu-item"><a href="#">Homepage #2</a></li>
-            <li class="menu-item"><a href="#">Homepage #3</a></li>
-          </ul>
-    </li>
+   
 
 
 
@@ -174,10 +168,16 @@
 
 
           <div class="navigation__column right">
-            <form class="ps-search--header" action="do_action" method="post">
-              <input class="form-control" type="text" placeholder="Search Product…">
+
+
+            <form class="ps-search--header" action="/category/men/"  method="GET">
+              <input class="form-control" name="search" type="search" placeholder="Поиск товара">
               <button><i class="ps-icon-search"></i></button>
             </form>
+
+
+
+
             <div class="ps-cart"><a class="ps-cart__toggle" href="{%url 'cart'%}"><span><i>{{cart.products.count}}</i></span><i class="ps-icon-shopping-cart"></i></a>
               <div class="ps-cart__listing">
                 <div class="ps-cart__total">
@@ -249,7 +249,7 @@
           <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                   <aside class="ps-widget--footer ps-widget--info">
-                    <header><a class="ps-logo" href="index.html"><img src="images/logo-white.png" alt=""></a>
+                    <header><a class="ps-logo" href="/"><img src="{%static 'images/logo-white.png'%}" alt=""></a>
                       {%for i in myinfo%}
                       <h3 class="ps-widget__title">{{i.adress1}}</h3>
                     </header>
@@ -292,15 +292,15 @@
                 <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12 ">
                   <aside class="ps-widget--footer ps-widget--link">
                     <header>
-                      <h3 class="ps-widget__title">Get Help</h3>
+                      <h3 class="ps-widget__title">Инфо</h3>
                     </header>
                     <footer>
                       <ul class="ps-list--line">
-                        <li><a href="#">Order Status</a></li>
-                        <li><a href="#">Shipping and Delivery</a></li>
-                        <li><a href="#">Returns</a></li>
-                        <li><a href="#">Payment Options</a></li>
-                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="{%url 'profile'%}">Сатус заказа</a></li>
+                        <li><a href="{%url 'profile'%}">Оплата и доставка</a></li>
+                        <li><a href="{%url 'profile'%}">Возврат</a></li>
+                        <!-- <li><a href="#">Payment Options</a></li> -->
+                        <li><a href="{%url 'about'%}">Наши контакты</a></li>
                       </ul>
                     </footer>
                   </aside>
@@ -308,14 +308,15 @@
                 <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12 ">
                   <aside class="ps-widget--footer ps-widget--link">
                     <header>
-                      <h3 class="ps-widget__title">Products</h3>
+                      <h3 class="ps-widget__title">Продукты</h3>
                     </header>
                     <footer>
                       <ul class="ps-list--line">
-                        <li><a href="#">Shoes</a></li>
-                        <li><a href="#">Clothing</a></li>
-                        <li><a href="#">Accessries</a></li>
-                        <li><a href="#">Football Boots</a></li>
+                        {%for i in topcategory %}
+                        {% if i.level == 1 %}
+                        <li><a href="{{i.get_absolute_url}}">{{i.name}}</a></li>
+                        {%endif%}
+                        {%endfor%}                     
                       </ul>
                     </footer>
                   </aside>
@@ -333,10 +334,11 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
                   <ul class="ps-social">
-                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                    {%for i in logo%}
+                    <li><a href="{{i.facebook}}"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="{{i.twiter}}"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="{{i.insta}}"><i class="fa fa-instagram"></i></a></li>
+                    {%endfor%}
                   </ul>
                 </div>
           </div>
@@ -344,34 +346,34 @@
       </div>
     </div>
     <!-- JS Library-->
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.kenburn.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.migration.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/jquery/dist/jquery.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/bootstrap/dist/js/bootstrap.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/jquery-bar-rating/dist/jquery.barrating.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/owl-carousel/owl.carousel.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/gmap3.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/imagesloaded.pkgd.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/isotope.pkgd.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/bootstrap-select/dist/js/bootstrap-select.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/jquery.matchHeight-min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/slick/slick/slick.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/elevatezoom/jquery.elevatezoom.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/Magnific-Popup/dist/jquery.magnific-popup.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/jquery-ui/jquery-ui.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.kenburn.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.migration.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/jquery/dist/jquery.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/bootstrap/dist/js/bootstrap.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/jquery-bar-rating/dist/jquery.barrating.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/owl-carousel/owl.carousel.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/gmap3.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/imagesloaded.pkgd.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/isotope.pkgd.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/bootstrap-select/dist/js/bootstrap-select.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/jquery.matchHeight-min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/slick/slick/slick.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/elevatezoom/jquery.elevatezoom.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/Magnific-Popup/dist/jquery.magnific-popup.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/jquery-ui/jquery-ui.min.js'%}"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAx39JFH5nhxze1ZydH-Kl8xXM3OK4fvcg&amp;region=Ua"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/jquery.themepunch.tools.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/jquery.themepunch.revolution.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.video.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.slideanims.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.layeranimation.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.navigation.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.parallax.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.actions.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.kenburn.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.migration.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.kenburn.min.js'%}"></script>
-    <script type="text/javascript" src="{% static '/plugins/revolution/js/extensions/revolution.extension.migration.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/jquery.themepunch.tools.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/jquery.themepunch.revolution.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.video.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.slideanims.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.layeranimation.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.navigation.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.parallax.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.actions.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.kenburn.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.migration.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.kenburn.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.migration.min.js'%}"></script>
 
     <!-- Custom scripts-->
     <script type="text/javascript" src="{% static 'js/main.js'%}"></script>
