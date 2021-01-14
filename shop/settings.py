@@ -150,7 +150,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-# COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', False)
+COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', True)
 
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
