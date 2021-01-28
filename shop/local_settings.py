@@ -9,8 +9,8 @@ ALLOWED_HOSTS = ["mysite123456.herokuapp.com"]
 
 
 
-STATIC_DIR =  os.path.join(BASE_DIR, 'static')
+STATIC_DIR =  os.path.join(BASE_DIR, 'shop/mainapp/static')
 # STATICFILES_DIRS =  os.path.join(BASE_DIR, 'staticfiles')
-STATIC_ROOT =  os.path.join(BASE_DIR, 'static')
+STATIC_ROOT =  os.path.join(BASE_DIR, 'shop/mainapp/static')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
