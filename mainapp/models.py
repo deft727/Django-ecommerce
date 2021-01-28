@@ -28,24 +28,8 @@ class Category(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['name']
 
-    # class Meta:
-        # unique_together = (('parent', 'slug',))
-        # verbose_name_plural = 'Категории'
-
-    # def get_slug_list(self):
-    #     try:
-    #         ancestors = self.get_ancestors(include_self=True)
-    #     except:
-    #         ancestors = []
-    #     else:
-    #         ancestors = [ i.slug for i in ancestors]
-    #         slugs = []
-    #     for i in range(len(ancestors)):
-    #         slugs.append('/'.join(ancestors[:i+1]))
-    #         return slugs
     def __str__(self):
 
-        # return self.name
 
 
         try:
@@ -76,45 +60,6 @@ class Category(MPTTModel):
     # def get_products(self):
     #     return Product.objects.filter(category__name=self.name)
 
-
-
-    
-# class ProductFeatures(models.Model):
-     
-    # RADIO='radio'
-    # CHECKBOX='checkbox'
-    # FILTER_TYPE_CHOICES=(
-    #     (RADIO,'Радиокнопка'),
-    #     (CHECKBOX,'Чекбокс')
-    # )
-    # feature_key = models.CharField(max_length=100,verbose_name='Ключ характеристики')
-    # feature_name= models.CharField(max_length=255,verbose_name='Наименование характеристики')
-    # category= models.ForeignKey(Category,verbose_name='Категория',on_delete=models.CASCADE)
-    # postfix_for_value= models.CharField(
-    #     max_length=25,
-    #     null=True,
-    #     blank=True,
-    #     verbose_name='Постфикс для значения',
-    #     help_text=f'Для хар-к можно добавить постфикс'
-    # )
-    # use_in_filter=models.CharField(max_length=50,
-    #     default=False,
-    #     verbose_name='Использовать в фильтрации товаров на странице'
-    # )
-    # filter_type = models.CharField(
-    #     max_length=20,
-    #     verbose_name='Тип фильтра',
-    #     default=CHECKBOX,
-    #     choices=FILTER_TYPE_CHOICES
-    # )
-    # filter_measures=models.CharField(
-    #     max_length=50,
-    #     verbose_name='Единица измерения',
-    #     help_text='Единица измерения для фильтра'
-    # )
-
-    # def __str__(self):
-    #     return f'Категория - "{self.category.name}" | Характеристика -"{self.feature_name}"'
 class Size(models.Model):
     
     class Meta:
@@ -138,16 +83,13 @@ class Product(models.Model):
     category =  TreeForeignKey(Category, blank=True, null=True, related_name='category', verbose_name="Выберите категорию",on_delete=models.PROTECT)
     title = models.CharField(max_length=250,verbose_name='Наименоватние продукта')
     slug=models.SlugField(unique=True)
-    image1 = models.ImageField(verbose_name='Главное изображение',upload_to='photos/%Y/%m/%d/')
-    image2 = models.ImageField(null=True,blank=True, verbose_name='Изображение 2',upload_to='products/%Y/%m/%d/')
-    image3 = models.ImageField(null=True,blank=True, verbose_name='Изображение 3',upload_to='products/%Y/%m/%d/')
-    image4 = models.ImageField(null=True,blank=True, verbose_name='Изображение 4',upload_to='products/%Y/%m/%d/')
-    image5 = models.ImageField(null=True,blank=True, verbose_name='Изображение 5',upload_to='products/%Y/%m/%d/')
+    image1 = models.ImageField(verbose_name='Главное изображение',upload_to='images/photos/%Y/%m/%d/')
+    image2 = models.ImageField(null=True,blank=True, verbose_name='Изображение 2',upload_to='images/products/%Y/%m/%d/')
+    image3 = models.ImageField(null=True,blank=True, verbose_name='Изображение 3',upload_to='images/products/%Y/%m/%d/')
+    image4 = models.ImageField(null=True,blank=True, verbose_name='Изображение 4',upload_to='images/products/%Y/%m/%d/')
+    image5 = models.ImageField(null=True,blank=True, verbose_name='Изображение 5',upload_to='images/products/%Y/%m/%d/')
     features = models.ManyToManyField("specs.ProductFeatures", blank=True, related_name='features_for_product')
-
     sizes = models.ManyToManyField(Size,verbose_name='размеры', help_text="Выберите доступные размеры продукта")
-
-    # characteristics = JSONField(blank=True,null=True)
     available = models.BooleanField(default=True,verbose_name="Наличие")
     description = models.TextField(verbose_name='Описание товара',null=True)
     price = models.DecimalField(max_digits=10,decimal_places=2,verbose_name='Цена')
@@ -272,8 +214,8 @@ class MyTopImage(models.Model):
     class Meta:
         verbose_name='Изображение сверху'
         verbose_name_plural = 'Изображения сверху'
-    image1=models.ImageField(null=True,blank=True, verbose_name='Изображение 1',upload_to='TopImage/')
-    image2=models.ImageField(null=True,blank=True, verbose_name='Изображение 2',upload_to='TopImage/')
+    image1=models.ImageField(null=True,blank=True, verbose_name='Изображение 1',upload_to='images/TopImage/')
+    image2=models.ImageField(null=True,blank=True, verbose_name='Изображение 2',upload_to='images/TopImage/')
 
     # def __str__(self):
     #     return self.verbose_name
@@ -313,8 +255,8 @@ class MyImage(models.Model):
     class Meta:
         verbose_name='Изображение снизу'
         verbose_name_plural = 'Изображения снизу'
-    imagedown1=models.ImageField(null=True,blank=True, verbose_name='Изображение 1',upload_to='DownImage')
-    imagedown2= models.ImageField(null=True,blank=True, verbose_name='Изображение 2',upload_to='DownImage')
+    imagedown1=models.ImageField(null=True,blank=True, verbose_name='Изображение 1',upload_to='images/DownImage')
+    imagedown2= models.ImageField(null=True,blank=True, verbose_name='Изображение 2',upload_to='images/DownImage')
 
     def save(self,*args,**kwargs):
         imagedown1=self.imagedown1
@@ -365,7 +307,7 @@ class Logo(models.Model):
         verbose_name='логотип и  соц.сети'
         verbose_name_plural = 'логотип и  соц.сети'
 
-    logo=models.ImageField(null=True,blank=True, verbose_name='Логотип',upload_to='Logo')
+    logo=models.ImageField(null=True,blank=True, verbose_name='Логотип',upload_to='images/Logo')
     insta = models.URLField(null=True,blank=True, verbose_name='Инстаграмм')
     twiter = models.URLField(null=True,blank=True, verbose_name='Твитер')
     facebook = models.URLField(null=True,blank=True, verbose_name='Фейсбук')
@@ -391,7 +333,7 @@ class AboutUs(models.Model):
 
     title = models.CharField(max_length=150, verbose_name='Заголовок',null=True,blank=True)
     text = models.TextField(max_length=1500, verbose_name='Текст',null=True,blank=True)
-    img= models.ImageField(null=True,blank=True, verbose_name='Изображение ',upload_to='AboutImage/')
+    img= models.ImageField(null=True,blank=True, verbose_name='Изображение ',upload_to='images/AboutImage/')
     def __str__(self):
         return self.title
 

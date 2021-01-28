@@ -14,7 +14,8 @@ import os
 import django_heroku
 import dj_database_url
 # import dotenv
-
+from botocore.client import Config
+import boto3
 # import posixpath
 
 
@@ -54,12 +55,13 @@ INSTALLED_APPS = [
     'mainapp.apps.MainappConfig',
     'specs',
     'crispy_forms',
+    'storages',
     # 'django_inlinecss',
     
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -158,14 +160,24 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ADMINS = [['Webmaster','zarj09@gmail.com']]
 
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_URL = '/static/'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+
+
+
 STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = '/images/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 
 
@@ -175,6 +187,48 @@ EMAIL_HOST_USER = 'magikmagazin123@gmail.com'
 EMAIL_HOST_PASSWORD = 'kirill99121'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD ='tiaxxhsvgnvmjyne'
+
+# AKIAYSVUBCGEK2QQAKNU -name
+# fq2rP35YCjvey8NwAGhRaUG+4jpX2vzMfBmRfdnf  -key
+
+#S3 BUCKETS CONFIG
+
+AWS_ACCESS_KEY_ID = 'AKIAYSVUBCGEK2QQAKNU'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'zarj09-crm-bucket'
+AWS_S3_FILE_OVERWRITE = True
+AWS_DEFAULT_ACL = None
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_REGION_NAME = "ap-south-1"
+
+# s3 = boto3.resource('s3')
+
+# s3 = boto3.resource(
+#     's3',
+#     aws_access_key_id='AKIAYSVUBCGEK2QQAKNU',
+#     aws_secret_access_key='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',
+#     config=Config(signature_version='s3v4')
+# )
+
+'''
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+<CORSRule>
+    <AllowedOrigin>*</AllowedOrigin>
+    <AllowedMethod>GET</AllowedMethod>
+    <AllowedMethod>POST</AllowedMethod>
+    <AllowedMethod>PUT</AllowedMethod>
+    <AllowedHeader>*</AllowedHeader>
+</CORSRule>
+</CORSConfiguration>
+'''
+
+
+
+
+
 
 
 
