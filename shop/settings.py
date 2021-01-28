@@ -166,6 +166,7 @@ COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', True)
 # MEDIA_URL = '/media/'
 
 
+WHITENOISE_USE_FINDERS = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
