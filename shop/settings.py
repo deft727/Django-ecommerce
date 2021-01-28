@@ -158,7 +158,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ADMINS = [['Webmaster','zarj09@gmail.com']]
 
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'shop/staticfiles')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
