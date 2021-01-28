@@ -14,8 +14,7 @@ import os
 import django_heroku
 import dj_database_url
 # import dotenv
-from botocore.client import Config
-import boto3
+# import boto3
 # import posixpath
 
 
