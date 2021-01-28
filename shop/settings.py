@@ -21,6 +21,7 @@ import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'   # Persist sessions to DB
@@ -32,7 +33,7 @@ SESSION_COOKIE_AGE = 1209600
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'rm^8ds7_w+kh2m%2_my$rb!s9-dg)cnqk+95yzfw(asx=-b&gb'
+SECRET_KEY = 'rm^8ds7_w+kh2m%2_my$rb!s9-dg)cnqk+95yzfw(asx=-b&gb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -41,7 +42,6 @@ ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
-        'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     # 'django.contrib.postgres',
@@ -64,7 +64,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-        # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -110,12 +110,12 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 # if os.path.isfile(dotenv_file):
 #     dotenv.load_dotenv(dotenv_file)
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 
 # Password validation
@@ -151,40 +151,20 @@ USE_L10N = True
 
 USE_TZ = True
 
-COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', True)
-
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATIC_URL = '/static/'
-
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'mainapp/static'),
-# )
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# MEDIA_URL = '/media/'
-
-
-WHITENOISE_USE_FINDERS = True
+# COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', True)
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
+ADMINS = [['Webmaster','zarj09@gmail.com']]
 
 
-
-
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATIC_URL = '/static/'
-# STATIC_DIR =  os.path.join(BASE_DIR, 'static')
-# STATICFILES_DIRS =  [STATIC_DIR]
-
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 
 
@@ -197,12 +177,7 @@ EMAIL_HOST_PASSWORD = 'kirill99121'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD ='tiaxxhsvgnvmjyne'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
@@ -212,12 +187,8 @@ django_heroku.settings(locals())
 # DATABASES = {'default': dj_database_url.parse('postgres://the-just-copied-link-comes-here
 # postgres://llhqpawwpotqxl:3e0d05c5087d080f1a402295b9e60243b1e135d6e584594eefff73686dcb44c0@ec2-54-247-118-139.eu-west-1.compute.amazonaws.com:5432/dfs02v38447867
 
+
+
 # INTERNAL_IPS = [
 #     '127.0.0.1',
 # ]
-
-
-try:
-    from.local_settings import *
-except ImportError:
-    from .prod_settings import *
