@@ -45,7 +45,7 @@
 {%for product in category_products.object_list%}
         <div class="ps-product__column">
           <div class="ps-shoe mb-30">
-            <div class="ps-shoe__thumbnail"><a class="ps-shoe__favorite" href="{{product.get_absolute_url}}"><i class="ps-icon-heart"></i></a><img src="{{product.image1.url}}" alt="{{product.title}}" height="320"><a class="ps-shoe__overlay" href="{{product.get_absolute_url}}"></a>
+            <div class="ps-shoe__thumbnail"><a class="ps-shoe__favorite" href="{%url 'add_to_whishlist' slug=product.slug x='category' %}" title="Добавить в Избранное"><i class="ps-icon-heart"></i></a><img src="{{product.image1.url}}" alt="{{product.title}}" height="320"><a class="ps-shoe__overlay" href="{{product.get_absolute_url}}"></a>
             </div>
             <div class="ps-shoe__content">
               <div class="ps-shoe__variants">
@@ -65,7 +65,10 @@
                 </select> -->
               </div>
               <div class="ps-shoe__detail"><a class="ps-shoe__name" href="{{product.get_absolute_url}}">{{product.title}}</a>
-                <p class="ps-shoe__categories"><a href="{{product.category.get_absolute_url}}">{{product.category}}</a></p><span class="ps-shoe__price"> {{product.price}} Грн</span>
+                <p class="ps-shoe__categories"><a href=" {{product.category.parent.parent.get_absolute_url}}  ">
+                  {{product.category.parent.parent}} </a>
+                  <a href="{{product.category.get_absolute_url}}">{{product.category.name}}
+                  </a></p><span class="ps-shoe__price"> {{product.price}} Грн</span>
               </div>
             </div>
           </div>

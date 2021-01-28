@@ -3,22 +3,23 @@
     <thead>
       <tr>
         <th>Номер Заказа </th>
-        <th> Сумма </th>
-        <th> Товар</th>
+        <th> Товар </th>
+        <th> Общая сумма</th>
       </tr>
     </thead>
     <tbody>
         {%for order in orders%}
       <tr>
         <td>{{order.id}}</td>
-        <td>{{order.cart.final_price}}</td>
         <td>
              <ul>
             {%for item in order.cart.products.all%}
-            <li>{{item.product.title}} x {{item.qty}} x {{item.product.price}}</li>
+            <li>{{item.product.title}} x {{item.size}} x {{item.qty}} x {{item.product.price}}</li>
             {%endfor%}
-        </ul>
-    </td>
+        </ul><br>
+    </td><br>
+    <br>
+    <td>{{order.cart.final_price}}</td>
 </tr>
 <h4 >Дополнительная информация</h4>
 <p>Имя: <strong>{{order.first_name}}</strong></p>

@@ -11,7 +11,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from mptt.models import MPTTModel, TreeForeignKey,TreeManyToManyField
 from django.contrib.sessions.models import Session
 
-from eav.decorators import register_eav
+# from eav.decorators import register_eav
 
 
 User=get_user_model()
@@ -115,7 +115,17 @@ class Category(MPTTModel):
 
     # def __str__(self):
     #     return f'Категория - "{self.category.name}" | Характеристика -"{self.feature_name}"'
+class Size(models.Model):
+    
+    class Meta:
+        verbose_name = 'Размеры'
+        verbose_name_plural = 'Размеры'
 
+    foot_size = models.CharField(max_length=50)
+    # gender = models.CharField(max_length=50,choices=(('F', 'Female'), ('M', 'Male'), ('U', 'Ungendered')))
+    
+    def __str__(self):
+        return self.foot_size
 
 
 class Product(models.Model):
@@ -134,6 +144,9 @@ class Product(models.Model):
     image4 = models.ImageField(null=True,blank=True, verbose_name='Изображение 4',upload_to='products/%Y/%m/%d/')
     image5 = models.ImageField(null=True,blank=True, verbose_name='Изображение 5',upload_to='products/%Y/%m/%d/')
     features = models.ManyToManyField("specs.ProductFeatures", blank=True, related_name='features_for_product')
+
+    sizes = models.ManyToManyField(Size,verbose_name='размеры', help_text="Выберите доступные размеры продукта")
+
     # characteristics = JSONField(blank=True,null=True)
     available = models.BooleanField(default=True,verbose_name="Наличие")
     description = models.TextField(verbose_name='Описание товара',null=True)
@@ -252,7 +265,7 @@ class TopText(models.Model):
     text= models.CharField(max_length=250,verbose_name='текст в бегущей строке',null=True,blank=True)
     
     def __str__(self):
-            return self.text
+            return self.title
 
 
 class MyTopImage(models.Model):
@@ -262,6 +275,8 @@ class MyTopImage(models.Model):
     image1=models.ImageField(null=True,blank=True, verbose_name='Изображение 1',upload_to='TopImage/')
     image2=models.ImageField(null=True,blank=True, verbose_name='Изображение 2',upload_to='TopImage/')
 
+    # def __str__(self):
+    #     return self.verbose_name
     # def save(self,*args,**kwargs):
 
     #     image1=self.image1
@@ -329,6 +344,9 @@ class MyImage(models.Model):
         super().save(*args,**kwargs)
 
 class ChangeMyInfo(models.Model):
+    class Meta:
+        verbose_name='Изменить адрес'
+        verbose_name_plural = 'Изменить адреса'
     toptext = models.CharField(max_length=150,verbose_name='Текст в левом углу',null=True,blank=True)
     adress1= models.CharField(max_length=150,verbose_name='Адресс 1',null=True,blank=True)
     street1= models.CharField(max_length=150,verbose_name='Улица для адресс 1',null=True,blank=True)
@@ -339,8 +357,14 @@ class ChangeMyInfo(models.Model):
     email2= models.EmailField(max_length=150,verbose_name='Емайл для адрес 2',null=True,blank=True)
     phone2= models.CharField(max_length=20, verbose_name='Номер телефона')
     about=  models.CharField(max_length=150,verbose_name='Пару слов о сайте',null=True,blank=True)
+    def __str__(self):
+        return 'Изменение информации'
 
 class Logo(models.Model):
+    class Meta:
+        verbose_name='логотип и  соц.сети'
+        verbose_name_plural = 'логотип и  соц.сети'
+
     logo=models.ImageField(null=True,blank=True, verbose_name='Логотип',upload_to='Logo')
     insta = models.URLField(null=True,blank=True, verbose_name='Инстаграмм')
     twiter = models.URLField(null=True,blank=True, verbose_name='Твитер')
@@ -361,22 +385,70 @@ class Logo(models.Model):
         super().save(*args,**kwargs)
 
 class AboutUs(models.Model):
-    title = models.CharField(max_length=150,verbose_name='Заголовок',null=True,blank=True)
-    text = models.CharField(max_length=150,verbose_name='Текст',null=True,blank=True)
-    doptext = models.CharField(max_length=700,verbose_name='Дополнительный Текст',null=True,blank=True)
+    class Meta:
+        verbose_name='Информация на странице о Нас'
+        verbose_name_plural = 'Информация на странице о Нас'
+
+    title = models.CharField(max_length=150, verbose_name='Заголовок',null=True,blank=True)
+    text = models.TextField(max_length=1500, verbose_name='Текст',null=True,blank=True)
+    img= models.ImageField(null=True,blank=True, verbose_name='Изображение ',upload_to='AboutImage/')
+    def __str__(self):
+        return self.title
+
 
 class Returns(models.Model):
+    class Meta:
+        verbose_name='Информация на странице о Возврате'
+        verbose_name_plural = 'Информация на странице о Возврате'
+
     returns = models.CharField(max_length=250,verbose_name='Заголовок',null=True,blank=True)
     returnsText = models.CharField(max_length=700,verbose_name='Дополнительный Текст',null=True,blank=True)
+    def __str__(self):
+        return self.returns
+
 
 class Delivery(models.Model):
+
+    class Meta:
+        verbose_name='Информация на странице о Доставке'
+        verbose_name_plural = 'Информация на странице о Доставке'
+
     title = models.CharField(max_length=150,verbose_name='Заголовок',null=True,blank=True)
-    text = models.CharField(max_length=150,verbose_name='Текст',null=True,blank=True)
+    text = models.TextField(max_length=1500,verbose_name='Текст',null=True,blank=True)
+
+    def __str__(self):
+        return self.title
+
+
+
+class ReturnsItem(models.Model):
+
+    class Meta:
+        verbose_name='Информация на странице о Возврате'
+        verbose_name_plural = 'Информация на странице о Возврате'
+
+    title = models.CharField(max_length=150,verbose_name='Заголовок',null=True,blank=True)
+    text = models.TextField(max_length=1500,verbose_name='Текст',null=True,blank=True)
+
+    def __str__(self):
+        return self.title
+
+
 
 class ContactUs(models.Model):
-    title = models.CharField(max_length=150,verbose_name='Заголовок',null=True,blank=True)
-    text = models.CharField(max_length=150,verbose_name='Текст',null=True,blank=True)
 
+    class Meta:
+        verbose_name='Информация на странице Контактов'
+        verbose_name_plural = 'Информация на странице Контактов'
+    title = models.CharField(max_length=150,verbose_name='Заголовок',null=True,blank=True)
+    text = models.TextField(max_length=150,verbose_name='Текст',null=True,blank=True)
+    phone = models.CharField(max_length=25,verbose_name="Телефон",null=True,blank=True)
+    instatitle = models.CharField(max_length=100,verbose_name=" Название страницы Инстаграмм",null=True,blank=True)
+    insta = models.CharField(max_length=100,verbose_name="адресс Инстаграмм",null=True,blank=True)
+    facebooktitle = models.CharField(max_length=100,verbose_name=" Название страницы Фейсбук",null=True,blank=True)
+    facebook = models.CharField(max_length=100,verbose_name="адресс Фейсбук",null=True,blank=True)
+    def __str__(self):
+        return self.title
 
 # class ProductFeatureValidators(models.Model):
     # category = models.ForeignKey(Category,verbose_name='Категория',on_delete=models.CASCADE)
@@ -398,9 +470,9 @@ class CartProduct(models.Model):
         verbose_name_plural = 'Продукты для корзины'
     user  = models.ForeignKey('Customer',verbose_name='Покупатель', on_delete=models.CASCADE)
     cart = models.ForeignKey('Cart',verbose_name='Корзина',on_delete=models.CASCADE,related_name='related_products')
-
     product= models.ForeignKey(Product,verbose_name='Товар',on_delete=models.CASCADE)
     qty = models.PositiveIntegerField(default=1)
+    size = models.CharField(max_length=150,verbose_name='Размер',null=True,blank=True)
     final_price = models.DecimalField(max_digits=10,decimal_places=2,verbose_name='Общая сумма')
     
     def __str__(self):
@@ -429,7 +501,15 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
- 
+
+
+class Whishlist(models.Model):
+
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    products = models.ForeignKey(Product,blank=True,related_name='Продукты',on_delete=models.CASCADE)
+    def __str__(self):
+        return str(self.owner)
+
 
 class Customer(models.Model):
 
@@ -498,7 +578,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now=True, verbose_name='Дата создания заказа')
 
     def __str__(self):
-        return "Заказ: {} {}".format(self.first_name, self.last_name)
+        return "Заказ: {} {} {}".format(self.id, self.first_name, self.last_name)
 
 class Rewiews(models.Model):
 

@@ -19,7 +19,6 @@ class CartMixin(View):
             session_key=request.session.session_key
             name=str(session_key)
             user= User.objects.filter(username=name).first()
-            # print(user)
             if not user:
                 user = User.objects.create_user(name, 'randomemail', 'randomemail')
             customer = Customer.objects.filter(user=user).first()
@@ -33,5 +32,5 @@ class CartMixin(View):
             if not cart:
                 cart= Cart.objects.create(for_anonymoys_user=True,owner=customer)
         self.cart=cart
-        self.cart.save()
+        # self.cart.save()
         return super().dispatch(request,*args,**kwargs)

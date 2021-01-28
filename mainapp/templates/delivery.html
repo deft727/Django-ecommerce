@@ -1,0 +1,51 @@
+{%extends 'base.html'%} 
+{% load static%}
+
+ {%block main%}
+
+<div class="container mb-5">
+
+    <div class="row m-4">
+        <div class="col-sm">
+          <section class="section-name bg padding-y">
+              <div class="container">
+                  {%for i in delivery%}
+    <h1>{{i.title}}</h1>
+ <p>{{i.text}}</p>
+    {%endfor%}
+    </div>
+    </div></section>
+    </div></div>
+
+
+
+    <div class="container mb-5">
+
+        <div class="row m-4">
+            <div class="col-sm">
+              <section class="section-name bg padding-y">
+                  <div class="container">
+        <h1>ОПЛАТА</h1>
+        <p>ВЫ МОЖЕТЕ ОПЛАТИТЬ ЗАКАЗ ОДНИМ ИЗ ПЕРЕЧИСЛЕННЫХ СПОСОБОВ:</p>
+        <ul>
+            <li>банковской картой Приват24</li>
+            <li>наложенным платежом в службе доставки “Нова пошта”</li>
+        <p>(При заказе наложенным платежом сумма предоплаты составляет 100 грн)</p>
+        </ul>
+        <br>
+        <p>После заказа мы с вами свяжемся для уточнения деталей 
+            
+        так же вы можете заказать по телефону или в <a href="https://github.com/deft727/python-ecommerce-on-flask">инстаграмме</a> </p>
+        <h1>ДОСТАВКА</h1>
+        <p>Бесплатная доставка по Украине действует при покупке от 1500 грн.</p>
+        <p>Доставка осуществляется транспортной службой "Нова пошта", все актуальные города и отделения представлены на сайте novaposhta.ua.
+        
+        <p>Сроки доставки от 1 до 5 дней. В зависимости от транспортной компании.</p>
+        <b>Отправка производится в день заказа до 17:00</b>
+        
+        </div>
+        </div></section>
+        </div></div>
+<br><br>
+
+    {%endblock main%}

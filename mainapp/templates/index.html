@@ -50,7 +50,7 @@
         <ul class="ps-masonry__filter">
            <li class="current" style="margin-right: auto; font-style: italic;"><a href="" data-filter="*"> Все </a></li>
            {% for node in topcategory.all %}
-           {% if node.level == 2 %} 
+           {% if node.level < 1 %} 
            <li style="margin-right: auto; font-style: italic;"><a href="{{ node.get_absolute_url}}" data-filter=".{{ node.name }}">{{ node.name }}</a></li> 
            {%endif%}
           {%endfor%} 
@@ -64,11 +64,11 @@
             {%for product in products%}
             <div class="grid-item {{ product.name}} "></div>
  
-            <div class="grid-item {{product.category.name}}">
+            <div class="grid-item {{product.category.parent}}">
               <div class="grid-item__content-wrapper">
                 <div class="ps-shoe mb-30">
                   <div class="ps-shoe__thumbnail">
-                    <!-- <a class="ps-shoe__favorite" href="#"><i class="ps-icon-heart"></i></a> -->
+                    <a class="ps-shoe__favorite" href="{%url 'add_to_whishlist' slug=product.slug x='index' %}" title="Добавить в Избранное"><i class="ps-icon-heart"></i></a>
                     <img src="{{product.image1.url}}" alt="" height="310"><a class="ps-shoe__overlay" href="{{product.get_absolute_url}}"></a>
                   </div>
                   <div class="ps-shoe__content">
@@ -84,11 +84,12 @@
                     </div>
                     <div class="ps-shoe__detail"><a class="ps-shoe__name" href="{{product.get_absolute_url}}">{{product.title}}</a>
 
-                      <p class="ps-shoe__categories"><a href=" {{product.category.get_absolute_url}}  ">
-                        
-                          {{product.category.name}}
-
-                      </a> <span class="ps-shoe__price"> {{product.price}} Грн</span>
+                      <p class="ps-shoe__categories"><a href=" {{product.category.parent.parent.get_absolute_url}}  ">
+                       {{product.category.parent.parent}} </a>
+                       <a href="{{product.category.get_absolute_url}}">{{product.category.name}}
+                      </a> 
+                      
+                      <span class="ps-shoe__price"> {{product.price}} Грн</span>
                     </div>
                   </div>
                 </div>
@@ -96,14 +97,12 @@
             </div>
             {%endfor%}
 
-             
+      
           </div>
         </div>
       </div>
     </div>
   </div>
-
-
 
 
   <div class="ps-section--offer">
@@ -160,23 +159,19 @@
               <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 ">
                 <h3 class="ps-section__title" data-mask="BEST SALE">-Случайные товары</h3>
               </div>
-<!-- prev want big  as left-->
-
               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                 <div class="ps-owl-actions"><a class="ps-prev" href="/"><i class="ps-icon-arrow-right"></i>Prev</a><a class="ps-next" href="/">Next<i class="ps-icon-arrow-left"></i></a></div>
               </div>
-
-
         </div>
       </div>
       <div class="ps-section__content">
         <div class="ps-owl--colection owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="4" data-owl-item-xs="1" data-owl-item-sm="2" data-owl-item-md="3" data-owl-item-lg="4" data-owl-duration="1000" data-owl-mousedrag="on">
 
           {%for i in randomProducts%}
-          <div class="ps-shoes--carousel">
+          <div class="ps-shoes--carousel ml-5">
             <div class="ps-shoe">
               <div class="ps-shoe__thumbnail">
-                <!-- <a class="ps-shoe__favorite" href="#"><i class="ps-icon-heart"></i></a> -->
+                <a class="ps-shoe__favorite" href="{%url 'add_to_whishlist' slug=i.slug x='index'%}"><i class="ps-icon-heart"></i></a>
                 <img src="{{ i.image1.url }}" alt="{{i.title}}" height="310"><a class="ps-shoe__overlay" href="{{i.get_absolute_url}}"></a>
               </div>
               <div class="ps-shoe__content">
@@ -191,7 +186,9 @@
                   </select> -->
                 </div>
                 <div class="ps-shoe__detail"><a class="ps-shoe__name" href="{{i.get_absolute_url}}">{{ i.title }}</a>
-                  <p class="ps-shoe__categories"><a href="#">{{i.category}}</a></p><span class="ps-shoe__price"> {{i.price}}</span>
+                  <p class="ps-shoe__categories"><a href="{{i.category.parent.parent.get_absolute_url}}">  {{i.category.parent.parent}} </a>
+                    <a href=" {{i.category.get_absolute_url}}  ">{{i.category.name}}
+                   </a> </a></p><span class="ps-shoe__price"> {{i.price}}</span>
                 </div>
               </div>
             </div>

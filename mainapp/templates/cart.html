@@ -12,35 +12,41 @@
             <table class="table ps-cart__table">
               <thead>
                 <tr>
-                  <th>All Products</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Total</th>
+                  <th>Все товары</th>
+                  <th>Цена</th>
+                  <th>Размер</th>
+                  <th>Кол-во</th>
+                  <th>Всего</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 <tr> {%for item in cart.products.all%}
                   <td><a class="ps-product__preview" href="{{item.product.get_absolute_url}}"><img class="mr-15" src="{{item.product.image1.url}}" alt="">{{item.product.title}}</a></td>
-                  <td>{{item.content_object.price}}</td>
+                  <td>{{item.product.price}}</td>
+                  <td>{{item.size}}</td>
                   <td>
-                    <form action="{% url 'change_qty'   slug=item.product.slug %}  " method="POST">
+
+                    <form action="{% url 'change_qty'   slug=item.product.slug %}  " method="POST" >
                       {%csrf_token%}
+
                     <div class="form-group--number">
                       {%if item.qty > 1%}
-                      <button class="minus"  name="qty" value="0"><span>-</span></button>
-                      <input  class="form-control" type="text" value="{{item.qty}}">
-                      <button class="plus"  name="qty" value="1"><span>+</span></button>
+                      <button class="minus"  name="qty" value="0/{{item.size}}"><span>-</span></button>
+                      <input  class="form-control" type="text" value="{{item.qty}}" >
+                      <button class="plus"  name="qty" value="1/{{item.size}}"><span> +</span></button>
                       {%else%}
                       <input  class="form-control" type="text" value="{{item.qty}}">
-                      <button class="plus"  name="qty" value="1"><span>+</span></button>
+                      <button class="plus"  name="qty" value="1/{{item.size}}"><span> +</span></button>
                       {%endif%}
                     </div>
                   </form>
+
                   </td>
                   <td>{{item.final_price}}</td>
                   <td>
-                    <a href="{%url 'remove_from_cart' slug=item.product.slug%}"><div class="ps-remove"></div></a>
+                    
+                    <a href="{%url 'remove_from_cart' slug=item.product.slug size=item.size %}" title="Удалить"><div class="ps-remove"></div></a>
                   </td>
                 </tr>
                 

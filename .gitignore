@@ -1,0 +1,9 @@
+.vscode/
+venv/
+*.pyc
+./venv/
+__pycache__/
+/venv/*
+*/__pycache__/
+mainapp/templatetags/__pycache__/
+*/migrations/*

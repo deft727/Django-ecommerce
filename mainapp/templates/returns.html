@@ -1,0 +1,25 @@
+{%extends 'base.html'%} 
+{% load static%}
+
+ {%block main%}
+
+<div class="container mb-5 ">
+
+  <div class="row m-2 mb-5 ">
+    <div class="col-sm">
+      <section class="section-name bg padding-y">
+          <div class="container">
+            {%for i in returns%}
+          <h1>{{i.title}}</h1><br>
+          <p>  {{i.text}} </p>
+        
+          {%endfor%}
+  </div>
+</section>
+  </div>
+
+</div>
+
+<br></div>
+<br>
+{%endblock main%}

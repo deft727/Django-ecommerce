@@ -18,7 +18,7 @@
     <meta name="author" content="Nghia Minh Luong">
     <meta name="keywords" content="Default Description">
     <meta name="description" content="Default keyword">
-    <title>{%block title%} {%endblock title%}</title>
+    <title>{%block title%}{{title}}{%endblock title%}</title>
     <!-- Fonts-->
     
     <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:300,400,700%7CMontserrat:300,400,500,600,700,800,900" rel="stylesheet">
@@ -112,16 +112,16 @@
 
 
  
-{% for node in topcategory.all %}
+{% for node in topcategory %}
 
      {% if node.level == 0 %} 
-<li class="menu-item menu-item-has-children has-mega-menu"><a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+<li class="menu-item menu-item-has-children has-mega-menu"><a href="{{ node.get_absolute_url }}">{{node.name}}</a>
   {% endif %}
-
   <div class="mega-menu">
     <div class="mega-wrap">
-      <div class="mega-column">
+      <!-- <div class="mega-column">
         <ul class="mega-item mega-features">
+          
           <li><a href="product-listing.html">NEW RELEASES</a></li>
           <li><a href="product-listing.html">FEATURES SHOES</a></li>
           <li><a href="product-listing.html">BEST SELLERS</a></li>
@@ -130,12 +130,12 @@
           <li><a href="product-listing.html">MOTHER'S DAY COLLECTION</a></li>
           <li><a href="product-listing.html">FAN GEAR</a></li>
         </ul>
-      </div>
+      </div> -->
       {% for item in node.children.all %}
 
       <div class="mega-column">
         <h4 class="mega-heading">{{item.name}} </h4>
-        {% for child in item.children.all  %}
+        {% for child in item.children.all%}
         <ul class="mega-item">
           <li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>
         </ul>
@@ -170,15 +170,21 @@
           <div class="navigation__column right">
 
 
-            <form class="ps-search--header" action="/category/men/"  method="GET">
+            <form class="ps-search--header" action="/category/Men/"  method="GET">
               <input class="form-control" name="search" type="search" placeholder="Поиск товара">
               <button><i class="ps-icon-search"></i></button>
             </form>
 
 
 
+            
 
-            <div class="ps-cart"><a class="ps-cart__toggle" href="{%url 'cart'%}"><span><i>{{cart.products.count}}</i></span><i class="ps-icon-shopping-cart"></i></a>
+              
+              
+              <div class="ps-cart">
+
+              <a class="ps-cart__toggle" href="{%url 'cart'%}"><span><i>{{cart.products.count}}</i></span><i class="ps-icon-shopping-cart"></i></a>
+
               <div class="ps-cart__listing">
                 <div class="ps-cart__total">
                   <p>Товаров в корзине:<span>{{cart.total_products}}</span></p>
@@ -187,6 +193,7 @@
           <div class="ps-cart__footer"><a class="ps-btn" href="{%url 'cart'%}">К корзине<i class="ps-icon-arrow-left"></i></a></div>
               </div>
             </div>
+            <a class="ps-cart__toggle" href="{%url 'whishlist' %}" ><i class="ps-icon-heart"></i></a>
 
 
             <div class="menu-toggle"><span></span></div>
@@ -236,13 +243,13 @@
 
     {%block main%}
     {%endblock main%}
-    <div class="ps-subscribe">
+    <!-- <div class="ps-subscribe">
       <div class="ps-container">
         <div class="row">
 
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="ps-footer bg--cover" data-background="">
       <div class="ps-footer__content">
         <div class="ps-container">
@@ -296,11 +303,11 @@
                     </header>
                     <footer>
                       <ul class="ps-list--line">
-                        <li><a href="{%url 'profile'%}">Сатус заказа</a></li>
-                        <li><a href="{%url 'profile'%}">Оплата и доставка</a></li>
-                        <li><a href="{%url 'profile'%}">Возврат</a></li>
+                        <li><a href="{%url 'about'%}">О нас</a></li>
+                        <li><a href="{%url 'delivery'%}">Оплата и доставка</a></li>
+                        <li><a href="{%url 'returns'%}">Возврат</a></li>
                         <!-- <li><a href="#">Payment Options</a></li> -->
-                        <li><a href="{%url 'about'%}">Наши контакты</a></li>
+                        <li><a href="{%url 'contact-us'%}">Наши контакты</a></li>
                       </ul>
                     </footer>
                   </aside>
@@ -313,7 +320,7 @@
                     <footer>
                       <ul class="ps-list--line">
                         {%for i in topcategory %}
-                        {% if i.level == 1 %}
+                        {% if i.level < 1 %}
                         <li><a href="{{i.get_absolute_url}}">{{i.name}}</a></li>
                         {%endif%}
                         {%endfor%}                     
@@ -346,6 +353,12 @@
       </div>
     </div>
     <!-- JS Library-->
+    <script>
+      var submitButton = document.getElementById('submit');
+      submitButton.addEventListener('click', function(event) {
+          this.disabled = true;
+      });
+     </script>
     <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.kenburn.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.migration.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'plugins/jquery/dist/jquery.min.js'%}"></script>
