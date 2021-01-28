@@ -31,8 +31,6 @@ class CartMixin(View):
             cart= Cart.objects.filter(for_anonymoys_user=True,owner=customer,in_order=False).first()
             if not cart:
                 cart= Cart.objects.create(for_anonymoys_user=True,owner=customer)
-        if cart:
-            self.cart=cart
-            self.cart.save()
-            return super().dispatch(request,*args,**kwargs)
+        self.cart=cart
+        self.cart.save()
         return super().dispatch(request,*args,**kwargs)
