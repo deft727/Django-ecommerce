@@ -19,12 +19,7 @@ ALLOWED_HOSTS = ["mysite123456.herokuapp.com"]
 #         'PORT': 5432
 #     }
 # }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+
 
 
 STATIC_DIR =  os.path.join(BASE_DIR, 'static')
