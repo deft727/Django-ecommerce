@@ -34,4 +34,5 @@ class CartMixin(View):
         if cart:
             self.cart=cart
             self.cart.save()
+            return super().dispatch(request,*args,**kwargs)
         return super().dispatch(request,*args,**kwargs)
