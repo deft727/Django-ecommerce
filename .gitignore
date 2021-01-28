@@ -6,5 +6,3 @@ __pycache__/
 /venv/*
 */__pycache__/
 mainapp/templatetags/__pycache__/
-# */migrations/*
-# db.sqlite3
