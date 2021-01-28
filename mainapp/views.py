@@ -302,7 +302,6 @@ class AddToCartView(CartMixin,View):
             cart_product.save()
             self.cart.products.add(cart_product)
             messages.add_message(request,messages.INFO,'Товар добавлен в корзину')
-            return redirect(product.get_absolute_url())
 
         else:
             messages.add_message(request,messages.INFO,'Товар уже в корзине')
