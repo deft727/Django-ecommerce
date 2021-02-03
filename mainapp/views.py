@@ -511,15 +511,12 @@ class PayCallbackView(View):
         data = request.POST.get('data')
         signature = request.POST.get('signature')
         sign = liqpay.str_to_sign(settings.LIQPAY_PRIVATE_KEY + data + settings.LIQPAY_PRIVATE_KEY)
-        if sign == signature:
-            x = ' оплата успешна '
-            send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+        # if sign == signature:
+        #     x = ' оплата успешна '
+        #     send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         response =liqpay.decode_data_from_str(data)
 
-        if response['order_id']:
-            q=response['order_id']
-        else:
-            q='0'
+
         if response['status']:
             w=response['status']
         else:
