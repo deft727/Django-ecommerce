@@ -493,7 +493,7 @@ class PayView(TemplateView):
             'currency': 'UAH',
             'description': 'Payment for clothes',
             'version': '3',
-            'order':  order_id ,
+            'order_id':  order_id ,
             'sandbox': 0, # sandbox mode, set to 1 to enable it
             'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
             'result_url':'https://mysite123456.herokuapp.com/',
@@ -512,12 +512,12 @@ class PayCallbackView(View):
         signature = request.POST.get('signature')
         sign = liqpay.str_to_sign(settings.LIQPAY_PRIVATE_KEY + data + settings.LIQPAY_PRIVATE_KEY)
         if sign == signature:
-            x = 'оплата успешна '
+            x = ' оплата успешна '
             send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         response =liqpay.decode_data_from_str(data)
 
-        if response['order']:
-            q=response['order']
+        if response['order_id']:
+            q=response['order_id']
         else:
             q='0'
         if response['status']:
@@ -532,7 +532,7 @@ class PayCallbackView(View):
 
         x = 'оплата успешна response order id==='+ q +'--status----'+ w +'--phone'+ e
         send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
-        return HttpResponse()
+        return HttpResponseRedirect('/')
 # otzivy
 class ProductRewiew(View):
     def post(self,request,pk):
