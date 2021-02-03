@@ -501,6 +501,9 @@ class PayView(TemplateView):
         signature = liqpay.cnb_signature(params)
         data = liqpay.cnb_data(params)
         
+
+
+        
         return render(request, self.template_name, {'signature': signature, 'data': data})
 
 
@@ -512,24 +515,12 @@ class PayCallbackView(View):
         signature = request.POST.get('signature')
         sign = liqpay.str_to_sign(settings.LIQPAY_PRIVATE_KEY + data + settings.LIQPAY_PRIVATE_KEY)
         # if sign == signature:
-        #     x = ' оплата успешна '
-        #     send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+        x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+response['sender_phone']
+        send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         response =liqpay.decode_data_from_str(data)
 
-
-        if response['status']:
-            w=response['status']
-        else:
-            w='0'
-        if response['sender_phone']:
-            e=response['sender_phone']
-        else:
-            e='0'
-
-
-        x = 'оплата успешна response order id==='+ q +'--status----'+ w +'--phone'+ e
-        send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
-        return HttpResponseRedirect('/')
+        # print('callback data', response)
+        return HttpResponse()
 # otzivy
 class ProductRewiew(View):
     def post(self,request,pk):
