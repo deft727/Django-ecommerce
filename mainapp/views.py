@@ -520,7 +520,7 @@ class PayCallbackView(View):
             x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+response['sender_phone']
             send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         # print('callback data', response)
-        return HttpResponse()
+        return HttpResponseRedirect('/')
 # otzivy
 class ProductRewiew(View):
     def post(self,request,pk):
