@@ -486,7 +486,7 @@ class PayView(TemplateView):
         orders = Order.objects.filter(customer=customer).order_by('-id')[:1].first()
 
         liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
-        order_id = random.randint(1,2,3,4,5,6,7,8,9,0)
+        order_id = random.randint(1,9)
         params = {
             'action': 'pay',
             'amount': '1',
