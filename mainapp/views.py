@@ -28,6 +28,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 from django.core.mail import send_mail
+import random
 
 
 def custom_404(request):
@@ -485,13 +486,14 @@ class PayView(TemplateView):
         orders = Order.objects.filter(customer=customer).order_by('-id')[:1].first()
 
         liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
+        order_id = random.randint(1,2,3,4,5,6,7,8,9,0)
         params = {
             'action': 'pay',
             'amount': '1',
             'currency': 'UAH',
             'description': 'Payment for clothes',
             'version': '3',
-            'order_id': '123',
+            'order_id':  order_id ,
             'sandbox': 0, # sandbox mode, set to 1 to enable it
             'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
             'result_url':'https://mysite123456.herokuapp.com/pay-callback/',
