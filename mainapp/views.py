@@ -491,10 +491,10 @@ class PayView(TemplateView):
             'currency': 'UAH',
             'description': 'Payment for clothes',
             'version': '3',
-            'order_id': '123'
+            'order_id': '123',
             'sandbox': 0, # sandbox mode, set to 1 to enable it
             'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
-            'result_url':'https://mysite123456.herokuapp.com/pay-callback/'
+            'result_url':'https://mysite123456.herokuapp.com/pay-callback/',
         }
         signature = liqpay.cnb_signature(params)
         data = liqpay.cnb_data(params)
@@ -514,9 +514,9 @@ class PayCallbackView(View):
         signature = str(request.POST.get('signature'))
         sign = str(liqpay.str_to_sign(settings.LIQPAY_PRIVATE_KEY + data + settings.LIQPAY_PRIVATE_KEY))
         if sign == signature:
-            # print('callback is valid')
+            print('callback is valid')
         response =str(liqpay.decode_data_from_str(data))
-        x = '... response order id==='+response{'order_id'}+'--status----'+response{'status'} +'--phone'+response{'sender_phone'}
+        x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+response['sender_phone']
         send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         # print('callback data', response)
         return HttpResponse()
