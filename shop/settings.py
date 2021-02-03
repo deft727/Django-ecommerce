@@ -245,3 +245,6 @@ django_heroku.settings(locals())
 # INTERNAL_IPS = [
 #     '127.0.0.1',
 # ]
+LIQPAY_PRIVATE_KEY = 'sandbox_HGCiYmFzrKiBzzRqi8T57lsD9BrGAgt6R2x7yqy3'
+
+LIQPAY_PUBLIC_KEY= 'sandbox_i41234761583'

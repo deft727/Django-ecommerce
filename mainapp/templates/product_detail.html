@@ -26,7 +26,7 @@
                     {%if product.image4%}<div class="item"><img src=" {{product.image4.url}} " ></div>{%endif%}
                     {%if product.image5%}  <div class="item"><img src="{{product.image5.url}} " ></div>{%endif%}
                   </div>
-                  <!-- <a class="popup-youtube ps-product__video" href="http://www.youtube.com/watch?v=0O2aH4XLbto"><img src="{{product.image1.url}}" alt="{{product.title}}"><i class="fa fa-play"></i></a> -->
+                  <!-- <a class="popup-youtube ps-product__video" href=""><img src="" alt=""><i class="fa fa-play"></i></a> -->
                 </div>
                 <div class="ps-product__image">
                   <div class="item"><img class="zoom" src="{%if product.image1%} {{product.image1.url}} {%endif%}" alt="{{product.title}}" data-zoom-image="{%if product.image1%} {{product.image1.url}} {%endif%}" ></div>
@@ -39,7 +39,7 @@
               </div>
               <div class="ps-product__thumbnail--mobile">
                 <div class="ps-product__main-img"><img src="{{product.image1.url}}" alt="{{product.title}}"></div>
-                <div class="ps-product__preview owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="20" data-owl-nav="true" data-owl-dots="false" data-owl-item="3" data-owl-item-xs="3" data-owl-item-sm="3" data-owl-item-md="3" data-owl-item-lg="3" data-owl-duration="1000" data-owl-mousedrag="on"><img src="{%if product.image2%} {{product.image2.url}} {%endif%}" alt="{{product.title}}"><img src="{%if product.image3%} {{product.image3.url}} {%endif%}" alt="{{product.title}}"><img src="{%if product.image4%} {{product.image4.url}} {%endif%}" alt="{{product.title}}"></div>
+                <div class="ps-product__preview owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="20" data-owl-nav="true" data-owl-dots="false" data-owl-item="3" data-owl-item-xs="3" data-owl-item-sm="3" data-owl-item-md="3" data-owl-item-lg="3" data-owl-duration="1000" data-owl-mousedrag="on"><img src="{%if product.image2%} {{product.image2.url}} {%endif%}" alt="{{product.title}}"><img src="{%if product.image3%} {{product.image3.url}} {%endif%}" alt="{{product.title}}"><img src="{%if product.image4%} {{product.image4.url}} {%endif%}" alt="{{product.title}}"> <img src="{%if product.image5%} {{product.image5.url}} {%endif%}" alt="{{product.title}}"></div>
               </div>
               <div class="ps-product__info">
                 <div class="ps-product__rating">
@@ -56,7 +56,7 @@
                   {{product.category.parent.parent}} </a>
                   <a href="{{product.category.get_absolute_url}}">{{product.category.name}}
                  </a> </p>
-                <h3 class="ps-product__price">{{product.price}} Грн<del>£ 330</del></h3>
+                <h3 class="ps-product__price">{%if product.old_price%}<del>£{{product.old_price}}</del> {%endif%} £  {{product.price}}</h3>
                 <div class="ps-product__block ps-product__quickview">
                   <b class="mt-4"> Характеристики:</b>
                   <table class="table">
@@ -272,7 +272,7 @@
                       <p class="ps-shoe__categories"><a href=" {{product.category.parent.parent.get_absolute_url}}  ">
                         {{product.category.parent.parent}} </a>
                         <a href="{{product.category.get_absolute_url}}">{{product.category.name}}
-                       </a> </p><span class="ps-shoe__price"> {{i.price}}</span>
+                       </a> </p><span class="ps-shoe__price"> {%if i.old_price%}<del>£{{i.old_price}}</del> {%endif%} £  {{i.price}}</span>
                     </div>
                   </div>
                 </div>

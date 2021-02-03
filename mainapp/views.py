@@ -20,10 +20,14 @@ from django.conf import settings
 from django.contrib.sessions.models import Session
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string,get_template
-
-
-
 from datetime import datetime, date, time
+
+from liqpay import LiqPay
+from  django.views.generic import TemplateView
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
+from django.core.mail import send_mail
 
 
 def custom_404(request):
@@ -79,7 +83,6 @@ class BaseView(CartMixin, View):
         Topimage=MyTopImage.objects.all()
         products = Product.objects.all().order_by('-id')[:8]
         myimage= MyImage.objects.all()
-        
         randomProducts =  Product.objects.all().order_by('?')[:10]
         form= ContactForm(request.POST or None)
         title = 'Сайт'
@@ -391,6 +394,7 @@ class MakeOrderView(CartMixin,View):
             name=str(session_key)
             user= User.objects.filter(username=name).first()
             customer = Customer.objects.filter(user=user).first()
+            orders = Order.objects.filter(customer=customer).order_by('-id')[:1]
 
 
 
@@ -417,37 +421,106 @@ class MakeOrderView(CartMixin,View):
             new_order.buying_type = form.cleaned_data['buying_type']
             new_order.comment = form.cleaned_data['comment']
             comment=form.cleaned_data['comment']
-            new_order.save()
-            self.cart.in_order = True
-            self.cart.save()
-            new_order.cart = self.cart
-            new_order.save()
-            customer.orders.add(new_order)
-            orders = Order.objects.filter(customer=customer).order_by('-id')[:1]
-# -----------------------------------------------------------------------------------------------------------------------
-            subject = "Заказ на сайте 12312312"
-            to = [email,]
-            from_email = 'test@example.com'
-            ctx = {
-                'orders': orders,
-            }
-            message = get_template('message.html').render(ctx)
-            msg = EmailMessage(subject, message, to=to, from_email=from_email)
-            msg.content_subtype = 'html'
-            msg.send()
+            payment = request.POST.get('payment')
+            if payment == 'online':
+                return redirect ('/pay/')
+                # new_order.save()
+                # self.cart.in_order = True
+                # self.cart.save()
+                # new_order.cart = self.cart
+                # new_order.save()
+                # customer.orders.add(new_order)
+              
+                
+                # liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
+                # params = {
+                #     'action': 'pay',
+                #     'amount': int(self.cart.final_price),
+                #     'currency': 'UAH',
+                #     'description': 'Payment for clothes',
+                #     'order_id': 'order_id_1',
+                #     'version': '3',
+                #     'sandbox': 0, # sandbox mode, set to 1 to enable it
+                #     'server_url': 'http://127.0.0.1/pay-callback/', # url to callback view
+                # }
+                # signature = liqpay.cnb_signature(params)
+                # data = liqpay.cnb_data(params)
+                # return render(request, 'pay.html', {'signature': signature, 'data': data})
+            
+#             new_order.save()
+#             self.cart.in_order = True
+#             self.cart.save()
+#             new_order.cart = self.cart
+#             new_order.save()
+#             customer.orders.add(new_order)
+#             orders = Order.objects.filter(customer=customer).order_by('-id')[:1]
+# # -----------------------------------------------------------------------------------------------------------------------
+#             subject = "Заказ на сайте 12312312"
+#             to = [email,]
+#             from_email = 'test@example.com'
+#             ctx = {
+#                 'orders': orders,
+#             }
+#             message = get_template('message.html').render(ctx)
+#             msg = EmailMessage(subject, message, to=to, from_email=from_email)
+#             msg.content_subtype = 'html'
+#             msg.send()
 # ----------------------------------------------------------------------------------------------------------------------
 
-            # email=form.cleaned_data['adress']
-            # print(email)
-            # name= form.cleaned_data['first_name']
-            # body= form.cleaned_data['phone']
-            # send_email(email,name,phone)
 
             messages.add_message(request, messages.INFO, 'Спасибо за заказ! Менеджер с Вами свяжется')
             return HttpResponseRedirect('/')
         return HttpResponseRedirect('/checkout/')
 
+class PayView(TemplateView):
+    template_name = 'pay.html'
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            customer = Customer.objects.get(user=request.user)
+        else:
+            session_key=request.session.session_key
+            name=str(session_key)
+            user= User.objects.filter(username=name).first()
+            customer = Customer.objects.filter(user=user).first()
+        orders = Order.objects.filter(customer=customer).order_by('-id')[:1].first()
 
+        liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
+        params = {
+            'action': 'pay',
+            'amount': '1',
+            'currency': 'UAH',
+            'description': 'Payment for clothes',
+            'version': '3',
+            'sandbox': 0, # sandbox mode, set to 1 to enable it
+            'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
+            'result_url':'https://mysite123456.herokuapp.com/pay-callback/'
+        }
+        signature = liqpay.cnb_signature(params)
+        data = liqpay.cnb_data(params)
+        
+
+
+        
+        return render(request, self.template_name, {'signature': signature, 'data': data})
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class PayCallbackView(View):
+    def post(self, request, *args, **kwargs):
+        liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
+        data = request.POST.get('data')
+        print('data',data)
+        signature = request.POST.get('signature')
+        sign = liqpay.str_to_sign(settings.LIQPAY_PRIVATE_KEY + data + settings.LIQPAY_PRIVATE_KEY)
+        if sign == signature:
+            print('callback is valid')
+        response = liqpay.decode_data_from_str(data)
+
+
+        x = 'data=== '+data+'... response==='+response+'----------'+sign+'////'+signature
+        send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+        print('callback data', response)
+        return HttpResponse('/')
 # otzivy
 class ProductRewiew(View):
     def post(self,request,pk):

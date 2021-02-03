@@ -49,7 +49,7 @@ class Category(MPTTModel):
 
     # @property
     # def get_products(self):
-    #      return Products.objects.filter(category=self.parent)
+    #      return Product.objects.filter(category=self.children)
  
     # def get_fields_for_filter_in_template(self):
     #     return ProductFeatures.objects.filter(
@@ -93,8 +93,7 @@ class Product(models.Model):
     available = models.BooleanField(default=True,verbose_name="Наличие")
     description = models.TextField(verbose_name='Описание товара',null=True)
     price = models.DecimalField(max_digits=10,decimal_places=2,verbose_name='Цена')
-
-
+    old_price = models.DecimalField(max_digits=10,decimal_places=2,verbose_name='Старая Цена',null=True,blank=True)
 
     def __str__(self):
         return self.title
@@ -475,6 +474,7 @@ class Order(models.Model):
 
     STATUS_NEW ='new'
     STATUS_IN_PROGRESS='in_progress'
+    STATUS_PAY = 'payment'
     STATUS_READY= 'is_ready'
     STATUS_COMPLETED= 'completed'
     STATUS_DEACTIVE='deactive'
@@ -484,6 +484,7 @@ class Order(models.Model):
 
     STATUS_CHOICES= (
         (STATUS_NEW,'Новый заказ'),
+        (STATUS_PAY,'Заказ оплачен'),
         (STATUS_IN_PROGRESS,'Заказ в обработке'),
         (STATUS_READY,'Заказ готов'),
         (STATUS_COMPLETED,'Заказ выполнен'),
@@ -518,6 +519,7 @@ class Order(models.Model):
     )
     comment = models.TextField(verbose_name='Комментарий к заказу', null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True, verbose_name='Дата создания заказа')
+    pay = models.CharField(max_length=100,verbose_name='Cпособ оплаты' , null=True,blank=True)
 
     def __str__(self):
         return "Заказ: {} {} {}".format(self.id, self.first_name, self.last_name)
@@ -541,11 +543,3 @@ class Rewiews(models.Model):
 
 
 
-
-# class Specification(models.Model):
-#     contet_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
-#     object_id = models.PositiveIntegerField()
-#     name = models.CharField(max_length=250,verbose_name="Имя товара для характеристик")
-
-#     def __str__(self):
-#         return "Характеристики для товара: {}".format(self.name)

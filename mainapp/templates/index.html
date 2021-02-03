@@ -73,7 +73,7 @@
                   </div>
                   <div class="ps-shoe__content">
                     <div class="ps-shoe__variants">
-                      <div class="ps-shoe__variant normal"><img src="{%if product.image2%} {{product.image2.url}} {%endif%}" alt="" ><img src="{%if product.image3%} {{product.image3.url}} {%endif%}" alt=""><img src="{%if product.image4%} {{product.image4.url}} {%endif%}" alt=""><img src="{%if product.image5%} {{product.image5.url}} {%endif%}" alt=""></div>
+                      <div class="ps-shoe__variant normal"><img src="{%if product.image2%} {{product.image2.url}}  {%endif%}" alt="{{product.title}}" ><img src="{%if product.image3%} {{product.image3.url}} {%endif%}" alt=""><img src="{%if product.image4%} {{product.image4.url}} {%endif%}" alt=""><img src="{%if product.image5%} {{product.image5.url}} {%endif%}" alt=""></div>
                       <!-- <select class="ps-rating ps-shoe__rating">
                         <option value="1">1</option>
                         <option value="1">2</option>
@@ -89,7 +89,7 @@
                        <a href="{{product.category.get_absolute_url}}">{{product.category.name}}
                       </a> 
                       
-                      <span class="ps-shoe__price"> {{product.price}} Грн</span>
+                      <span class="ps-shoe__price">{%if product.old_price%}<del>£{{product.old_price}}</del> {%endif%} £  {{product.price}}</span>
                     </div>
                   </div>
                 </div>
@@ -149,7 +149,7 @@
                 <div class="ps-shoe__detail"><a class="ps-shoe__name" href="{{i.get_absolute_url}}">{{ i.title }}</a>
                   <p class="ps-shoe__categories"><a href="{{i.category.parent.parent.get_absolute_url}}">  {{i.category.parent.parent}} </a>
                     <a href=" {{i.category.get_absolute_url}}  ">{{i.category.name}}
-                   </a> </a></p><span class="ps-shoe__price"> {{i.price}}</span>
+                   </a> </a></p><span class="ps-shoe__price">{%if i.old_price%}<del>£{{i.old_price}}</del> {%endif%} £ {{i.price}}</span>
                 </div>
               </div>
             </div>

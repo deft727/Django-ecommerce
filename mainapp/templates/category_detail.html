@@ -68,7 +68,7 @@
                 <p class="ps-shoe__categories"><a href=" {{product.category.parent.parent.get_absolute_url}}  ">
                   {{product.category.parent.parent}} </a>
                   <a href="{{product.category.get_absolute_url}}">{{product.category.name}}
-                  </a></p><span class="ps-shoe__price"> {{product.price}} Грн</span>
+                  </a></p><span class="ps-shoe__price"> {%if product.old_price%}<del>£{{product.old_price}}</del> {%endif%} £  {{product.price}}</span>
               </div>
             </div>
           </div>

@@ -21,12 +21,15 @@ from .views import (
                     ReturnsView,
                     AddtoWhishlistView,
                     WhislistView,
-                    DeleteFromWhislist
+                    DeleteFromWhislist,
+                    PayView, 
+                    PayCallbackView
                     )
 from django.contrib.auth import views as authViews
 # from django.conf.urls import url
+from django.conf.urls import url
 
-
+import re
 
 # handler404 = 'mainapp.views.custom_page_not_found_view'
 
@@ -60,7 +63,11 @@ urlpatterns = [
     path('remove_from_whishlist/<str:slug>/', DeleteFromWhislist.as_view(),name='remove_from_whishlist'),
 
 
+    # path('pay/',PayView.as_view(), name='pay_view'),
+    # path('pay-callback/', PayCallbackView.as_view(), name='pay_callback'),
     # url(r'^$',BaseView.as_view(),name='base'),
+    url(r'^pay/$', PayView.as_view(), name='pay_view'),
+    url(r'^pay-callback/$', PayCallbackView.as_view(), name='pay_callback'),
 ]             
 
 custom_404 = 'mainapp.views.custom_404'

@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="{% static 'plugins/revolution/css/layers.css'%}">
     <link rel="stylesheet" href="{% static 'plugins/revolution/css/navigation.css'%}">
     <!-- Custom-->
+    
     <link rel="stylesheet" href="{% static 'css/style.css'%}">
     <!--HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries-->
     <!--WARNING: Respond.js doesn't work if you view the page via file://-->
@@ -119,23 +120,22 @@
   {% endif %}
   <div class="mega-menu">
     <div class="mega-wrap">
-      <!-- <div class="mega-column">
-        <ul class="mega-item mega-features">
-          
-          <li><a href="product-listing.html">NEW RELEASES</a></li>
-          <li><a href="product-listing.html">FEATURES SHOES</a></li>
-          <li><a href="product-listing.html">BEST SELLERS</a></li>
-          <li><a href="product-listing.html">NOW TRENDING</a></li>
-          <li><a href="product-listing.html">SUMMER ESSENTIALS</a></li>
-          <li><a href="product-listing.html">MOTHER'S DAY COLLECTION</a></li>
-          <li><a href="product-listing.html">FAN GEAR</a></li>
-        </ul>
-      </div> -->
-      {% for item in node.children.all %}
 
+
+     
+      <div class="mega-column">
+        <ul class="mega-item mega-features">
+          <li><a href="product-listing.html">{{node.children.products}}</a></li>
+        </ul>
+      </div>
+
+     
+     
+      {% for item in node.children.all %}
       <div class="mega-column">
         <h4 class="mega-heading">{{item.name}} </h4>
         {% for child in item.children.all%}
+        
         <ul class="mega-item">
           <li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>
         </ul>

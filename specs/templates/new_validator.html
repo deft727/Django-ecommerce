@@ -6,7 +6,7 @@
     <select class="form-select" required name="category-validators" id="category-validators-id" aria-label="Default select example">
     <option selected>---</option>
         {% for category in categories %}
-          <option value="{{ category.id }}">{{ category.name }}</option>
+          <option value="{{ category.id }}">{{ category }}</option>
         {% endfor %}
     </select>
 </div>

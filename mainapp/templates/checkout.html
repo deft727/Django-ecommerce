@@ -48,18 +48,19 @@
                         </table>
                       </div>
                       <footer>
-                        <h3>Payment Method</h3>
+                        <h3>Выберите способ оплаты</h3>
                         <div class="form-group cheque">
                           <div class="ps-radio">
-                            <input class="form-control" type="radio" id="rdo01" name="payment" checked>
-                            <label for="rdo01">Cheque Payment</label>
-                            <p>Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+                            <input class="form-control" type="radio" id="rdo01" name="payment" value="nal" checked>
+                            <label for="rdo01">Наложенный платеж</label>
+                            <p> Сумма предоплаты при заказе наложенным платежём состовляет 100 грн . Номер карты прийдет на указанный е-майл.</p>
                           </div>
                         </div>
                         <div class="form-group paypal">
                           <div class="ps-radio ps-radio--inline">
-                            <input class="form-control" type="radio" name="payment" id="rdo02">
-                            <label for="rdo02">Paypal</label>
+                            <input class="form-control" type="radio"  name="payment" value="online" id="rdo02">
+                            <label for="rdo02">Liqpay</label>
+                            <p>Вы можете оплатить онлайн</p>
                           </div>
                           <ul class="ps-payment-method">
                             <li><a href="#"><img src="{%static 'images/payment/1.png'%}" alt=""></a></li>
@@ -75,6 +76,7 @@
                       </footer>
                     </div>
                     <div class="ps-shipping">
+                      
                       <h3>FREE SHIPPING</h3>
                       <p>YOUR ORDER QUALIFIES FOR FREE SHIPPING.<br> <a href="#"> Singup </a> for free shipping on every order, every time.</p>
                     </div>

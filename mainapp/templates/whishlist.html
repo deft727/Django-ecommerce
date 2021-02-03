@@ -23,7 +23,7 @@
               {%for item in favorite%}
               <tr>
                 <td><a class="ps-product__preview" href="{{item.products.get_absolute_url}}"><img class="mr-15" src="{{item.products.image1.url}}" alt="">{{item.products.title}}</a></td>
-                <td>{{item.products.price}} EU</td>
+                <td>{%if product.old_price%}<del>£{{product.old_price}}</del> {%endif%} £ {{item.products.price}} </td>
                 <td><a class="ps-product-link" href="{{item.products.get_absolute_url}}">Подробнее</a></td>
                 <td>
                   <a href="{%url 'remove_from_whishlist' slug=item.products.slug  %}" title="Удалить"><div class="ps-remove"></div></a>
