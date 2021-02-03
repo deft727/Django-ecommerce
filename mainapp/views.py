@@ -29,7 +29,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from django.core.mail import send_mail
 import random
-
+from django.http import HttpResponse
 
 def custom_404(request):
     return render(request, '404.html', {}, status=404)
