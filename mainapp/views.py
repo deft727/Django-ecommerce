@@ -514,9 +514,7 @@ class PayCallbackView(View):
         sign = str(liqpay.str_to_sign(settings.LIQPAY_PRIVATE_KEY + data + settings.LIQPAY_PRIVATE_KEY))
         if sign == signature:
             print('callback is valid')
-        response = liqpay.decode_data_from_str(data)
-
-
+        response =str(liqpay.decode_data_from_str(data))
         x = 'data=== '+data+'... response==='+response+'----------'+sign+'////'+signature
         send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         print('callback data', response)
