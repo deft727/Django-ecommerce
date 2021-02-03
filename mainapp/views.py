@@ -496,7 +496,7 @@ class PayView(TemplateView):
             'order_id':  order_id ,
             'sandbox': 0, # sandbox mode, set to 1 to enable it
             'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
-            'result_url':'https://mysite123456.herokuapp.com/pay-callback/',
+            'result_url':'https://mysite123456.herokuapp.com/',
         }
         signature = liqpay.cnb_signature(params)
         data = liqpay.cnb_data(params)
