@@ -515,10 +515,10 @@ class PayCallbackView(View):
         signature = request.POST.get('signature')
         sign = liqpay.str_to_sign(settings.LIQPAY_PRIVATE_KEY + data + settings.LIQPAY_PRIVATE_KEY)
         # if sign == signature:
-        x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+response['sender_phone']
-        send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         response =liqpay.decode_data_from_str(data)
-
+        if response['sender_phone']:
+            x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+response['sender_phone']
+            send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         # print('callback data', response)
         return HttpResponse()
 # otzivy
