@@ -509,13 +509,13 @@ class PayView(TemplateView):
 class PayCallbackView(View):
     def post(self, request, *args, **kwargs):
         liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
-        data = str(request.POST.get('data'))
+        data = request.POST.get('data')
         print('data',data)
-        signature = str(request.POST.get('signature'))
-        sign = str(liqpay.str_to_sign(settings.LIQPAY_PRIVATE_KEY + data + settings.LIQPAY_PRIVATE_KEY))
+        signature = request.POST.get('signature')
+        sign = liqpay.str_to_sign(settings.LIQPAY_PRIVATE_KEY + data + settings.LIQPAY_PRIVATE_KEY)
         if sign == signature:
             print('callback is valid')
-        response =str(liqpay.decode_data_from_str(data))
+        response =liqpay.decode_data_from_str(data)
         x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+response['sender_phone']
         send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         # print('callback data', response)
