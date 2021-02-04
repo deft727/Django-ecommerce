@@ -524,8 +524,11 @@ class PayCallbackView(View):
         except:
             phone = '0'
         if phone != '0':
-            x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone
-            send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+            x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+response
+            send_mail('Платеж!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+        if signature == sign:
+            s='Равно signature i sign'
+            send_mail('Равно!',s, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         # print('callback data', response)
         success_url = reverse_lazy('base')
         return HttpResponse()
