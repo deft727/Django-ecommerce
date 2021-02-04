@@ -489,7 +489,7 @@ class PayView(TemplateView):
         orders = Order.objects.filter(customer=customer).order_by('-id')[:1].first()
 
         liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
-        order_id = random.randint(11,19)
+        order_id = random.randint(1,30)
         params = {
             'action': 'pay',
             'amount': '1',
@@ -524,7 +524,7 @@ class PayCallbackView(View):
         except:
             phone = '0'
         if phone != '0':
-            x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+response
+            x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
             send_mail('Платеж!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         if signature == sign:
             s='Равно signature i sign'
