@@ -30,6 +30,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 import random
 from django.http import HttpResponse
+from django.urls import reverse_lazy
+
+
 
 def custom_404(request):
     return render(request, '404.html', {}, status=404)
@@ -108,7 +111,7 @@ class BaseView(CartMixin, View):
             text= form.cleaned_data['text']
             email = EmailMessage('Интернет магазин',' ГОСТЬ С ИМЕНЕМ - '+ name+ ' НАПИСАЛ- '+ text + ' ЕГО ПОЧТА ДЛЯ СВЗЯИ: '+ email_user, to=['magikmagazin123@gmail.com'])
             email.send()
-            messages.add_message(request,messages.INFO,'Ваше сообщение отправлено')
+            messages.add_message(request,messages.SUCCESS,'Ваше сообщение отправлено')
             return HttpResponseRedirect('/')
         return HttpResponseRedirect('/')
 
@@ -240,7 +243,7 @@ class AddtoWhishlistView(CartMixin,View):
         product= Product.objects.get(slug=product_slug)
         try:
             Whishlist.objects.get_or_create(owner=user,products=product)
-            messages.add_message(request,messages.INFO,'Товар добавлен в избранноe')
+            messages.add_message(request,messages.SUCCESS,'Товар добавлен в избранноe')
         finally:
             if page == 'index':
                 return HttpResponseRedirect("/")
@@ -305,10 +308,10 @@ class AddToCartView(CartMixin,View):
             cart_product.qty= qty
             cart_product.save()
             self.cart.products.add(cart_product)
-            messages.add_message(request,messages.INFO,'Товар добавлен в корзину')
+            messages.add_message(request,messages.SUCCESS,'Товар добавлен в корзину')
 
         else:
-            messages.add_message(request,messages.INFO,'Товар уже в корзине')
+            messages.add_message(request,messages.ERROR,'Товар уже в корзине')
 
         recalc_cart(self.cart)
         return redirect(product.get_absolute_url())
@@ -516,10 +519,15 @@ class PayCallbackView(View):
         sign = liqpay.str_to_sign(settings.LIQPAY_PRIVATE_KEY + data + settings.LIQPAY_PRIVATE_KEY)
         # if sign == signature:
         response =liqpay.decode_data_from_str(data)
-        if response['sender_phone']:
-            x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+response['sender_phone']
+        try:
+            phone = response['sender_phone']
+        except:
+            phone = '0'
+        if phone != '0':
+            x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone
             send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         # print('callback data', response)
+        success_url = reverse_lazy('base')
         return HttpResponse()
 # otzivy
 class ProductRewiew(View):
@@ -588,7 +596,11 @@ class RegistrationView(CartMixin,View):
             )
             user= authenticate(username=form.cleaned_data['username'],password=form.cleaned_data['password'])
             login(request,user)
-            return  HttpResponseRedirect('/')
+            messages.add_message(request,messages.SUCCESS,'Вы успешно зарегистрировались на сайте')
+            return redirect('login')
+
+        else:
+            messages.add_message(request,messages.ERROR,'Ошибка регистрации')
         context={'form':form,'cart':self.cart}
         return render(request,'registration.html',context)
 

@@ -211,20 +211,30 @@
     </div>
 
 
+    
+
 
     {% if messages %}
 
-    <div class="alert alert-success alert-dismissible mt-5 ">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       {% for message in messages %}
+      {%if message.tags == 'error' %}
+      <div class="alert alert-danger alert-dismissible mt-5 ">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       <div class="row">
         <h3 class="text-center">  {{ message }}  </h3>
       </div>
+    </div>
+    {%else%}
+    <div class="alert alert-{{message.tags}} alert-dismissible mt-5 ">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <div class="row">
+      <h3 class="text-center">  {{ message }}  </h3>
+    </div>
+  </div>
+  {% endif %}
 
       {% endfor %}
-    </div>
-    </div>
-
+    
     {% endif %}
 
 
