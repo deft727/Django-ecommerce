@@ -530,6 +530,8 @@ class PayCallbackView(View):
             else:
                 orders.status_pay = 'miss'
                 orders.save()
+                x = '.order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
+                send_mail('Платеж!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         result_url = reverse_lazy('base')
         success_url = reverse_lazy('base')
         return HttpResponse()
