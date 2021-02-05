@@ -4,8 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Оплата</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{%url 'base'%}">Главная</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="https://www.liqpay.ua/ru">LiqPay</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="mailto:zarj09@gmail.com">e-mail</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="tel:+380638994440" tabindex="-1" >+380638994440</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+<div class="container">
+
 <div id="liqpay_checkout"></div>
 <script>
   window.LiqPayCheckoutCallback = function() {
@@ -24,6 +50,8 @@
     });
   };
 </script>
+</div>
 <script src="//static.liqpay.ua/libjs/checkout.js" async></script>
 </body>
+
 </html>

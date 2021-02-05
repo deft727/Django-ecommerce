@@ -427,14 +427,14 @@ class MakeOrderView(CartMixin,View):
             comment=form.cleaned_data['comment']
             payment = request.POST.get('payment')
             if payment == 'online':
+                new_order.save()
+                self.cart.in_order = True
+                self.cart.save()
+                new_order.cart = self.cart
+                new_order.save()
+                customer.orders.add(new_order)
                 return redirect ('/pay/')
-                # new_order.save()
-                # self.cart.in_order = True
-                # self.cart.save()
-                # new_order.cart = self.cart
-                # new_order.save()
-                # customer.orders.add(new_order)
-              
+
                 
                 # liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
                 # params = {
@@ -451,24 +451,24 @@ class MakeOrderView(CartMixin,View):
                 # data = liqpay.cnb_data(params)
                 # return render(request, 'pay.html', {'signature': signature, 'data': data})
             
-#             new_order.save()
-#             self.cart.in_order = True
-#             self.cart.save()
-#             new_order.cart = self.cart
-#             new_order.save()
-#             customer.orders.add(new_order)
-#             orders = Order.objects.filter(customer=customer).order_by('-id')[:1]
-# # -----------------------------------------------------------------------------------------------------------------------
-#             subject = "Заказ на сайте 12312312"
-#             to = [email,]
-#             from_email = 'test@example.com'
-#             ctx = {
-#                 'orders': orders,
-#             }
-#             message = get_template('message.html').render(ctx)
-#             msg = EmailMessage(subject, message, to=to, from_email=from_email)
-#             msg.content_subtype = 'html'
-#             msg.send()
+            new_order.save()
+            self.cart.in_order = True
+            self.cart.save()
+            new_order.cart = self.cart
+            new_order.save()
+            customer.orders.add(new_order)
+            orders = Order.objects.filter(customer=customer).order_by('-id')[:1]
+# -----------------------------------------------------------------------------------------------------------------------
+            subject = "Заказ на сайте 12312312"
+            to = [email,]
+            from_email = 'test@example.com'
+            ctx = {
+                'orders': orders,
+            }
+            message = get_template('message.html').render(ctx)
+            msg = EmailMessage(subject, message, to=to, from_email=from_email)
+            msg.content_subtype = 'html'
+            msg.send()
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -487,26 +487,23 @@ class PayView(TemplateView):
             user= User.objects.filter(username=name).first()
             customer = Customer.objects.filter(user=user).first()
         orders = Order.objects.filter(customer=customer).order_by('-id')[:1].first()
-
+        orders.status_pay = 'wait'
+        orders.save()
         liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
         order_id = random.randint(1,30)
         params = {
             'action': 'pay',
-            'amount': '1',
+            'amount': int(orders.cart.final_price) ,
             'currency': 'UAH',
             'description': 'Payment for clothes',
             'version': '3',
-            'order_id':  order_id ,
+            'order_id':  orders.id ,
             'sandbox': 0, # sandbox mode, set to 1 to enable it
             'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
             'result_url':'https://mysite123456.herokuapp.com/',
         }
         signature = liqpay.cnb_signature(params)
         data = liqpay.cnb_data(params)
-        
-
-
-        
         return render(request, self.template_name, {'signature': signature, 'data': data})
 
 
@@ -523,13 +520,17 @@ class PayCallbackView(View):
             phone = response['sender_phone']
         except:
             phone = '0'
-        if phone != '0':
-            x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
-            send_mail('Платеж!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
-        if signature == sign:
-            s='Равно signature i sign'
-            send_mail('Равно!',s, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
-        # print('callback data', response)
+        if phone != '0' and signature == sign:
+            orders = Order.objects.get(id=response['order_id'])
+            if response['status'] == 'succes':
+                orders.status_pay = 'pay'
+                orders.save()
+                x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
+                send_mail('Платеж!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+            else:
+                orders.status_pay = 'miss'
+                orders.save()
+        result_url = reverse_lazy('base')
         success_url = reverse_lazy('base')
         return HttpResponse()
 # otzivy

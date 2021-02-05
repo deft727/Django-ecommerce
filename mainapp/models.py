@@ -474,7 +474,6 @@ class Order(models.Model):
 
     STATUS_NEW ='new'
     STATUS_IN_PROGRESS='in_progress'
-    STATUS_PAY = 'payment'
     STATUS_READY= 'is_ready'
     STATUS_COMPLETED= 'completed'
     STATUS_DEACTIVE='deactive'
@@ -484,7 +483,6 @@ class Order(models.Model):
 
     STATUS_CHOICES= (
         (STATUS_NEW,'Новый заказ'),
-        (STATUS_PAY,'Заказ оплачен'),
         (STATUS_IN_PROGRESS,'Заказ в обработке'),
         (STATUS_READY,'Заказ готов'),
         (STATUS_COMPLETED,'Заказ выполнен'),
@@ -494,6 +492,21 @@ class Order(models.Model):
     BUYING_TYPE_CHOICES=(
         (BUYING_TYPE_SELF,'Отделение'),
         (BUYING_TYPE_DELIVERY,'Курьер')
+        )
+
+    PAY_TYPE_NAL = 'nal'
+    PAY_TYPE_PAY = 'pay'
+    PAY_TYPE_NOT_PAY = 'not_pay'
+    PAY_TYPE_MISS= 'miss'
+    PAY_TYPE_WAIT= 'wait'
+
+
+    PAY_TYPE_CHOICES=(
+        (PAY_TYPE_PAY,'Олачен'),
+        (PAY_TYPE_NOT_PAY,'Отклонен'),
+        (PAY_TYPE_MISS,'Ошибка при оплате'),
+        (PAY_TYPE_NAL,'Наложенный платеж'),
+        (PAY_TYPE_WAIT,'Ожидание платежа'),
         )
 
 
@@ -517,6 +530,13 @@ class Order(models.Model):
         choices=BUYING_TYPE_CHOICES,
         default=BUYING_TYPE_SELF
     )
+    status_pay =  models.CharField(
+        max_length=100,
+        verbose_name='Оплата',
+        choices=PAY_TYPE_CHOICES,
+        default=PAY_TYPE_NAL
+    )
+
     comment = models.TextField(verbose_name='Комментарий к заказу', null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True, verbose_name='Дата создания заказа')
     pay = models.CharField(max_length=100,verbose_name='Cпособ оплаты' , null=True,blank=True)
