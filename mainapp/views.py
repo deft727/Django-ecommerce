@@ -485,6 +485,7 @@ class PayView(TemplateView):
             'sandbox': 0, # sandbox mode, set to 1 to enable it
             'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
             'result_url':'https://mysite123456.herokuapp.com/',
+            'Result URL':'https://mysite123456.herokuapp.com/'
         }
         signature = liqpay.cnb_signature(params)
         data = liqpay.cnb_data(params)
@@ -509,7 +510,7 @@ class PayCallbackView(View):
             if response['status'] == 'success':
                 orders.status_pay = 'pay'
                 orders.save()
-                x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
+                x ='сумма платежа'+response['amount']+ '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
                 send_mail('Платеж удачен!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
             if response['status'] == 'failed':
                 orders.status_pay='not_pay'
@@ -521,7 +522,7 @@ class PayCallbackView(View):
                 orders.save()
                 x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
                 send_mail('Платеж возвращн',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
-            else:
+            if response['status'] == 'error':
                 orders.status_pay = 'miss'
                 orders.save()
                 #написать если ошибка при оплате
