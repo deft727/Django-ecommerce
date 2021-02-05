@@ -23,7 +23,7 @@ class LoginForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        self.fields['username'].label='Логин'
+        self.fields['username'].label='Логин или е-майл'
         self.fields['password'].label = 'Пароль'
         
     def clean(self):

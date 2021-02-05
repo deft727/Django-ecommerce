@@ -171,12 +171,13 @@ ADMINS = [['Webmaster','zarj09@gmail.com']]
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/images/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 
@@ -191,6 +192,8 @@ EMAIL_HOST_PASSWORD ='tiaxxhsvgnvmjyne'
 # fq2rP35YCjvey8NwAGhRaUG+4jpX2vzMfBmRfdnf  -key
 
 #S3 BUCKETS CONFIG
+# +++++++++статика амазон
+
 
 AWS_ACCESS_KEY_ID = 'AKIAYSVUBCGEK2QQAKNU'
 AWS_SECRET_ACCESS_KEY = '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'
@@ -201,6 +204,9 @@ AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_S3_REGION_NAME = "us-east-2"
+
+
+
 # AWS_S3_REGION_NAME = "ap-south-1"
 
 # s3 = boto3.resource('s3')

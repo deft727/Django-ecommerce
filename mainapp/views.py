@@ -481,7 +481,7 @@ class PayView(TemplateView):
             'currency': 'UAH',
             'description': 'Payment for clothes',
             'version': '3',
-            'order_id':  orders.id ,
+            'order_id':  str(orders.id) ,
             'sandbox': 0, # sandbox mode, set to 1 to enable it
             'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
             'result_url':'https://mysite123456.herokuapp.com/',
