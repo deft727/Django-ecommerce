@@ -424,6 +424,7 @@ class MakeOrderView(CartMixin,View):
             new_order.otdel = form.cleaned_data['otdel']
             new_order.buying_type = form.cleaned_data['buying_type']
             new_order.comment = form.cleaned_data['comment']
+            new_order.status_pay = 'nal'
             comment=form.cleaned_data['comment']
             payment = request.POST.get('payment')
             if payment == 'online':
@@ -522,7 +523,7 @@ class PayCallbackView(View):
             phone = '0'
         if phone != '0' and signature == sign:
             orders = Order.objects.get(id=response['order_id'])
-            if response['status'] == 'succes':
+            if response['status'] == 'success':
                 orders.status_pay = 'pay'
                 orders.save()
                 x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
@@ -530,7 +531,8 @@ class PayCallbackView(View):
             else:
                 orders.status_pay = 'miss'
                 orders.save()
-                x = '.order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
+                #написать если ошибка при оплате
+                x = ' ошибка при оплате '+' .order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
                 send_mail('Платеж!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
         result_url = reverse_lazy('base')
         success_url = reverse_lazy('base')
