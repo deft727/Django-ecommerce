@@ -19,6 +19,7 @@
       <tr>
         <th>Номер</th>
         <th>Заказ</th>
+        <th>Оплата</th>
         <th>Сумма</th>
         <th>Товар</th>
         <th>Доп-но</th>
@@ -30,6 +31,7 @@
       <tr>
         <td>{{order.id}}</td>
         <td>{{order.get_status_display}}</td>
+        <td>{{order.get_status_pay_display}}</td>
         <td>{{order.cart.final_price}}</td>
         <td> <ul>
             {%for item in order.cart.products.all%}

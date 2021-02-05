@@ -28,7 +28,6 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 from django.core.mail import send_mail
-import random
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 
@@ -428,29 +427,16 @@ class MakeOrderView(CartMixin,View):
             comment=form.cleaned_data['comment']
             payment = request.POST.get('payment')
             if payment == 'online':
+                new_order.status_pay = 'wait'
                 new_order.save()
                 self.cart.in_order = True
                 self.cart.save()
                 new_order.cart = self.cart
                 new_order.save()
                 customer.orders.add(new_order)
+                
                 return redirect ('/pay/')
 
-                
-                # liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
-                # params = {
-                #     'action': 'pay',
-                #     'amount': int(self.cart.final_price),
-                #     'currency': 'UAH',
-                #     'description': 'Payment for clothes',
-                #     'order_id': 'order_id_1',
-                #     'version': '3',
-                #     'sandbox': 0, # sandbox mode, set to 1 to enable it
-                #     'server_url': 'http://127.0.0.1/pay-callback/', # url to callback view
-                # }
-                # signature = liqpay.cnb_signature(params)
-                # data = liqpay.cnb_data(params)
-                # return render(request, 'pay.html', {'signature': signature, 'data': data})
             
             new_order.save()
             self.cart.in_order = True
@@ -488,10 +474,7 @@ class PayView(TemplateView):
             user= User.objects.filter(username=name).first()
             customer = Customer.objects.filter(user=user).first()
         orders = Order.objects.filter(customer=customer).order_by('-id')[:1].first()
-        orders.status_pay = 'wait'
-        orders.save()
         liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
-        order_id = random.randint(1,30)
         params = {
             'action': 'pay',
             'amount': int(orders.cart.final_price) ,
@@ -527,13 +510,24 @@ class PayCallbackView(View):
                 orders.status_pay = 'pay'
                 orders.save()
                 x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
-                send_mail('Платеж!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+                send_mail('Платеж удачен!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+            if response['status'] == 'failed':
+                orders.status_pay='not_pay'
+                orders.save()
+                x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
+                send_mail('Платеж отклонен!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+            if response['status'] == 'reversed':
+                orders.status_pay='reversed'
+                orders.save()
+                x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
+                send_mail('Платеж возвращн',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
             else:
                 orders.status_pay = 'miss'
                 orders.save()
                 #написать если ошибка при оплате
                 x = ' ошибка при оплате '+' .order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
-                send_mail('Платеж!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+                send_mail('Платеж ошибка!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+
         result_url = reverse_lazy('base')
         success_url = reverse_lazy('base')
         return HttpResponse()
@@ -562,20 +556,23 @@ class LoginView(CartMixin,View):
         'cart':self.cart}
         return render(request,'login.html',context)
 
+
     def post(self,request,*args,**kwargs):
         form=LoginForm(request.POST or None)
         if form.is_valid():
             username= form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user= authenticate(username=username,password=password)
-            user1= authenticate(email=username,password=password)
+            if '@' in username:
+                user1= User.objects.filter(email=username).first()
+                user= authenticate(username=user1,password=password)
+            else:
+                user= authenticate(username=username,password=password)
             if user:
                 login(request,user)
-            if user1:
-                login(request,user1)
             return HttpResponseRedirect('/')
         context={'form':form,'cart':self.cart}
         return render(request,'login.html',context)
+
 
 class RegistrationView(CartMixin,View):
     def get(self,request,*args,**kwargs):

@@ -499,6 +499,7 @@ class Order(models.Model):
     PAY_TYPE_NOT_PAY = 'not_pay'
     PAY_TYPE_MISS= 'miss'
     PAY_TYPE_WAIT= 'wait'
+    PAY_TYPE_REVERSED = 'reversed'
 
 
     PAY_TYPE_CHOICES=(
@@ -507,6 +508,7 @@ class Order(models.Model):
         (PAY_TYPE_MISS,'Ошибка при оплате'),
         (PAY_TYPE_NAL,'Наложенный платеж'),
         (PAY_TYPE_WAIT,'Ожидание платежа'),
+        (PAY_TYPE_REVERSED,'Платеж возвращен'), 
         )
 
 

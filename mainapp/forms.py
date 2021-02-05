@@ -29,11 +29,21 @@ class LoginForm(forms.ModelForm):
     def clean(self):
         username= self.cleaned_data['username']
         password= self.cleaned_data['password']
-        if not User.objects.filter(username=username).exists() or User.objects.filter(email=username).exists():
-            raise forms.ValidationError(f'Пользователь с логином или почтой  {username} не найден.')
+        if '@' in username:
+            if not User.objects.filter(email=username).exists():
+                raise forms.ValidationError(f'Пользователь с  почтой  {username} не найден.')
+        else:
+            if not User.objects.filter(username=username).exists():
+                raise forms.ValidationError(f'Пользователь с логином   {username} не найден.')
+
         user = User.objects.filter(username=username).first()
+        user1= User.objects.filter(email=username).first()
+        # print(user1)
         if user:
             if not user.check_password(password):
+                raise forms.ValidationError("Неверный пароль")
+        else:
+            if not user1.check_password(password):
                 raise forms.ValidationError("Неверный пароль")
         return self.cleaned_data
     
