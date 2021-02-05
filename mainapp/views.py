@@ -510,7 +510,7 @@ class PayCallbackView(View):
             if response['status'] == 'success':
                 orders.status_pay = 'pay'
                 orders.save()
-                x ='сумма платежа'+response['amount']+ '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
+                x ='сумма платежа'+str(response['amount'])+ '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
                 send_mail('Платеж удачен!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
             if response['status'] == 'failed':
                 orders.status_pay='not_pay'
