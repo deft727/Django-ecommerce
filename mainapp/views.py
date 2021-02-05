@@ -564,9 +564,12 @@ class LoginView(CartMixin,View):
             username= form.cleaned_data['username']
             password = form.cleaned_data['password']
             user= authenticate(username=username,password=password)
+            user1= authenticate(email=username,password=password)
             if user:
                 login(request,user)
-                return HttpResponseRedirect('/')
+            if user1:
+                login(request,user1)
+            return HttpResponseRedirect('/')
         context={'form':form,'cart':self.cart}
         return render(request,'login.html',context)
 
