@@ -481,11 +481,11 @@ class PayView(TemplateView):
             'currency': 'UAH',
             'description': 'Payment for clothes',
             'version': '3',
-            'order_id':  str(orders.id) ,
+            'order_id':  orders.id ,
             'sandbox': 0, # sandbox mode, set to 1 to enable it
             'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
             'result_url':'https://mysite123456.herokuapp.com/',
-            'Result URL':'https://mysite123456.herokuapp.com/'
+            'Result URL':'https://mysite123456.herokuapp.com/',
         }
         signature = liqpay.cnb_signature(params)
         data = liqpay.cnb_data(params)
@@ -515,22 +515,24 @@ class PayCallbackView(View):
             if response['status'] == 'failed':
                 orders.status_pay='not_pay'
                 orders.save()
-                x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
-                send_mail('Платеж отклонен!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+                # x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
+                send_mail('Платеж отклонен!', "Yasoob",['zarj09@gmail.com'], fail_silently=False)
             if response['status'] == 'reversed':
                 orders.status_pay='reversed'
                 orders.save()
-                x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
-                send_mail('Платеж возвращн',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+                # x = '... response order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
+                send_mail('Платеж возвращн', "Yasoob",['zarj09@gmail.com'], fail_silently=False)
             if response['status'] == 'error':
                 orders.status_pay = 'miss'
                 orders.save()
                 #написать если ошибка при оплате
-                x = ' ошибка при оплате '+' .order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
-                send_mail('Платеж ошибка!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+                # x = ' ошибка при оплате '+' .order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
+                send_mail('Платеж ошибка!', "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+        else:
+            pass
 
-        result_url = reverse_lazy('base')
-        success_url = reverse_lazy('base')
+        result_url = 'https://mysite123456.herokuapp.com/'
+        success_url = 'https://mysite123456.herokuapp.com/'
         return HttpResponse()
 # otzivy
 class ProductRewiew(View):
