@@ -503,7 +503,7 @@ class Order(models.Model):
 
 
     PAY_TYPE_CHOICES=(
-        (PAY_TYPE_PAY,'Олачен'),
+        (PAY_TYPE_PAY,'Оплачен'),
         (PAY_TYPE_NOT_PAY,'Отклонен'),
         (PAY_TYPE_MISS,'Ошибка при оплате'),
         (PAY_TYPE_NAL,'Наложенный платеж'),
