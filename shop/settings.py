@@ -175,7 +175,7 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_ROOT = 'media/'
-MEDIA_URL = 'http://127.0.0.1:8000/media/'
+MEDIA_URL = 'https://mysite123456.herokuapp.com//media/'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
