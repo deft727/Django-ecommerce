@@ -113,7 +113,7 @@
               </div>
               <div class="tab-content mb-60">
                 <div class="tab-pane active" role="tabpanel" id="tab_01">
-                  <p> {{product.description}} </p>
+                  <p> {{product.description | safe}} </p>
                 </div>
                 <div class="tab-pane" role="tabpanel" id="tab_02">
                   <div class="ps-review">
@@ -134,8 +134,8 @@
                                          {%endif%}
 
                       {%for review in product.rewiews_set.all%}
-                        <p>От <b> {{review.name}} </b> - {{review.data|date:"d.m.Y H:i"}}</p> 
-                        <p>{{review.text}}</p>
+                        <p>От <b> {{review.name| safe}} </b> - {{review.data|date:"d.m.Y H:i"}}</p> 
+                        <p>{{review.text|safe}}</p>
   
                       {%endfor%}
 

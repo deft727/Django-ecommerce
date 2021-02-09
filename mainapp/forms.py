@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import Order,Rewiews
+from snowpenguin.django.recaptcha3.fields import ReCaptchaField
 
 
 
@@ -57,6 +58,7 @@ class ContactForm(forms.Form):
     name = forms.CharField(max_length=40)
     email = forms.EmailField(required=True,max_length=30)
     text = forms.CharField(widget=forms.Textarea,max_length=500,help_text='Максимальное кол-во символов 500')
+    captcha = ReCaptchaField()
 
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -113,6 +115,7 @@ class RegistrationForm(forms.ModelForm):
 class RewiewsForm(forms.ModelForm):
     # if not User.objects.get(user=request.user).exists():
     #         raise forms.ValidationError('Пользователь не залогинен')
+    captcha = ReCaptchaField()
     class Meta:
         model = Rewiews
-        fields=('text',)
+        fields=('text','captcha',)

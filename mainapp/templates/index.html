@@ -48,10 +48,10 @@
       <div class="ps-section__header mb-50">
         <h3 class="ps-section__title" data-mask="features">- Последние добавления</h3>
         <ul class="ps-masonry__filter">
-           <li class="current" style="margin-right: auto; font-style: italic;"><a href="" data-filter="*"> Все </a></li>
+           <li class="current" style="margin-right: auto; font-style: normal; "><a href="" data-filter="*"> Все </a></li>
            {% for node in topcategory.all %}
            {% if node.level < 1 %} 
-           <li style="margin-right: auto; font-style: italic;"><a href="{{ node.get_absolute_url}}" data-filter=".{{ node.name }}">{{ node.name }}</a></li> 
+           <li style="margin-right: auto; font-style: normal	;"><a href="{{ node.get_absolute_url}}" data-filter=".{{ node.name }}">{{ node.name }}</a></li> 
            {%endif%}
           {%endfor%} 
 
@@ -255,6 +255,11 @@
       </div>
     </div>
   </div> -->
+
+</div>
+</div>
+</div>
+
   <div class="ps-home-contact">
     <div id="contact-map" data-address="New York, NY" data-title="BAKERY " data-zoom="17"></div>
     <div class="ps-home-contact__form">
@@ -267,18 +272,16 @@
           <div class="form-group">
             {%csrf_token%}
             {{form|crispy}}
-          </div>
+        
           <div class="form-group text-center">
-            <button class="ps-btn">Отправить<i class="fa fa-angle-right"></i></button>  </div>
+            <button class="ps-btn">Отправить<i class="fa fa-angle-right"></i></button> 
 
-          </div>
+          
         </form>  </div>
 
       </footer>  </div>
 
     </div>
-  </div>  </div>
-
 
 </main>
 {%endblock main%}

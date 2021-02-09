@@ -1,5 +1,7 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
+from django.views.decorators.cache import cache_page
+
 from .views import (
                     BaseView,
                     ProductDetailView,
@@ -34,8 +36,8 @@ import re
 # handler404 = 'mainapp.views.custom_page_not_found_view'
 
 urlpatterns = [
-    path('',BaseView.as_view(),name='base'),
-    path('products/<str:slug>/',ProductDetailView.as_view(),name='product_detail'),
+    path('',cache_page(30)(BaseView.as_view()),name='base'),
+    path('products/<str:slug>/',cache_page(30)(ProductDetailView.as_view()),name='product_detail'),
     path('category/<str:slug>/', CategoryDetailView.as_view(), name='category_detail'),
     path('cart/',CartView.as_view(),name='cart'),
 

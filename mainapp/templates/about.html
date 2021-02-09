@@ -1,19 +1,21 @@
 
 {%extends 'base.html'%} 
 {% load static%}
+{%block title%}<title>О нас</title>{%endblock title%}
+
  {%block main%}
 <div class="container"> 
   <div class="row"> 
     <div class="col-12"> 
       {% for i in about%}
-    <p class="h2">{{i.title}}</h1>
+    <p class="h2">{{i.title| safe}}</h1>
    </div>
    </div>
    </div>
     <div class="container md-15"> 
       <div class="row"> 
         <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-           <p>{{i.text}}</p> </div> <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+           <p>{{i.text| safe}}</p> </div> <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
              <img src="{{i.img.url}}" style="max-width: 250px; margin-bottom:50px ;" class="w-15"> 
             </div> 
           </div>
@@ -21,6 +23,4 @@
 
              {%endfor%}         </div>         </div>
             </div>
-
-
  {%endblock main%}

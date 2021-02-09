@@ -1,7 +1,7 @@
 {%extends 'base.html'%} 
 {% load static%}
-
- {%block main%}
+{%block title%}<title>Контакты</title>{%endblock title%}
+{%block main%}
 
 <div class="container mb-5 ">
 
@@ -10,8 +10,8 @@
       <section class="section-name bg padding-y">
           <div class="container">
             {%for i in contact%}
-          <h1>{{i.title}}</h1><br>
-          <p>  {{i.text}} </p>
+          <h1>{{i.title| safe}}</h1><br>
+          <p>  {{i.text| safe}} </p>
           <p class="h2"> <i class="fa fa-volume-control-phone" aria-hidden="true"> Вайбер:  <a href="viber://add?number={{i.phone}}">{{i.phone}} </a></i>
           </p>   
            

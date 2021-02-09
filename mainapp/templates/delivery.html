@@ -1,5 +1,6 @@
 {%extends 'base.html'%} 
 {% load static%}
+{%block title%}<title>Оплата и Доставка</title>{%endblock title%}
 
  {%block main%}
 
@@ -10,8 +11,8 @@
           <section class="section-name bg padding-y">
               <div class="container">
                   {%for i in delivery%}
-    <h1>{{i.title}}</h1>
- <p>{{i.text}}</p>
+    <h1>{{i.title| safe}}</h1>
+ <p>{{i.text| safe}}</p>
     {%endfor%}
     </div>
     </div></section>

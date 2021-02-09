@@ -550,9 +550,6 @@ class Rewiews(models.Model):
 
     name= models.CharField(max_length=255, verbose_name='Имя')
     text= models.TextField('Сообщение',max_length=500)
-    parent= models.ForeignKey(
-        'self',verbose_name='Родитель',on_delete=models.SET_NULL,blank=True,null=True
-    )
     product=models.ForeignKey(Product,verbose_name='Продукт',on_delete=models.CASCADE)
     data = models.DateTimeField(auto_now=True,db_index=True,verbose_name='Добавлено')
 

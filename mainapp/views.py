@@ -13,7 +13,6 @@ from .models import Category,Customer,Cart,CartProduct,Product,Order,MyImage,Use
 from .mixins import CartMixin
 from .forms import OrderForm,LoginForm,RegistrationForm,ContactForm,RewiewsForm
 from .utils import recalc_cart
-
 from specs.models import ProductFeatures
 from django.core.mail import EmailMessage
 from django.conf import settings
@@ -30,7 +29,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-
+from django.core.cache import cache
 
 
 def custom_404(request):
@@ -85,7 +84,10 @@ class BaseView(CartMixin, View):
 
         Topimage=MyTopImage.objects.all()
         products = Product.objects.all().order_by('-id')[:8]
+        # myimage = cache.get('myimage')
+        # if not myimage:
         myimage= MyImage.objects.all()
+            # cache.set('myimage',myimage,30)
         randomProducts =  Product.objects.all().order_by('?')[:10]
         form= ContactForm(request.POST or None)
         title = 'Сайт'
@@ -112,6 +114,9 @@ class BaseView(CartMixin, View):
             email.send()
             messages.add_message(request,messages.SUCCESS,'Ваше сообщение отправлено')
             return HttpResponseRedirect('/')
+        else:
+            messages.add_message(request,messages.ERROR,'Неверно введена капча')
+
         return HttpResponseRedirect('/')
 
 
@@ -483,9 +488,8 @@ class PayView(TemplateView):
             'version': '3',
             'order_id':  orders.id ,
             'sandbox': 0, # sandbox mode, set to 1 to enable it
-            'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
             'result_url':'https://mysite123456.herokuapp.com/',
-            'Result URL':'https://mysite123456.herokuapp.com/',
+            'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
         }
         signature = liqpay.cnb_signature(params)
         data = liqpay.cnb_data(params)

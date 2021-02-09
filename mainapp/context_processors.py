@@ -4,10 +4,18 @@ from django.template import context_processors
 from django.core.paginator import Paginator
 from specs.models import ProductFeatures,CategoryFeature
 
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
+
 from django.core.mail import send_mail
 
+
+# @cache_page(60 * 15)
 def single_well_info(request):
-    category = Category.objects.all().prefetch_related('parent')
+    categories = cache.get('categories')
+    if not categories:
+        category = Category.objects.all().prefetch_related('parent')
+        cache.set('categories',categories,30)
     toptext=TopText.objects.all()
     myinfo= ChangeMyInfo.objects.all()
     logo = Logo.objects.all()
