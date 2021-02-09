@@ -22,7 +22,7 @@ import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+# PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'   # Persist sessions to DB
@@ -64,8 +64,8 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -156,7 +156,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', True)
+# COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', True)
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
@@ -173,6 +173,7 @@ STATICFILES_DIRS = (
 )
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
