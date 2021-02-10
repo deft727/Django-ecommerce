@@ -21,6 +21,8 @@ from django.conf import settings
 from django.views.static import serve 
 from django.conf.urls import url
 
+import debug_toolbar
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
@@ -28,7 +30,7 @@ urlpatterns = [
     path('product-specs/', include('specs.urls')),
     url(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}), 
     url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
-
+    # path('__debug__/', include(debug_toolbar.urls)),
 ]
 
 

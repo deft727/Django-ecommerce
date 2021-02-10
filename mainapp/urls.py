@@ -30,7 +30,6 @@ from .views import (
 from django.contrib.auth import views as authViews
 # from django.conf.urls import url
 from django.conf.urls import url
-
 import re
 
 # handler404 = 'mainapp.views.custom_page_not_found_view'
@@ -63,7 +62,6 @@ urlpatterns = [
     path('add-to-whishlist/<str:slug>/<str:x>/',AddtoWhishlistView.as_view(),name='add_to_whishlist'),
     path('whishlist/', WhislistView.as_view(),name='whishlist'),
     path('remove_from_whishlist/<str:slug>/', DeleteFromWhislist.as_view(),name='remove_from_whishlist'),
-
 
     # path('pay/',PayView.as_view(), name='pay_view'),
     # path('pay-callback/', PayCallbackView.as_view(), name='pay_callback'),

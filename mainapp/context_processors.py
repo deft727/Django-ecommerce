@@ -15,7 +15,7 @@ def single_well_info(request):
     categories = cache.get('categories')
     if not categories:
         category = Category.objects.all().prefetch_related('parent')
-        cache.set('categories',categories,30)
+        cache.set('categories',categories,1230)
     toptext=TopText.objects.all()
     myinfo= ChangeMyInfo.objects.all()
     logo = Logo.objects.all()

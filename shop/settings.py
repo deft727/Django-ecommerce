@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'snowpenguin.django.recaptcha3',
-    # 'debug_toolbar',
+    'debug_toolbar',
     'ckeditor',
     'ckeditor_uploader',
     'mainapp.apps.MainappConfig',
@@ -69,7 +69,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-        # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -163,10 +163,12 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ADMINS = [['Webmaster','zarj09@gmail.com']]
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles/media')
-MEDIA_URL = '/static/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
-
+MEDIAFILES_DIRS = [
+    os.path.join(os.path.dirname(BASE_DIR), "static", "media"),
+]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -177,7 +179,6 @@ STATICFILES_DIRS = (
 )
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-DEFAULT_FILE_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
@@ -195,24 +196,23 @@ EMAIL_HOST_PASSWORD = 'kirill99121'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD ='tiaxxhsvgnvmjyne'
 
-# AKIAYSVUBCGEK2QQAKNU -name
-# fq2rP35YCjvey8NwAGhRaUG+4jpX2vzMfBmRfdnf  -key
 
 #S3 BUCKETS CONFIG
-# +++++++++статика амазон
 
+# +++++++++  статика амазон +++++++++++++++++ #
 
-# AWS_ACCESS_KEY_ID = 'AKIAYSVUBCGEK2QQAKNU'
-# AWS_SECRET_ACCESS_KEY = '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'
-# AWS_STORAGE_BUCKET_NAME = 'zarj09-crm-bucket'
-# AWS_S3_FILE_OVERWRITE = True
-# AWS_DEFAULT_ACL = None
+# #############################################################################
+AWS_ACCESS_KEY_ID = 'AKIAYSVUBCGEK2QQAKNU'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'zarj09-crm-bucket'
+AWS_S3_FILE_OVERWRITE = True
+AWS_DEFAULT_ACL = None
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# AWS_S3_REGION_NAME = "us-east-2"
+AWS_S3_REGION_NAME = "us-east-2"
 
-# ###############################################################
+# #############################################################################
 
 # AWS_S3_REGION_NAME = "ap-south-1"
 
@@ -257,6 +257,8 @@ CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 CKEDITOR_UPLOAD_PATH = "static/uploads/"
 CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
 
+# debug toolbar settings
+# ----------------------
 
 # INTERNAL_IPS = [
 #     '127.0.0.1',
