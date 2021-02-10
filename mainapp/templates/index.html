@@ -1,15 +1,13 @@
 {%extends 'base.html'%}
-
 {% load static%}
-
 {%load crispy_forms_tags%}
-
 {%block main%}
 <main class="ps-main">
 
   <div class="ps-banner">
     <div class="rev_slider fullscreenbanner" id="home-banner">
       <ul>
+
         {%for myimages in Topimage%}
 
         <li class="ps-banner" data-index="rs-2972" data-transition="random" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off" data-rotate="0"><img class="rev-slidebg" src="{{myimages.image1.url}}"  alt="" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="5" data-no-retina>
@@ -38,6 +36,7 @@
         </li>
         {%endfor%}
 
+
       </ul>
     </div>
   </div>  
@@ -49,6 +48,8 @@
         <h3 class="ps-section__title" data-mask="features">- Последние добавления</h3>
         <ul class="ps-masonry__filter">
            <li class="current" style="margin-right: auto; font-style: normal; "><a href="" data-filter="*"> Все </a></li>
+          
+
            {% for node in topcategory.all %}
            {% if node.level < 1 %} 
            <li style="margin-right: auto; font-style: normal	;"><a href="{{ node.get_absolute_url}}" data-filter=".{{ node.name }}">{{ node.name }}</a></li> 
@@ -61,7 +62,9 @@
         <div class="masonry-wrapper" data-col-md="4" data-col-sm="2" data-col-xs="1" data-gap="30" data-radio="100%">
           <div class="ps-masonry">
             <div class="grid-sizer"></div>
+
             {%for product in products%}
+
             <div class="grid-item {{ product.name}} "></div>
  
             <div class="grid-item {{product.category.parent}}">
@@ -95,6 +98,7 @@
                 </div>
               </div>
             </div>
+            
             {%endfor%}
 
       
@@ -106,10 +110,13 @@
 
 
   <div class="ps-section--offer">
+
     {%for down in myimage%}
+
     <div class="ps-column"><a class="ps-offer" href="#"><img src="{{down.imagedown1.url}}" alt=""></a></div>
     <div class="ps-column"><a class="ps-offer" href="#"><img src="{{down.imagedown2.url}}" alt=""></a></div>
     {%endfor%}
+
   </div>
 
 
@@ -129,15 +136,19 @@
         <div class="ps-owl--colection owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="4" data-owl-item-xs="1" data-owl-item-sm="2" data-owl-item-md="3" data-owl-item-lg="4" data-owl-duration="1000" data-owl-mousedrag="on">
 
           {%for i in randomProducts%}
+
           <div class="ps-shoes--carousel ml-5">
             <div class="ps-shoe">
               <div class="ps-shoe__thumbnail">
+                
                 <a class="ps-shoe__favorite" href="{%url 'add_to_whishlist' slug=i.slug x='index'%}"><i class="ps-icon-heart"></i></a>
                 <img src="{{ i.image1.url }}" alt="{{i.title}}" height="310"><a class="ps-shoe__overlay" href="{{i.get_absolute_url}}"></a>
               </div>
               <div class="ps-shoe__content">
                 <div class="ps-shoe__variants">
+
                   <div class="ps-shoe__variant normal"><img src="{%if i.image2%} {{i.image2.url}} {%endif%}" alt=""><img src="{%if i.image3%} {{i.image3.url}} {%endif%}" alt=""><img src="{%if i.image4%} {{i.image4.url}} {%endif%}" alt=""><img src="{%if i.image5%} {{i.image5.url}} {%endif%}" alt=""></div>
+
                   <!-- <select class="ps-rating ps-shoe__rating">
                     <option value="1">1</option>
                     <option value="1">2</option>
@@ -154,6 +165,7 @@
               </div>
             </div>
           </div>
+
           {%endfor%}
 
         </div>

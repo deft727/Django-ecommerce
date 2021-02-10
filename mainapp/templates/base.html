@@ -2,11 +2,11 @@
 {% load mptt_tags %}
 {% load cache %}
 {%load static recaptcha3%}
+{% load compress %}
 
 <!DOCTYPE html>
 
 <html lang="en">
-  {% cache 500 head %}
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,17 +14,21 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-     <link href="{% static 'favicon/apple-touch-icon.png'%}" rel="apple-touch-icon">
-     <link href="{% static 'favicon/favicon.png'%}" rel="icon">
-     <link href="{% static 'favicon/favicon.ico'%}" rel="icon">
 
     <meta name="author" content="Nghia Minh Luong">
     <meta name="keywords" content="Default Description">
     <meta name="description" content="Default keyword">
     {%block title%}<title>{{title}}</title>{%endblock title%}
     <!-- Fonts-->
-    
     <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:300,400,700%7CMontserrat:300,400,500,600,700,800,900" rel="stylesheet">
+
+    {% compress css %}
+
+     <link href="{% static 'favicon/apple-touch-icon.png'%}" rel="apple-touch-icon">
+     <link href="{% static 'favicon/favicon.png'%}" rel="icon">
+     <link href="{% static 'favicon/favicon.ico'%}" rel="icon">
+
+
     <link rel="stylesheet" href="{% static 'plugins/font-awesome/css/font-awesome.min.css'%}">
     <link rel="stylesheet" href="{% static 'plugins/ps-icon/style.css'%}">
     <!-- CSS Library-->
@@ -44,7 +48,7 @@
     <!--HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries-->
     <!--WARNING: Respond.js doesn't work if you view the page via file://-->
     <!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]-->
-    {% endcache %}
+    {% endcompress %}
 
     {%recaptcha_init%}
     {%recaptcha_ready action_name='homepage'%}
@@ -59,6 +63,7 @@
         <div class="container-fluid">
           <div class="row">
                 <div class="col-lg-6 col-md-8 col-sm-6 col-xs-12 ">
+                  
                <p>{%for i in myinfo%}
                  {{i.toptext}}
                 {%endfor%}</p>
@@ -88,7 +93,13 @@
       <nav class="navigation">
         <div class="container-fluid">
           <div class="navigation__column left">
-            <div class="header__logo"><a class="ps-logo" href="{%url 'base'%}"><img src="{%for i in logo%} {{i.logo.url}} {%endfor%}" alt=""></a></div>
+
+            <div class="header__logo"><a class="ps-logo" href="{%url 'base'%}">
+              {% cache 500 i %}
+
+            <img src="{%for i in logo%} {{i.logo.url}} {%endfor%}" alt=""></a>
+            {% endcache %}
+          </div>
           </div>
  
 
@@ -118,7 +129,8 @@
 
 
 
- 
+    {% cache 500 node %}
+
  
 {% for node in topcategory %}
 
@@ -157,8 +169,8 @@
 {% endfor %}
 
 
-
 </div>
+{% endcache  %}
 
                              
 
@@ -274,6 +286,8 @@
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                   <aside class="ps-widget--footer ps-widget--info">
                     <header><a class="ps-logo" href="/"><img src="" alt=""></a>
+                      {% cache 600 footer %}
+
                       {%for i in myinfo%}
                       <h3 class="ps-widget__title">{{i.adress1}}</h3>
                     </header>
@@ -368,7 +382,8 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>{% endcache  %}
+
     <!-- JS Library-->
     <script>
       var submitButton = document.getElementById('submit');
@@ -376,6 +391,11 @@
           this.disabled = true;
       });
      </script>
+
+      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAx39JFH5nhxze1ZydH-Kl8xXM3OK4fvcg&amp;region=Ua"></script>
+
+     {% compress js inline %}
+
     <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.kenburn.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.migration.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'plugins/jquery/dist/jquery.min.js'%}"></script>
@@ -391,7 +411,6 @@
     <script type="text/javascript" src="{% static 'plugins/elevatezoom/jquery.elevatezoom.js'%}"></script>
     <script type="text/javascript" src="{% static 'plugins/Magnific-Popup/dist/jquery.magnific-popup.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'plugins/jquery-ui/jquery-ui.min.js'%}"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAx39JFH5nhxze1ZydH-Kl8xXM3OK4fvcg&amp;region=Ua"></script>
     <script type="text/javascript" src="{% static 'plugins/revolution/js/jquery.themepunch.tools.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'plugins/revolution/js/jquery.themepunch.revolution.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'plugins/revolution/js/extensions/revolution.extension.video.min.js'%}"></script>
@@ -407,5 +426,7 @@
 
     <!-- Custom scripts-->
     <script type="text/javascript" src="{% static 'js/main.js'%}"></script>
+    {% endcompress %}
+
   </body>
 </html>
