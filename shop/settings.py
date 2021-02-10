@@ -163,20 +163,23 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ADMINS = [['Webmaster','zarj09@gmail.com']]
 
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles/media')
+MEDIA_URL = '/static/media/'
+
+
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'mainapp/static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'mainapp/static'),
+# )
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# DEFAULT_FILE_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
 
 # STATICFILES_FINDERS = (
 #     'django.contrib.staticfiles.finders.FileSystemFinder',
