@@ -3,6 +3,7 @@
     <thead>
       <tr>
         <th>Номер Заказа </th>
+        <th>Оплата</th>
         <th> Товар </th>
         <th> Общая сумма</th>
       </tr>
@@ -11,6 +12,7 @@
         {%for order in orders%}
       <tr>
         <td>{{order.id}}</td>
+        <td>{{order.get_status_pay_display}}</td>
         <td>
              <ul>
             {%for item in order.cart.products.all%}

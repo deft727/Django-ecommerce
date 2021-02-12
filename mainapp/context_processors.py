@@ -14,12 +14,17 @@ from django.core.mail import send_mail
 def single_well_info(request):
     categories = cache.get('categories')
     if not categories:
-        category = Category.objects.all().prefetch_related('parent')
+        categories = Category.objects.all().prefetch_related('parent')
         cache.set('categories',categories,600)
     toptext=TopText.objects.all()
-    myinfo= ChangeMyInfo.objects.all()
-    logo = Logo.objects.all()
-      
+    myinfo= cache.get('myinfo')
+    if not myinfo:
+        myinfo = ChangeMyInfo.objects.all()
+        cache.set('myinfo',myinfo,600)
+    logo = cache.get('logo')
+    if not logo:
+        logo = Logo.objects.all()
+        cache.set('logo',logo,600)
     if not request.session.session_key:
 
 
@@ -30,7 +35,7 @@ def single_well_info(request):
         request.session.create()
 
     return {
-        'topcategory': category,
+        'topcategory': categories,
         'toptext':toptext,
         'myinfo': myinfo,
         'logo': logo,

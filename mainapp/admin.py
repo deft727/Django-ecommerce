@@ -6,8 +6,6 @@ from mptt.models import TreeManyToManyField
 from django.forms import ModelChoiceField,ModelForm, ValidationError
 from .models import *
 from django.utils.safestring import mark_safe
-
-
 from ckeditor.widgets import CKEditorWidget
 # from ckeditor_uploader.widgets import 
 
@@ -73,7 +71,7 @@ class DeliveryAdmin(admin.ModelAdmin):
 
 
 
-class PostAdminForm(forms.ModelForm):
+class ProductdminForm(forms.ModelForm):
     description = forms.CharField(widget=CKEditorWidget())
     class Meta:
         model = Product
@@ -114,7 +112,8 @@ class filterCategory(forms.ModelForm):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    form = PostAdminForm
+    form =  ProductAdminForm
+    prepopulated_fields = {'slug':("title",)}
     # search_fields= ('title',)
     list_display= ( 'id','title', 'category', 'price', 'available')
     list_display_links=('id','title')
@@ -135,6 +134,8 @@ class SizeAdmin(admin.ModelAdmin):
         ]
 
 
+class  MPTTModelAdmin(MPTTModelAdmin):
+    prepopulated_fields = {'slug':("name",)}
 
 
 

@@ -12,19 +12,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-
-
     <meta name="author" content="Nghia Minh Luong">
     <meta name="keywords" content="Default Description">
     <meta name="description" content="Default keyword">
     {%block title%}<title>{{title}}</title>{%endblock title%}
     <!-- Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:300,400,700%7CMontserrat:300,400,500,600,700,800,900" rel="stylesheet">
-
-{% cache 5000 css %}
      <link href="{% static 'favicon/apple-touch-icon.png'%}" rel="apple-touch-icon">
      <link href="{% static 'favicon/favicon.png'%}" rel="icon">
      <link href="{% static 'favicon/favicon.ico'%}" rel="icon">
+     {% cache 5000 css %}
     <link rel="stylesheet" href="{% static 'plugins/font-awesome/css/font-awesome.min.css'%}">
     <link rel="stylesheet" href="{% static 'plugins/ps-icon/style.css'%}">
     <link rel="stylesheet" href="{% static 'plugins/bootstrap/dist/css/bootstrap.min.css'%}">
@@ -63,14 +60,14 @@
                  {{i.toptext}}
                 {%endfor%}</p>
                 </div>
-
                 <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12 ">
+                  <div class="header__actions"><a href="{%url 'blog'%}">Блог</a>
                   {%if not request.user.is_authenticated%}
 
                   <div class="header__actions"><a href="{%url 'login'%}">Вход</a>
                     <div class="header__actions"><a href="{%url 'registration'%}">Регистрация</a>
                  {%else%}
-                 <div class="header__actions"><a href="{% url 'profile' %}">Профиль <strong> {{request.user.username}}</strong></a>
+                 <div class="header__actions"><a href="{% url 'profile' %}">Профиль<strong> {{request.user.username}}</strong></a>
 
                   <div class="header__actions"><a href="{%url 'logout'%}">Выйти</a>
 
@@ -314,7 +311,7 @@
                     </header>
                     <footer>
                       <ul class="ps-list--link">
-                        <li><a href="#">Coupon Code</a></li>
+                        <li><a href="{%url 'blog'%}">Blog</a></li>
                         <li><a href="#">SignUp For Email</a></li>
                         <li><a href="#">Site Feedback</a></li>
                         <li><a href="#">Careers</a></li>

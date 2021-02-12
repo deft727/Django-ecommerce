@@ -479,21 +479,25 @@ class PayView(TemplateView):
             user= User.objects.filter(username=name).first()
             customer = Customer.objects.filter(user=user).first()
         orders = Order.objects.filter(customer=customer).order_by('-id')[:1].first()
-        liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
-        params = {
-            'action': 'pay',
-            'amount': int(orders.cart.final_price) ,
-            'currency': 'UAH',
-            'description': 'Payment for clothes',
-            'version': '3',
-            'order_id':  orders.id ,
-            'sandbox': 0, # sandbox mode, set to 1 to enable it
-            'result_url':'https://mysite123456.herokuapp.com/',
-            'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
-        }
-        signature = liqpay.cnb_signature(params)
-        data = liqpay.cnb_data(params)
-        return render(request, self.template_name, {'signature': signature, 'data': data})
+        # /
+        if orders:
+            liqpay = LiqPay(settings.LIQPAY_PUBLIC_KEY, settings.LIQPAY_PRIVATE_KEY)
+            params = {
+                'action': 'pay',
+                'amount': int(orders.cart.final_price) ,
+                'currency': 'UAH',
+                'description': 'Payment for clothes',
+                'version': '3',
+                'order_id':  orders.id ,
+                'sandbox': 0, # sandbox mode, set to 1 to enable it
+                'result_url':'https://mysite123456.herokuapp.com/',
+                'server_url': 'https://mysite123456.herokuapp.com/pay-callback/', # url to callback view
+            }
+            signature = liqpay.cnb_signature(params)
+            data = liqpay.cnb_data(params)
+            return render(request, self.template_name, {'signature': signature, 'data': data})
+        else:
+            return HttpResponseRedirect('/')
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -532,11 +536,11 @@ class PayCallbackView(View):
                 #написать если ошибка при оплате
                 # x = ' ошибка при оплате '+' .order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
                 send_mail('Платеж ошибка!', "Yasoob",['zarj09@gmail.com'], fail_silently=False)
-        else:
-            pass
+            else:
+                orders.status_pay = 'miss'
+                orders.save()
 
         result_url = 'https://mysite123456.herokuapp.com/'
-        success_url = 'https://mysite123456.herokuapp.com/'
         return HttpResponse()
 # otzivy
 class ProductRewiew(View):
@@ -554,6 +558,9 @@ class ProductRewiew(View):
 
 class LoginView(CartMixin,View):
     def get(self,request,*args,**kwargs):
+        if  request.user.is_authenticated:
+            messages.add_message(request,messages.ERROR,'Вы уже залогинены')
+            return redirect('base')
         form = LoginForm(request.POST or None)
         # category = Category.objects.all()
         title = 'Логин'
@@ -580,9 +587,12 @@ class LoginView(CartMixin,View):
         context={'form':form,'cart':self.cart}
         return render(request,'login.html',context)
 
-
+# registration
 class RegistrationView(CartMixin,View):
     def get(self,request,*args,**kwargs):
+        if  request.user.is_authenticated:
+            messages.add_message(request,messages.ERROR,'Вы уже зарегистрированы')
+            return redirect('base')
         form=RegistrationForm(request.POST or None)
         # categories=Category.objects.all()
         title = 'Регистрация'
@@ -604,16 +614,29 @@ class RegistrationView(CartMixin,View):
             new_user.last_name=form.cleaned_data['last_name']
             new_user.set_password(form.cleaned_data['password'])
             new_user.save()
-            Customer.objects.create(
+
+            oldname = request.session.session_key
+            oldorders = Order.objects.filter(customer__user__username=oldname)
+            customer = Customer.objects.create(
                 user=new_user,
                 phone=form.cleaned_data['phone'],
-                adress=form.cleaned_data['adress']
+                adress=form.cleaned_data['adress'],
             )
+            customer.save()
+
+            if oldorders:
+                customer.orders.set(oldorders)
+                for i in oldorders:
+                    i.customer = customer
+                    i.customer.save()
+                    i.save()
+                
+                # User.objects.filter(username=oldname).delete()
+                
             user= authenticate(username=form.cleaned_data['username'],password=form.cleaned_data['password'])
             login(request,user)
             messages.add_message(request,messages.SUCCESS,'Вы успешно зарегистрировались на сайте')
-            return redirect('login')
-
+            return redirect('base')
         else:
             messages.add_message(request,messages.ERROR,'Ошибка регистрации')
         context={'form':form,'cart':self.cart}
@@ -622,14 +645,15 @@ class RegistrationView(CartMixin,View):
 
 class ProfileView(CartMixin,View):
     def get (self,request,*args,**kwargs):
+        if not  request.user.is_authenticated:
+            messages.add_message(request,messages.ERROR,'Для просмотра заказов и их статуса зарегистрируйтесь')
+            return redirect('registration')
         customer = Customer.objects.get(user=request.user)
         orders= Order.objects.filter(customer=customer).order_by('-created_at')
-        # categories= Category.objects.all()
         title = 'Профиль '+request.user.username
 
         return render(request,'profile.html',{'title':title,
         'orders':orders,
         'cart':self.cart,
-        # 'categories':categories
  })
 

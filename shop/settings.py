@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'mainapp.apps.MainappConfig',
-    'specs',
+    'blog.apps.BlogConfig',
+    'specs.apps.SpecsConfig',
     'crispy_forms',
     'storages',
     # "compressor",
@@ -70,7 +71,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-        # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -116,27 +117,27 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'ecom_db',
-#         'USER': 'kirill',
-#         'PASSWORD' : 'devpass1',
-#         'HOST' : 'localhost',
-#         'PORT': 5432
-#     }
-# }
-# dotenv_file = os.path.join(BASE_DIR, ".env")
-# if os.path.isfile(dotenv_file):
-#     dotenv.load_dotenv(dotenv_file)
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ecom_db',
+        'USER': 'kirill',
+        'PASSWORD' : 'devpass1',
+        'HOST' : 'localhost',
+        'PORT': 5432
     }
 }
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 
 # Password validation
@@ -220,15 +221,15 @@ EMAIL_HOST_PASSWORD ='tiaxxhsvgnvmjyne'
 # +++++++++  статика амазон +++++++++++++++++ #
 
 # #############################################################################
-AWS_ACCESS_KEY_ID = 'AKIAYSVUBCGEK2QQAKNU'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'zarj09-crm-bucket'
-AWS_S3_FILE_OVERWRITE = True
-AWS_DEFAULT_ACL = None
+# AWS_ACCESS_KEY_ID = 'AKIAYSVUBCGEK2QQAKNU'
+# AWS_SECRET_ACCESS_KEY = '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'
+# AWS_STORAGE_BUCKET_NAME = 'zarj09-crm-bucket'
+# AWS_S3_FILE_OVERWRITE = True
+# AWS_DEFAULT_ACL = None
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_S3_REGION_NAME = "us-east-2"
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# AWS_S3_REGION_NAME = "us-east-2"
 
 # #############################################################################
 
