@@ -550,7 +550,7 @@ class ProductRewiew(View):
         if form.is_valid():
             form=form.save(commit=False)
             form.name= request.user
-            form.product= product
+            form.product = product
             form.save()
             messages.add_message(request,messages.INFO,'Ваш отзыв добавлен!')
         return redirect(product.get_absolute_url())

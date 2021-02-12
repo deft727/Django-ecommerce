@@ -78,15 +78,15 @@ class ProductAdminForm(forms.ModelForm):
         fields = '__all__'
 
 
-class ReviewsAdminForm(forms.ModelForm):
-    text = forms.CharField(widget=CKEditorWidget())
-    class Meta:
-        model = Rewiews
-        fields = '__all__'
+# class ReviewsAdminForm(forms.ModelForm):
+#     text = forms.CharField(widget=CKEditorWidget())
+#     class Meta:
+#         model = Rewiews
+#         fields = '__all__'
 
 
 class RewiewsAdmin(admin.ModelAdmin):
-    form = ReviewsAdminForm
+    # form = ReviewsAdminForm
     list_display= ( 'id','name','product')
     list_display_links=('id','product')
 
@@ -146,7 +146,7 @@ admin.site.register(Customer)
 admin.site.register(Order)
 admin.site.register(Product,ProductAdmin)
 admin.site.register(Size)
-admin.site.register(Rewiews,RewiewsAdmin)
+admin.site.register(Rewiews)
 
 
 admin.site.register(TopText)

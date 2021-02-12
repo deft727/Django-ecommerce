@@ -115,7 +115,8 @@ class RegistrationForm(forms.ModelForm):
 class RewiewsForm(forms.ModelForm):
     # if not User.objects.get(user=request.user).exists():
     #         raise forms.ValidationError('Пользователь не залогинен')
+    text = forms.CharField(widget=forms.Textarea,max_length=500,help_text='Максимальное кол-во символов 500')
     captcha = ReCaptchaField()
     class Meta:
         model = Rewiews
-        fields=('text','captcha',)
+        fields=['text','captcha',]
