@@ -276,7 +276,6 @@
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
                   <aside class="ps-widget--footer ps-widget--info">
                     <header><a class="ps-logo" href="/"><img src="" alt=""></a>
-                      {% cache 600 footer %}
 
                       {%for i in myinfo%}
                       <h3 class="ps-widget__title">{{i.adress1}}</h3>
@@ -372,7 +371,7 @@
           </div>
         </div>
       </div>
-    </div>{% endcache  %}
+    </div>
 
     <!-- JS Library-->
     <script>

@@ -71,7 +71,7 @@ class DeliveryAdmin(admin.ModelAdmin):
 
 
 
-class ProductdminForm(forms.ModelForm):
+class ProductAdminForm(forms.ModelForm):
     description = forms.CharField(widget=CKEditorWidget())
     class Meta:
         model = Product
