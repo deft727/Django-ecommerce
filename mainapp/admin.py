@@ -96,9 +96,9 @@ class MyImageAdminForm(ModelForm):
         super().__init__(*args,**kwargs)
 
 
-class ProductAdminForm(ModelForm):
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
+# class ProductAdminForm(ModelForm):
+#     def __init__(self,*args,**kwargs):
+#         super().__init__(*args,**kwargs)
 
 
 class filterCategory(forms.ModelForm):
