@@ -221,15 +221,15 @@ EMAIL_HOST_PASSWORD ='tiaxxhsvgnvmjyne'
 # +++++++++  статика амазон +++++++++++++++++ #
 
 # #############################################################################
-# AWS_ACCESS_KEY_ID = 'AKIAYSVUBCGEK2QQAKNU'
-# AWS_SECRET_ACCESS_KEY = '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'
-# AWS_STORAGE_BUCKET_NAME = 'zarj09-crm-bucket'
-# AWS_S3_FILE_OVERWRITE = True
-# AWS_DEFAULT_ACL = None
+AWS_ACCESS_KEY_ID = 'AKIAYSVUBCGEK2QQAKNU'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'zarj09-crm-bucket'
+AWS_S3_FILE_OVERWRITE = True
+AWS_DEFAULT_ACL = None
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# AWS_S3_REGION_NAME = "us-east-2"
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_REGION_NAME = "us-east-2"
 
 # #############################################################################
 
