@@ -12,15 +12,15 @@ from django.core.mail import send_mail
 
 
 def single_well_info(request):
-    categories = cache.get('categories')
-    if not categories:
-        categories = Category.objects.all().prefetch_related('parent')
-        cache.set('categories',categories,600)
+    # categories = cache.get('categories')
+    # if not categories:
+    categories = Category.objects.all().prefetch_related('parent')
+        # cache.set('categories',categories,600)
     toptext=TopText.objects.all()
     myinfo= cache.get('myinfo')
-    if not myinfo:
-        myinfo = ChangeMyInfo.objects.all()
-        cache.set('myinfo',myinfo,600)
+    # if not myinfo:
+    myinfo = ChangeMyInfo.objects.all()
+        # cache.set('myinfo',myinfo,600)
     logo = cache.get('logo')
     if not logo:
         logo = Logo.objects.all()
