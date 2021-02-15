@@ -1,5 +1,5 @@
 {%extends 'base.html'%} 
-{%block title%}<title>Блог</title>{%endblock title%}
+{%block title%} <title>{{title}}</title> {%endblock title%}
 {%block main%}
 
 
@@ -9,17 +9,32 @@
         <div class="ps-container">
           <div class="row">
                 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 ">
+
+                  {%for post in posts %}
                   <div class="ps-post--2">
-                    <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="#"></a><img src="images/blog/4.jpg" alt=""></div>
+                    <div class="ps-post__thumbnail">
+                      <!-- <a class="ps-post__overlay" href="#"></a> ramka -->
+                    {% if post.photo %}
+                    <img src="{{post.photo.url}}"  width="350" alt="{{post.title}}" >
+                      {%else%}
+                      <img src="https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg" alt="">
+                      {%endif%}
+                    
+                    </div>
                     <div class="ps-post__container">
-                      <header class="ps-post__header"><a class="ps-post__title" href="blog-detail.html">Unpacking the Breaking 2 Race Strategy</a>
-                        <p>Posted by <a href="blog-grid.html">Alena Studio</a> on August 17, 2016  in <a href="blog-grid.html">Men Shoes</a> , <a href="blog-grid.html">Stylish</a></p>
+                      <header class="ps-post__header"><a class="ps-post__title" href="{{post}}">{{post.title}}</a>
+                        {%if post.author%}
+                        <p>Posted by <a href="blog-grid.html">{{post.author}}</a> {{post.created_at }}</p>
+                      <p> <a href="blog-grid.html">Men Shoes</a> , <a href="blog-grid.html">Stylish</a></p>
+                          {%else%}
+                          <p></a> {{post.created_at }} <a href="blog-grid.html"> Men Shoes</a> , <a href="blog-grid.html">Stylish</a></p>
+                          {%endif%}
                       </header>
                       <div class="ps-post__content">
-                        <p>Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further, Support Sports Bra has a compression fit and V-back straps that give you medium support and full range of motion during your workout….</p>
+                        <p>{{post.content|truncatewords_html:60|safe}}</p>
                       </div>
-                      <footer class="ps-post__footer"><a class="ps-post__morelink" href="#">READ MORE<i class="ps-icon-arrow-left"></i></a>
-                        <div class="ps-post__actions"><span><i class="fa fa-comments"></i> 23 Comments</span><span><i class="fa fa-heart"></i>  likes</span>
+                      <footer class="ps-post__footer"><a class="ps-post__morelink" href="#">Подр<i class="ps-icon-arrow-left"></i></a>
+                        <div class="ps-post__actions"><span><i class="fa fa-comments"></i> 23 К(я)</span><span><a href="#"><i class="fa fa-heart" title="Поставить лайк"></i></a> 12 Лайков</span>
                           <div class="ps-post__social"><i class="fa fa-share-alt"></i><a href="#">Share</a>
                             <ul>
                               <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -31,107 +46,47 @@
                       </footer>
                     </div>
                   </div>
-                  <div class="ps-post--2">
-                    <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="#"></a><img src="#" alt=""></div>
-                    <div class="ps-post__container">
-                      <header class="ps-post__header"><a class="ps-post__title" href="#">Leverage agile frameworks to provide a robust synopsis</a>
-                        <p>Posted by <a href="#">Alena Studio</a> on August 17, 2016  in <a href="#">Men Shoes</a> , <a href="#">Stylish</a></p>
-                      </header>
-                      <div class="ps-post__content">
-                        <p>Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further, Support Sports Bra has a compression fit and V-back straps that give you medium support and full range of motion during your workout….</p>
-                      </div>
-                      <footer class="ps-post__footer"><a class="ps-post__morelink" href="#">READ MORE<i class="ps-icon-arrow-left"></i></a>
-                        <div class="ps-post__actions"><span><i class="fa fa-comments"></i> 23 Comments</span><span><i class="fa fa-heart"></i>  likes</span>
-                          <div class="ps-post__social"><i class="fa fa-share-alt"></i><a href="#">Share</a>
-                            <ul>
-                              <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                              <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                              <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </footer>
-                    </div>
-                  </div>
-                  <div class="ps-post--2">
-                    <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="#"></a><img src="images/blog/3.jpg" alt=""></div>
-                    <div class="ps-post__container">
-                      <header class="ps-post__header"><a class="ps-post__title" href="#">Nike’s Latest Football Cleat Breaks the Mold</a>
-                        <p>Posted by <a href="#">Alena Studio</a> on August 17, 2016  in <a href="#">Men Shoes</a> , <a href="#">Stylish</a></p>
-                      </header>
-                      <div class="ps-post__content">
-                        <p>Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further, Support Sports Bra has a compression fit and V-back straps that give you medium support and full range of motion during your workout….</p>
-                      </div>
-                      <footer class="ps-post__footer"><a class="ps-post__morelink" href="#">READ MORE<i class="ps-icon-arrow-left"></i></a>
-                        <div class="ps-post__actions"><span><i class="fa fa-comments"></i> 23 Comments</span><span><i class="fa fa-heart"></i>  likes</span>
-                          <div class="ps-post__social"><i class="fa fa-share-alt"></i><a href="#">Share</a>
-                            <ul>
-                              <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                              <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                              <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </footer>
-                    </div>
-                  </div>
-                  <div class="ps-post--2">
-                    <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="#"></a><img src="#" alt=""></div>
-                    <div class="ps-post__container">
-                      <header class="ps-post__header"><a class="ps-post__title" href="#">Breaking Down the Black Rose Tech Fleece Collection</a>
-                        <p>Posted by <a href="#">Alena Studio</a> on August 17, 2016  in <a href="#">Men Shoes</a> , <a href="#">Stylish</a></p>
-                      </header>
-                      <div class="ps-post__content">
-                        <p>Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further, Support Sports Bra has a compression fit and V-back straps that give you medium support and full range of motion during your workout….</p>
-                      </div>
-                      <footer class="ps-post__footer"><a class="ps-post__morelink" href="#">READ MORE<i class="ps-icon-arrow-left"></i></a>
-                        <div class="ps-post__actions"><span><i class="fa fa-comments"></i> 23 Comments</span><span><i class="fa fa-heart"></i>  likes</span>
-                          <div class="ps-post__social"><i class="fa fa-share-alt"></i><a href="#">Share</a>
-                            <ul>
-                              <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                              <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                              <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </footer>
-                    </div>
-                  </div>
-                  <div class="ps-post--2">
-                    <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="#"></a><img src="#" alt=""></div>
-                    <div class="ps-post__container">
-                      <header class="ps-post__header"><a class="ps-post__title" href="#">The Shoes Athletes Say Will Change the Future of Running</a>
-                        <p>Posted by <a href="#">Alena Studio</a> on August 17, 2016  in <a href="#">Men Shoes</a> , <a href="#">Stylish</a></p>
-                      </header>
-                      <div class="ps-post__content">
-                        <p>Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further, Support Sports Bra has a compression fit and V-back straps that give you medium support and full range of motion during your workout….</p>
-                      </div>
-                      <footer class="ps-post__footer"><a class="ps-post__morelink" href="#">READ MORE<i class="ps-icon-arrow-left"></i></a>
-                        <div class="ps-post__actions"><span><i class="fa fa-comments"></i> 23 Comments</span><span><i class="fa fa-heart"></i>  likes</span>
-                          <div class="ps-post__social"><i class="fa fa-share-alt"></i><a href="#">Share</a>
-                            <ul>
-                              <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                              <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                              <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </footer>
-                    </div>
-                  </div>
+
+                  {%endfor%}
+            
+
+
+                  
                   <div class="mt-30">
+
+
+                    {%if page_obj.has_other_pages%}
+
                     <div class="ps-pagination">
                       <ul class="pagination">
-                        <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                        {%if page_obj.has_previous%}
+                        <li><a href="?page={{page_obj.previous_page_number}}"><i class="fa fa-angle-left"></i></a></li>
+                        {%endif%}
+                        {%for p in page_obj.paginator.page_range%}
+                          {% if page_obj.number == p %}
+                          <li class="active"><a href="?page={{p}}">{{p}}</a></li>
+
+                          {%elif p > page_obj.number|add:-3 and p < page_obj.number|add:+3 %}
+                          <li><a href="?page={{p}}">{{p}}</a></li>
+
+                          {%endif%}
+                        {%endfor%}
+                      
+
+                        {%if page_obj.has_next%}
+                        <li><a href="?page={{page_obj.next_page_number}}"><i class="fa fa-angle-right"></i></a></li>
+                        {%endif%}
+
+                        
                       </ul>
                     </div>
+                    {%endif%}
+
                   </div>
                 </div>
+
+
+
                 <!-- bloglist  -->
                 {% include 'inc/_right_bar.html'%}
           </div>

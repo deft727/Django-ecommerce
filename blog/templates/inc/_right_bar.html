@@ -1,3 +1,7 @@
+{% load my_tags %}
+{%get_tags as tags%}
+{%get_categories as category%}
+
 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
     <aside class="ps-widget--sidebar ps-widget--search">
       <form class="ps-search--widget" action="do_action" method="post">
@@ -11,13 +15,11 @@
       </div> 
       <div class="ps-widget__content">
         <ul class="ps-list--arrow">
-          <li class="current"><a href="#">Sky(321)</a></li>
-          <li><a href="#">Amazin’ Glazin’</a></li>
-          <li><a href="#">The Crusty Croissant</a></li>
-          <li><a href="#">The Rolling Pin</a></li>
-          <li><a href="#">Skippity Scones</a></li>
-          <li><a href="#">Mad Batter</a></li>
-          <li><a href="#">Confection Connection</a></li>
+          <li class="current"><a href="#">Все</a></li>
+
+          {%for i in category%}
+          <li><a href='{{ i.get_absolute_url}}'>{{i}}</a></li>
+          {%endfor%}
         </ul>
       </div>
     </aside>
@@ -77,14 +79,9 @@
       </div>
       <div class="ps-widget__content">
         <ul class="ps-tags">
-          <li><a href="#">Men</a></li>
-          <li><a href="#">Female</a></li>
-          <li><a href="#">B&G</a></li>
-          <li><a href="#">ugly fashion</a></li>
-          <li><a href="#">Nike</a></li>
-          <li><a href="#">Dior</a></li>
-          <li><a href="#">Adidas</a></li>
-          <li><a href="#">Diour</a></li>
+          {%for tag in tags%}
+          <li><a href="?tag={{tag}}">{{tag}}</a></li>
+          {%endfor%}
         </ul>
       </div>
     </aside>

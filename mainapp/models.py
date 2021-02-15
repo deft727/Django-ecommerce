@@ -94,6 +94,7 @@ class Product(models.Model):
     description = models.TextField(verbose_name='Описание товара',null=True)
     price = models.DecimalField(max_digits=10,decimal_places=2,verbose_name='Цена')
     old_price = models.DecimalField(max_digits=10,decimal_places=2,verbose_name='Старая Цена',null=True,blank=True)
+    views = models.IntegerField (default=0,verbose_name='Кол-во просмотров')
 
     def __str__(self):
         return self.title

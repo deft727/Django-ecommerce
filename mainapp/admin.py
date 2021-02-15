@@ -114,14 +114,22 @@ class filterCategory(forms.ModelForm):
 class ProductAdmin(admin.ModelAdmin):
     form =  ProductAdminForm
     prepopulated_fields = {'slug':("title",)}
-    # search_fields= ('title',)
-    list_display= ( 'id','title', 'category', 'price', 'available')
+    list_display= ( 'id','title', 'category', 'price', 'available','get_photo')
     list_display_links=('id','title')
     list_editable=('available',)
+    # save_as = True
+    # save_on_top = True
+    search_fields=('title',)
     change_form_template = 'custom_admin/change_form.html'
+    readonly_fields = ('views',)
+
     # form = filterCategory
     # formfield_overrides = { TreeManyToManyField:{'widget':CheckboxSelectMultiple},}
-
+    def get_photo(self,obj):
+        if obj.image1:
+            return mark_safe(f'<img src="{obj.image1.url}" width="50">')
+        return '-'
+    get_photo.short_description = 'Фото'
 
 class SizeInline(admin.TabularInline):
     verbose_name='Размеры'
