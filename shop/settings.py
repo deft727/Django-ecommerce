@@ -84,7 +84,7 @@ CACHE_MIDDLEWARE_ALIAS = 'default'
 # Additional prefix for cache keys
 CACHE_MIDDLEWARE_KEY_PREFIX = ''
 
-# Cache key TTL in seconds
+# Cache key TTL in second
 CACHE_MIDDLEWARE_SECONDS = 600
 
 
