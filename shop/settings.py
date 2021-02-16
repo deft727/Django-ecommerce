@@ -46,7 +46,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    # 'django.contrib.postgres',
+    'django.contrib.postgres',
     'mptt',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
