@@ -14,7 +14,7 @@ import os
 import django_heroku
 import dj_database_url
 
-# import dotenv
+import dotenv
 # import boto3
 # import posixpath
 
@@ -46,7 +46,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.postgres',
+    # 'django.contrib.postgres',
     'mptt',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -264,8 +264,8 @@ AWS_S3_REGION_NAME = "us-east-2"
 
 
 
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 
 # DATABASES = {'default': dj_database_url.parse('postgres://the-just-copied-link-comes-here
