@@ -37,6 +37,8 @@ class Tag(models.Model):
         verbose_name_plural = 'Теги'
         ordering = ['title']
 
+    def get_absolute_url(self):
+        return reverse('tag',kwargs={"slug":self.slug})
 
 class Post(models.Model):
     title = models.CharField(max_length=255,verbose_name='Название статьи')

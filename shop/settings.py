@@ -46,7 +46,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.postgres',
+    # 'django.contrib.postgres',
     'mptt',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -84,7 +84,7 @@ CACHE_MIDDLEWARE_ALIAS = 'default'
 # Additional prefix for cache keys
 CACHE_MIDDLEWARE_KEY_PREFIX = ''
 
-# Cache key TTL in seconds
+# Cache key TTL in second
 CACHE_MIDDLEWARE_SECONDS = 600
 
 
@@ -128,9 +128,9 @@ DATABASES = {
         'PORT': 5432
     }
 }
-dotenv_file = os.path.join(BASE_DIR, ".env")
-if os.path.isfile(dotenv_file):
-    dotenv.load_dotenv(dotenv_file)
+# dotenv_file = os.path.join(BASE_DIR, ".env")
+# if os.path.isfile(dotenv_file):
+#     dotenv.load_dotenv(dotenv_file)
 
 # DATABASES = {
 #     'default': {

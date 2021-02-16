@@ -15,7 +15,7 @@
       </div> 
       <div class="ps-widget__content">
         <ul class="ps-list--arrow">
-          <li class="current"><a href="#">Все</a></li>
+          <li class="current"><a href="{%url 'blog'%}">Все</a></li>
 
           {%for i in category%}
           <li><a href='{{ i.get_absolute_url}}'>{{i}}</a></li>
@@ -80,7 +80,7 @@
       <div class="ps-widget__content">
         <ul class="ps-tags">
           {%for tag in tags%}
-          <li><a href="?tag={{tag}}">{{tag}}</a></li>
+          <li><a href="{{tag.get_absolute_url}}">{{tag}}</a></li>
           {%endfor%}
         </ul>
       </div>

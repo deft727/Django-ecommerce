@@ -12,15 +12,15 @@
                       <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                         <div class="ps-post mb-30">
 
-                          <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="blog-detail.html"></a>                    {% if post.photo %}
+                          <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="{{post.get_absolute_url}}"></a>                    {% if post.photo %}
                             <img src="{{post.photo.url}}"  height="280" alt="{{post.title}}" >
                               {%else%}
                               <img src="https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg" alt="">
                               {%endif%}</div>
-                          <div class="ps-post__content"><a class="ps-post__title" href="blog-detail.html">An Inside Look at the Breaking2 Kit</a>
+                          <div class="ps-post__content"><a class="ps-post__title" href="{{post.get_absolute_url}}">{{post.title}}</a>
                             <p class="ps-post__meta">
                               {%if post.author%}
-                              <span>By:<a class="mr-5" href="blog.html">{{post.author}}</a></span>
+                              <span>By:<a class="mr-5" href="#">{{post.author}}</a></span>
                               {%endif%}
                               -<span class="ml-5"> {{post.created_at }}</span></p>
                             <p>{{post.content|truncatewords_html:30|safe}}</p>
