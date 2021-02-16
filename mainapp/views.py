@@ -536,9 +536,7 @@ class PayCallbackView(View):
                 #написать если ошибка при оплате
                 # x = ' ошибка при оплате '+' .order id==='+response['order_id']+'--status----'+response['status'] +'--phone'+phone +'Остальное -------'+str(response)
                 send_mail('Платеж ошибка!', "Yasoob",['zarj09@gmail.com'], fail_silently=False)
-            else:
-                orders.status_pay = 'miss'
-                orders.save()
+
 
         result_url = 'https://mysite123456.herokuapp.com/'
         return HttpResponse()
