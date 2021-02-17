@@ -13,6 +13,7 @@ from .models import Category,Customer,Cart,CartProduct,Product,Order,MyImage,Use
 from .mixins import CartMixin
 from .forms import OrderForm,LoginForm,RegistrationForm,ContactForm,RewiewsForm
 from .utils import recalc_cart
+from blog.models import Post
 from specs.models import ProductFeatures
 from django.core.mail import EmailMessage
 from django.conf import settings
@@ -83,12 +84,15 @@ class BaseView(CartMixin, View):
     def get(self,request,*args,**kwargs):
 
         Topimage=MyTopImage.objects.all()
-        products = Product.objects.all().order_by('-id')[:8]
+        products = Product.objects.order_by('-id')[:8]
         # myimage = cache.get('myimage')
         # if not myimage:
         myimage= MyImage.objects.all()
             # cache.set('myimage',myimage,30)
-        randomProducts =  Product.objects.all().order_by('?')[:10]
+        randomProducts =  Product.objects.order_by('?')[:10]
+
+        posts = Post.objects.order_by('-created_at')[:3]
+
         form= ContactForm(request.POST or None)
         title = 'Сайт'
         context= {
@@ -98,7 +102,8 @@ class BaseView(CartMixin, View):
             'Topimage':Topimage,
             'myimage':myimage,
             'randomProducts':randomProducts,
-            'form':form
+            'form':form,
+            'posts':posts
         }
         return render(request,'index.html',context)
 

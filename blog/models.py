@@ -51,7 +51,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category,on_delete=models.PROTECT,related_name='posts')
     tags = models.ManyToManyField(Tag,blank=True,related_name='posts')
     url = models.URLField(null=True,blank=True,verbose_name='Ссылка на товар (если есть)')
-
+    is_publish = models.BooleanField(default=True,verbose_name='Публиковать?')
     def __str__(self):
         return self.title
 

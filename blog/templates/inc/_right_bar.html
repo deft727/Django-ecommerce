@@ -1,7 +1,9 @@
 {% load my_tags %}
 {%get_tags as tags%}
 {%get_categories as category%}
-
+{%get_new_posts as new_posts%}
+{%get_popular_products as products%}
+{%load static%}
 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
     <aside class="ps-widget--sidebar ps-widget--search">
       <form class="ps-search--widget" action="do_action" method="post">
@@ -11,66 +13,56 @@
     </aside>
     <aside class="ps-widget--sidebar">
       <div class="ps-widget__header">
-        <h3>Archive</h3>
+        <h3>Категории</h3>
       </div> 
       <div class="ps-widget__content">
         <ul class="ps-list--arrow">
-          <li class="current"><a href="{%url 'blog'%}">Все</a></li>
+          <li class="current"><a href="{%url 'blog'%}">Все </a></li>
 
           {%for i in category%}
-          <li><a href='{{ i.get_absolute_url}}'>{{i}}</a></li>
+          
+          <li><a href='{{ i.get_absolute_url}}'>{{i }}({{ i.cnt}})</a></li>
           {%endfor%}
         </ul>
       </div>
     </aside>
     <aside class="ps-widget--sidebar">
       <div class="ps-widget__header">
-        <h3>Ads Banner</h3>
+        <h3>Реклама</h3>
       </div>
-      <div class="ps-widget__content"><a href="#"><img src="#" alt=""></a></div>
+      <div class="ps-widget__content"><a href="#"><img src="{% static 'images/banner/cip.png'%}" width="150" alt=""></a></div>
     </aside>
     <aside class="ps-widget--sidebar">
       <div class="ps-widget__header">
-        <h3>Recent Posts</h3>
+        <h3>Новые посты</h3>
+        
       </div>
       <div class="ps-widget__content">
+        {%for new in new_posts%}
         <div class="ps-post--sidebar">
-          <div class="ps-post__thumbnail"><a href="#"></a><img src="#" alt=""></div>
-          <div class="ps-post__content"><a class="ps-post__title" href="#">Micenas Placerat Nibh Loreming Fentum</a><span>SEP 29, 2017</span></div>
+          <div class="ps-post__thumbnail"><a href="{{new.get_absolute_url}}"></a><img src="{{new.photo.url}}" alt="{{new.title}}"></div>
+          <div class="ps-post__content"><a class="ps-post__title" href="{{new.get_absolute_url}}">{{new.title}}</a><span>{{new.created_at}}</span></div>
         </div>
-        <div class="ps-post--sidebar">
-          <div class="ps-post__thumbnail"><a href="#"></a><img src="#" alt=""></div>
-          <div class="ps-post__content"><a class="ps-post__title" href="#">Micenas Placerat Nibh Loreming Fentum</a><span>SEP 29, 2017</span></div>
-        </div>
-        <div class="ps-post--sidebar">
-          <div class="ps-post__thumbnail"><a href="#"></a><img src="#" alt=""></div>
-          <div class="ps-post__content"><a class="ps-post__title" href="#">Micenas Placerat Nibh Loreming Fentum</a><span>SEP 29, 2017</span></div>
-        </div>
-      </div>
+        {%endfor%}
+         
     </aside>
     <aside class="ps-widget--sidebar">
       <div class="ps-widget__header">
-        <h3>Best Seller</h3>
+        <h3>Лучшие продажи</h3>
       </div>
       <div class="ps-widget__content">
+        {%for prod in products%}
         <div class="ps-shoe--sidebar">
-          <div class="ps-shoe__thumbnail"><a href="#"></a><img src="#" alt=""></div>
-          <div class="ps-shoe__content"><a class="ps-shoe__title" href="#">Men's Sky</a>
-            <p><del> £253.00</del> £152.00</p><a class="ps-btn" href="#">PURCHASE</a>
+          <div class="ps-shoe__thumbnail"><a href="{{prod.get_absolute_url}}"></a><img src="{{prod.image1.url}}" alt=""></div>
+          <div class="ps-shoe__content"><a class="ps-shoe__title" href="{{prod.get_absolute_url}}">{{prod.title}}</a>
+            <p>
+              {%if prod.old_price%}
+              <del>{{prod.old_price}}</del>
+              {%endif%}
+              {{prod.price}}</p><a class="ps-btn" href="{{prod.get_absolute_url}}">Перейти</a>
           </div>
         </div>
-        <div class="ps-shoe--sidebar">
-          <div class="ps-shoe__thumbnail"><a href="#"></a><img src="#" alt=""></div>
-          <div class="ps-shoe__content"><a class="ps-shoe__title" href="#">Nike Flight Bonafide</a>
-            <p><del> £253.00</del> £152.00</p><a class="ps-btn" href="#">PURCHASE</a>
-          </div>
-        </div>
-        <div class="ps-shoe--sidebar">
-          <div class="ps-shoe__thumbnail"><a href="#"></a><img src="#" alt=""></div>
-          <div class="ps-shoe__content"><a class="ps-shoe__title" href="#">Nike Sock Dart QS</a>
-            <p><del> £253.00</del> £152.00</p><a class="ps-btn" href="#">PURCHASE</a>
-          </div>
-        </div>
+        {%endfor%}
       </div>
     </aside>
     <aside class="ps-widget--sidebar">

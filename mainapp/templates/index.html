@@ -226,46 +226,39 @@
         </div>
       </div>
     </div>
-  </div> -->
-  <!-- <div class="ps-section ps-home-blog pt-80 pb-80">
+  </div>  -->
+
+
+
+
+  <div class="ps-section ps-home-blog pt-80 pb-80"> 
     <div class="ps-container">
       <div class="ps-section__header mb-50">
-        <h2 class="ps-section__title" data-mask="News">- Our Story</h2>
-        <div class="ps-section__action"><a class="ps-morelink text-uppercase" href="#">View all post<i class="fa fa-long-arrow-right"></i></a></div>
+        <h2 class="ps-section__title" data-mask="News">- Наш блог</h2>
       </div>
       <div class="ps-section__content">
         <div class="row">
+          {%for post in posts%}
               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                 <div class="ps-post">
-                  <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="blog-detail.html"></a><img src="" alt=""></div>
-                  <div class="ps-post__content"><a class="ps-post__title" href="blog-detail.html">An Inside Look at the Breaking2 Kit</a>
-                    <p class="ps-post__meta"><span>By:<a class="mr-5" href="blog.html">Alena Studio</a></span> -<span class="ml-5">Jun 10, 2017</span></p>
-                    <p>Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further…</p><a class="ps-morelink" href="blog-detail.html">Read more<i class="fa fa-long-arrow-right"></i></a>
+                  <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="{{post.get_absolute_url}}"></a><img src="{{post.photo.url}}" style="max-height: 400px;" alt="{{post.title}}" ></div>
+                  <div class="ps-post__content"><a class="ps-post__title" href="{{post.get_absolute_url}}">{{post.title}}</a>
+                    <p class="ps-post__meta">
+                      {%if post.author%}
+                      <span>By:<a class="mr-5" >{{post.author}}</a></span>
+                      {%else%}
+                      <span>By:<a class="mr-5" href="#">Anonimous</a></span>
+                      {%endif%}
+                       -<span class="ml-5">{{post.created_at }}</span></p>
+                    <p>{{post.content|truncatewords_html:30|safe}}</p><a class="ps-morelink" href="{{post.get_absolute_url}}">Подробнее<i class="fa fa-long-arrow-right"></i></a>
                   </div>
                 </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
-                <div class="ps-post">
-                  <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="blog-detail.html"></a><img src="" alt=""></div>
-                  <div class="ps-post__content"><a class="ps-post__title" href="blog-detail.html">Unpacking the Breaking2 Race Strategy</a>
-                    <p class="ps-post__meta"><span>By:<a class="mr-5" href="blog.html">Alena Studio</a></span> -<span class="ml-5">Jun 10, 2017</span></p>
-                    <p>Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further…</p><a class="ps-morelink" href="blog-detail.html">Read more<i class="fa fa-long-arrow-right"></i></a>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
-                <div class="ps-post">
-                  <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="blog-detail.html"></a><img src="" alt=""></div>
-                  <div class="ps-post__content"><a class="ps-post__title" href="blog-detail.html">Nike’s Latest Football Cleat Breaks the Mold</a>
-                    <p class="ps-post__meta"><span>By:<a class="mr-5" href="blog.html">Alena Studio</a></span> -<span class="ml-5">Jun 10, 2017</span></p>
-                    <p>Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further…</p><a class="ps-morelink" href="blog-detail.html">Read more<i class="fa fa-long-arrow-right"></i></a>
-                  </div>
-                </div>
-              </div>
+              </div>    
+          {%endfor%}
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 
 </div>
 </div>

@@ -13,7 +13,7 @@
                         <div class="ps-post mb-30">
 
                           <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="{{post.get_absolute_url}}"></a>                    {% if post.photo %}
-                            <img src="{{post.photo.url}}"  height="280" alt="{{post.title}}" >
+                            <img src="{{post.photo.url}}"  height="250" alt="{{post.title}}" >
                               {%else%}
                               <img src="https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg" alt="">
                               {%endif%}</div>
@@ -21,9 +21,12 @@
                             <p class="ps-post__meta">
                               {%if post.author%}
                               <span>By:<a class="mr-5" href="#">{{post.author}}</a></span>
+                              {%else%}
+                              <span>By:<a class="mr-5" href="#">Anonimous</a></span>
                               {%endif%}
-                              -<span class="ml-5"> {{post.created_at }}</span></p>
-                            <p>{{post.content|truncatewords_html:30|safe}}</p>
+                              <span class="ml-5"> {{post.created_at| date:"Y-m-d- H:i"  }}</span>
+                              -<span class="ml-5">Категория: <a href="{{post.category.get_absolute_url}}">{{post.category}}</a> </span> </p>
+                            <p> {{post.content|truncatewords_html:20|safe}}</p>
                           </div>
                           <footer class="ps-post__footer">
                             <div class="ps-post__actions"><span><i class="fa fa-comments"></i> 23 К(я)</span><span><a href="#"><i class="fa fa-heart" title="Поставить лайк"></i></a> 12 Лайков</span>
