@@ -28,8 +28,8 @@ def single_well_info(request):
     if not request.session.session_key:
 
 
-        # x = ' Ктото зашел на сайт '
-        # send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
+        x = ' Ктото зашел на сайт '
+        send_mail('Welcome!',x, "Yasoob",['zarj09@gmail.com'], fail_silently=False)
 
 
         request.session.create()
