@@ -147,8 +147,7 @@ class ProductDetailView(CartMixin,DetailView):
 class SearchProduct(ListView,CartMixin):
     template_name = 'product-search.html'
     context_object_name = 'products'
-    paginate_by = 6
-
+    paginate_by = 9
     def get_queryset(self):
         search= self.request.GET.get('sear')
         if search:
@@ -158,10 +157,10 @@ class SearchProduct(ListView,CartMixin):
     
     def get_context_data(self,*,object_list=None,**kwargs):
         context = super().get_context_data(**kwargs)
-        
         context['cart']=self.cart
         context['title']='Поиск по сайту: '+str(self.request.GET.get('sear'))
         # context['category']=Category.objects.order_by('?').first()
+        context['s']=f"s={self.request.GET.get('sear')}&"
 
 
         return context
@@ -290,13 +289,15 @@ class AddtoWhishlistView(CartMixin,View):
             messages.add_message(request,messages.SUCCESS,'Товар добавлен в избранноe')
         finally:
             if page == 'index':
-                return HttpResponseRedirect("/")
+                return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
             if page == 'product':
                 return HttpResponseRedirect(product.get_absolute_url())
             if page == 'category':
-                return HttpResponseRedirect("/category/Men/")
+                return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
             if page == 'search':
-                return HttpResponseRedirect("/")
+                return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+            else:
+                return HttpResponseRedirect('/')
 
 class WhislistView(CartMixin, View):
     def get(self, request, *args, **kwargs):

@@ -45,7 +45,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=220,verbose_name='slug статьи',unique=True)
     author = models.CharField(max_length=100,null=True,blank=True)
     content = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now=True,verbose_name='Опубликовано')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Опубликовано')
     photo = models.ImageField(upload_to='blog/photos/%Y/%m/%d/',blank=True)
     views = models.IntegerField (default=0,verbose_name='Кол-во просмотров')
     category = models.ForeignKey(Category,on_delete=models.PROTECT,related_name='posts')

@@ -40,7 +40,7 @@
 {%for product in products%}
         <div class="ps-product__column">
           <div class="ps-shoe mb-30">
-            <div class="ps-shoe__thumbnail"><a class="ps-shoe__favorite" href="{%url 'add_to_whishlist' slug=product.slug x='search' %}" title="Добавить в Избранное"><i class="ps-icon-heart"></i></a><img src="{{product.image1.url}}" alt="{{product.title}}" height="320"><a class="ps-shoe__overlay" href="{{product.get_absolute_url}}"></a>
+            <div class="ps-shoe__thumbnail"><a class="ps-shoe__favorite" href="{%url 'add_to_whishlist' slug=product.slug x='search' %}" title="Добавить в Избранное"  ><i class="ps-icon-heart"></i></a><img src="{{product.image1.url}}" alt="{{product.title}}" height="320"><a class="ps-shoe__overlay" href="{{product.get_absolute_url}}"></a>
             </div>
             <div class="ps-shoe__content">
               <div class="ps-shoe__variants">
@@ -78,18 +78,18 @@
             {% if page.has_other_pages %}
             {% if page.has_previous %}
 
-            <li><a href="?page={{ page.previous_page_number }}{{addSort}}"><i class="fa fa-angle-left"></i></a></li>
+            <li><a href="{{s}}?page={{ page.previous_page_number }}{{addSort}}"><i class="fa fa-angle-left"></i></a></li>
             {%endif%}
             {% for i in page.paginator.page_range %}
             {% if page.number == i %}
             <li class="active"><a href="#">{{ i }}</a></li>
             {%else%}
-            <li><a href="?page={{ i }}{{addSort}}">{{ i }}</a></li>
+            <li><a href="{{s}}?page={{ i }}{{addSort}}">{{ i }}</a></li>
             {% endif %}
               {% endfor %}
               {% if page.has_next %}
 
-            <li><a href="?page={{ page.next_page_number }}{{addSort}}"><i class="fa fa-angle-right"></i></a></li>
+            <li><a href="{{s}}?page={{ page.next_page_number }}{{addSort}}"><i class="fa fa-angle-right"></i></a></li>
             {% endif %}
             {% endif %}
 
