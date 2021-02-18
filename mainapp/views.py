@@ -264,7 +264,7 @@ class CategoryDetailView(CartMixin, DetailView):
         else:
             prod = Product.objects.filter(category=category)
 
-        products = prod.filter(id__in=[pf_['product_id'] for pf_ in pf]))
+        products = prod.filter(id__in=[pf_['product_id'] for pf_ in pf])
         
         # id__in=[pf_['product_id'] for pf_ in pf])
         paginator = Paginator(products, 18)  # 3 поста на каждой странице  
