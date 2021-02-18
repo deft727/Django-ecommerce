@@ -255,7 +255,18 @@ class CategoryDetailView(CartMixin, DetailView):
         pf = ProductFeatures.objects.filter(
             q_condition_queries
         ).prefetch_related('product', 'feature').values('product_id')
-        products = Product.objects.filter(id__in=[pf_['product_id'] for pf_ in pf])
+
+        prod = category.id # укажи стартовую верхнюю категорию
+        sub1 = list(Category.objects.filter(parent = prod))
+        sub2 = list(Category.objects.filter(parent__in = sub1))
+        if sub1 or sub2:
+            prod= Product.objects.filter(category__in = sub1+sub2)
+        else:
+            prod = Product.objects.filter(category=category)
+
+        products = prod.filter(id__in=[pf_['product_id'] for pf_ in pf]))
+        
+        # id__in=[pf_['product_id'] for pf_ in pf])
         paginator = Paginator(products, 18)  # 3 поста на каждой странице  
         page =paginator.get_page(page_number) 
         context['category_products'] = page
