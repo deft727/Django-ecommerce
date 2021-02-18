@@ -15,8 +15,8 @@ def get_tags():
     return Tag.objects.all()
 
 @register.simple_tag()
-def get_new_posts():
-    return Post.objects.order_by('-created_at')[:3]
+def get_new_posts(cnt=3):
+    return Post.objects.order_by('-created_at')[:cnt]
 
 @register.simple_tag()
 def get_popular_products():

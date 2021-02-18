@@ -134,7 +134,7 @@ class ProductDetailView(CartMixin,DetailView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        query = self.request.GET.get('search')
+        # query = self.request.GET.get('search')
         # context['categories'] =  self.get_object().category.__class__.objects.all()
         context['cart']= self.cart
         context['title'] = self.get_object().title
@@ -142,6 +142,29 @@ class ProductDetailView(CartMixin,DetailView):
         context['randomProducts']= Product.objects.filter(category=category)[:12]
         return context
 
+
+
+class SearchProduct(ListView,CartMixin):
+    template_name = 'product-search.html'
+    context_object_name = 'products'
+    paginate_by = 6
+
+    def get_queryset(self):
+        search= self.request.GET.get('sear')
+        if search:
+            if search[0].lower():
+                search=search.title()
+        return Product.objects.filter(Q(title__icontains=search))
+    
+    def get_context_data(self,*,object_list=None,**kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        context['cart']=self.cart
+        context['title']='Поиск по сайту: '+str(self.request.GET.get('sear'))
+        # context['category']=Category.objects.order_by('?').first()
+
+
+        return context
 
 
 
@@ -155,7 +178,7 @@ class CategoryDetailView(CartMixin, DetailView):
 
     def get_context_data(self,*args, **kwargs):
         context = super().get_context_data(**kwargs)
-        query = self.request.GET.get('search')
+        # query = self.request.GET.get('search')
         query1 = self.request.GET.get('page')
         category = title =self.get_object()
         context['title']=title
@@ -164,7 +187,8 @@ class CategoryDetailView(CartMixin, DetailView):
         page_number = self.request.GET.get('page',1) 
         filter_by= self.request.GET.get('sort')
         addSort =''
-        if   not query and  not self.request.GET :
+        # not query and
+        if not self.request.GET :
             category_man_id = category.id # укажи стартовую верхнюю категорию
             sub1 = list(Category.objects.filter(parent = category_man_id))
             sub2 = list(Category.objects.filter(parent__in = sub1))
@@ -205,15 +229,15 @@ class CategoryDetailView(CartMixin, DetailView):
             context['page']= page
             return context
   
-        if query:
-            if query[0].lower():
-                query= query.title()
-            products =   Product.objects.filter(Q(title__icontains=query))
-            paginator = Paginator(products, 18)  # 3 поста на каждой странице  
-            page =paginator.get_page(page_number) 
-            context['category_products'] = page
-            context['page']= page
-            return context
+        # if query:
+        #     if query[0].lower():
+        #         query= query.title()
+        #     products =   Product.objects.filter(Q(title__icontains=query))
+        #     paginator = Paginator(products, 18)  # 3 поста на каждой странице  
+        #     page =paginator.get_page(page_number) 
+        #     context['category_products'] = page
+        #     context['page']= page
+        #     return context
 
 
         url_kwargs = {}
@@ -260,7 +284,8 @@ class AddtoWhishlistView(CartMixin,View):
                 return HttpResponseRedirect(product.get_absolute_url())
             if page == 'category':
                 return HttpResponseRedirect("/category/Men/")
-
+            if page == 'search':
+                return HttpResponseRedirect("/")
 
 class WhislistView(CartMixin, View):
     def get(self, request, *args, **kwargs):

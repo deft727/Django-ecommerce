@@ -64,3 +64,19 @@ class BlogDetail(CartMixin,DetailView):
         self.object.refresh_from_db()
         context['cart']=self.cart
         return context
+
+
+class Search(ListView,CartMixin):
+    template_name = 'blog-grid.html'
+    context_object_name = 'posts'
+    paginate_by = 6
+
+    def get_queryset(self):
+        return Post.objects.filter(title__icontains = self.request.GET.get('s'))
+    
+    def get_context_data(self,*,object_list=None,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cart']=self.cart
+        context['title']='Поиск по блогу: '+str(self.request.GET.get('s'))
+        
+        return context

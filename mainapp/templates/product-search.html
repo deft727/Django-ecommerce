@@ -1,17 +1,11 @@
 {%extends 'base.html'%}
-{% load search_filter %}
-{% load mptt_tags %}
-
-
-
 
 {%block main%}
-<nav aria-label="breadcrumb" class="mt-5">
+<!-- <nav aria-label="breadcrumb" class="mt-5">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{% url 'base' %}">Главная</a></li>
-    <li class="breadcrumb-item active">{{ category.name }}</li>
   </ol>
-</nav>
+</nav> -->
 
 <main class="ps-main">
   <div class="ps-products-wrap pt-80 pb-80">
@@ -37,18 +31,19 @@
         </div>
       </div> -->
       <div class="ps-product__columns">
-  <!-- <form class="d-flex mt-3" action="{% url 'category_detail' slug=category.slug %}" method="GET">
-        <input class="form-control me-2" name="search" type="search" placeholder="Поиск товара" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Поиск</button>
-      </form> -->
-{%for product in category_products%}
+        {%if not products%}
+        <p class="h3">По вашему запросу ничего не найдено...</p>
+
+        {%endif%}
+
+
+{%for product in products%}
         <div class="ps-product__column">
           <div class="ps-shoe mb-30">
-            <div class="ps-shoe__thumbnail"><a class="ps-shoe__favorite" href="{%url 'add_to_whishlist' slug=product.slug x='category' %}" title="Добавить в Избранное"><i class="ps-icon-heart"></i></a><img src="{{product.image1.url}}" alt="{{product.title}}" height="320"><a class="ps-shoe__overlay" href="{{product.get_absolute_url}}"></a>
+            <div class="ps-shoe__thumbnail"><a class="ps-shoe__favorite" href="{%url 'add_to_whishlist' slug=product.slug x='search' %}" title="Добавить в Избранное"><i class="ps-icon-heart"></i></a><img src="{{product.image1.url}}" alt="{{product.title}}" height="320"><a class="ps-shoe__overlay" href="{{product.get_absolute_url}}"></a>
             </div>
             <div class="ps-shoe__content">
               <div class="ps-shoe__variants">
-
 
 
                 <div class="ps-shoe__variant normal"><img src="{%if product.image2%} {{product.image2.url}} {%endif%}" alt=""><img src="{%if product.image3%} {{product.image3.url}} {%endif%}" alt=""><img src="{%if product.image4%} {{product.image4.url}} {%endif%}" alt=""><img src="{%if product.image5%} {{product.image5.url}} {%endif%}" alt=""></div>
@@ -76,22 +71,7 @@
 
 
       </div>
-      <form method="GET" name="sort" >
-      <div class="ps-product-action">
-        <div class="ps-product__filter">
-          <select class="ps-select selectpicker" onchange ="if (this.value)window.location.href=this.value">
-            <option value='/'>Сортировка : 
-              <option value="?sort=title">
-             Сотировать по Имени
-            </option>
-              <option value="?sort=priceup "
-             >Сотировать по Возростанию цены</option>
-              <option value="?sort=pricedown "
-             >Сотировать по Убыванию цены</option>
-    
-          </select>
-        </div>
-      </form>
+ 
  
         <div class="ps-pagination">
           <ul class="pagination">
@@ -127,19 +107,6 @@
 
 
 
-          {% block productfilter %}
-<hr>
-
-
-<form action="{% url 'category_detail' slug=category.slug %}" method="GET" name="filter">
-  {{ category|product_spec }}
-<p class="text-center">
-  <button class="btn btn-outline-success" type="submit">Поиск</button>
-  <button class="btn btn-outline-info" type="submit">Сбросить</button>
-</p>
-</form>
-
-{% endblock productfilter %}
          
       </aside>
      

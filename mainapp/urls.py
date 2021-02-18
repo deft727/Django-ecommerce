@@ -25,8 +25,11 @@ from .views import (
                     WhislistView,
                     DeleteFromWhislist,
                     PayView, 
-                    PayCallbackView
+                    PayCallbackView,
+                    SearchProduct,
                     )
+
+
 from django.contrib.auth import views as authViews
 # from django.conf.urls import url
 from django.conf.urls import url
@@ -62,7 +65,7 @@ urlpatterns = [
     path('add-to-whishlist/<str:slug>/<str:x>/',AddtoWhishlistView.as_view(),name='add_to_whishlist'),
     path('whishlist/', WhislistView.as_view(),name='whishlist'),
     path('remove_from_whishlist/<str:slug>/', DeleteFromWhislist.as_view(),name='remove_from_whishlist'),
-
+    path('search/',SearchProduct.as_view(),name='sear'),
     # path('pay/',PayView.as_view(), name='pay_view'),
     # path('pay-callback/', PayCallbackView.as_view(), name='pay_callback'),
     # url(r'^$',BaseView.as_view(),name='base'),
