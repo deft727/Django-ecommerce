@@ -6,5 +6,3 @@ __pycache__/
 /venv/*
 */__pycache__/
 mainapp/templatetags/__pycache__/
-*/settings.py/
-mainapp/shop/settings.py
